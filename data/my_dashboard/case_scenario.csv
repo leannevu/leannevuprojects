@@ -1,0 +1,888 @@
+Question,Answer,Wrong Example,Correct Example,Methods,Example Input,Example Output
+Why can't you use the in operator to filter a Pandas DataFrame?,in returns a single True/False for the whole object. .isin() is vectorized and returns a True/False for every individual row.,"df[df['col'] in ['A', 'B']]","df[df['col'].isin(['A', 'B'])]",pd.Series.isin(),"df = pd.DataFrame({'col':['A','C','B']})",col\n0  A\n2  B
+What are the Pandas bitwise operators for multiple filters?,"Use & for ""and"", | for ""or"", and ~ for ""not"". Each condition must be wrapped in parentheses.",df[df['a'] > 5 and df['b'] < 10],df[(df['a'] > 5) & (df['b'] < 10)],"&, |, ~","df = pd.DataFrame({'a':[3,7],'b':[12,8]})",a  b\n1  7  8
+When do you use the subset= parameter?,In cleaning methods like .dropna() or .drop_duplicates() to limit which columns are checked.,df.dropna(),"df.dropna(subset=['col1','col2'])","DataFrame.dropna(), DataFrame.drop_duplicates()","df = pd.DataFrame({'col1':[1,None],'col2':[None,2]})",Empty DataFrame
+When do you use the columns= parameter?,In structural methods like .rename() or .reindex() to target the column axis.,df.rename({'a':'A'}),df.rename(columns={'a':'A'}),"DataFrame.rename(), DataFrame.reindex()",df = pd.DataFrame({'a':[1]}),A\n0  1
+How do you rename columns within an .agg() call?,"Use Named Aggregation: New_Name=('Old_Column', 'function').",df.groupby('a').agg({'b':'mean'}),"df.groupby('a').agg(avg_b=('b','mean'))",DataFrameGroupBy.agg(),"df = pd.DataFrame({'a':[1,1],'b':[2,4]})",a  avg_b\n0  1    3.0
+Does .reindex(columns=...) delete data?,Yes. Columns not included in the new list are dropped.,"df[['a','b']]","df.reindex(columns=['a','b'])",DataFrame.reindex(),"df = pd.DataFrame({'a':[1],'b':[2],'c':[3]})",a  b\n0  1  2
+How do you sum values across columns?,Use sum(axis=1) for row-wise operations,df.sum(),df.sum(axis=1),DataFrame.sum(),"df = pd.DataFrame({'a':[1,2],'b':[3,4]})",0    4\n1    6
+How do you filter rows based on multiple conditions?,Use boolean masks with & and wrap conditions in parentheses,df[df['a'] > 5 & df['b'] < 10],df[(df['a'] > 5) & (df['b'] < 10)],boolean indexing,"df = pd.DataFrame({'a':[3,7],'b':[12,8]})",a  b\n1  7  8
+How do you count rows in each group?,Use groupby().size() to count all rows including NaNs,df.groupby('col').count(),df.groupby('col').size().reset_index(name='count'),"DataFrame.groupby(), GroupBy.size()","df = pd.DataFrame({'col':['A','A','B']})",col  count\n0   A      2\n1   B      1
+How do you compute the mean per group?,Use groupby().mean() and reset index,df.groupby('col').mean(),df.groupby('col')['val'].mean().reset_index(),GroupBy.mean(),"df = pd.DataFrame({'col':['A','A'],'val':[2,4]})",col  val\n0   A  3.0
+How do you combine DataFrames vertically?,Use pd.concat with ignore_index=True,df1.append(df2),"pd.concat([df1, df2], ignore_index=True)",pd.concat(),df1 = pd.DataFrame({'a':[1]}); df2 = pd.DataFrame({'a':[2]}),a\n0  1\n1  2
+How do you merge two DataFrames?,Use merge() on common key columns,df1 + df2,"df1.merge(df2, on='id')",DataFrame.merge(),"df1 = pd.DataFrame({'id':[1],'a':[2]}); df2 = pd.DataFrame({'id':[1],'b':[3]})",id  a  b\n0   1  2  3
+How do you reshape wide data to long format?,Use pd.melt() to convert columns into rows,df.stack(),"pd.melt(df, id_vars=['id'], var_name='Milestone')",pd.melt(),"df = pd.DataFrame({'id':[1],'p1':[10],'p2':[20]})",id Milestone  value\n0   1        p1     10\n1   1        p2     20
+How do you compute differences between rows?,Use diff() after sorting values,df['col'].diff(),df.sort_values('time')['col'].diff(),Series.diff(),"df = pd.DataFrame({'time':[1,2],'col':[5,8]})",0    NaN\n1    3.0
+How do you compute a running total?,Use cumsum() to accumulate values,df['col'].sum(),df['col'].cumsum(),Series.cumsum(),"df = pd.DataFrame({'col':[1,2,3]})",0    1\n1    3\n2    6
+How do you flatten a NumPy array?,Use flatten() or ravel() to make it 1D,"arr.reshape(2,2)",arr.flatten(),ndarray.flatten(),"arr = np.array([[1,2],[3,4]])","array([1, 2, 3, 4])"
+How do you reshape a NumPy array to a column vector?,"Use reshape(-1,1)","arr.reshape(1,-1)","arr.reshape(-1,1)",ndarray.reshape(),"arr = np.array([1,2,3])","array([[1],[2],[3]])"
+How do you reshape a NumPy array to a row vector?,"Use reshape(1,-1)","arr.reshape(-1,1)","arr.reshape(1,-1)",ndarray.reshape(),"arr = np.array([1,2,3])","array([[1, 2, 3]])"
+How do you stack arrays vertically?,Use np.vstack() with tuple input,"np.vstack(arr1, arr2)","np.vstack((arr1, arr2))",np.vstack(),"arr1 = np.array([[1,2]]); arr2 = np.array([[3,4]])","array([[1, 2],[3, 4]])"
+How do you concatenate arrays along an axis?,Use np.concatenate() and specify axis,"np.concatenate(arr1, arr2)","np.concatenate((arr1, arr2), axis=0)",np.concatenate(),"arr1 = np.array([[1,2]]); arr2 = np.array([[3,4]])","array([[1, 2],[3, 4]])"
+How do you get unique values?,Use np.unique() to remove duplicates,set(arr),np.unique(arr),np.unique(),"arr = np.array([1,2,2,3])","array([1, 2, 3])"
+Combine SQL tables and keep duplicates,Use UNION ALL to combine results while keeping duplicate rows.,SELECT name FROM t1 UNION SELECT name FROM t2,SELECT name FROM t1 UNION ALL SELECT name FROM t2,UNION ALL,"t1 = ['A','B'], t2 = ['B','C']","['A','B','B','C']"
+Normalize extra spaces before splitting text,Use re.sub() with '\\s+' to collapse multiple spaces into a single space.,"re.sub(' ', ' ', text)","re.sub(r'\\s+', ' ', text)",re.sub(),text = 'a   b   c',a b c'
+Check whether a keyword appears anywhere in a string,Use re.search() because it scans the entire string and returns a match if found.,"re.match('cat', text)","re.search('cat', text)",re.search(),text = 'a cat here',<match object>
+Extract all numbers from a messy string,Use re.findall() to return all matches as a list.,"re.search('\\d+', text)","re.findall(r'\\d+', text)",re.findall(),text = 'a1b2c3',"['1','2','3']"
+Get the matched text from a regex match object,Call .group() on the match object to extract the matched text.,"match = re.search('\\d+', text)","match = re.search(r'\\d+', text)\nmatch.group()","re.search(), match.group()",text = 'abc123',123'
+Remove leading quotes or spaces from names,Use re.sub() anchored with ^ to remove leading unwanted characters.,"re.sub(r""[^\w.'-]+"", """", name)","re.sub(r""^[^\w.'-]+"", """", name)",re.sub(),"name = ""' Gabrielle Adcock""",Gabrielle Adcock'
+Remove nicknames inside quotation marks,Use re.sub() with a pattern that removes anything inside double quotes.,"re.sub(r'""\w*""', """", name)","re.sub(r'""[^""]*""', """", name)",re.sub(),"name = ""Susan ""Susie"" O'Neill""",Susan  O'Neill
+Remove maiden names inside parentheses,Use re.sub() with a pattern that removes anything inside parentheses.,"re.sub(r""\([\w.'-]*\)"", """", name)","re.sub(r""\([^)]*\)"", """", name)",re.sub(),"name = ""Alfrd (Arnold-) Hajs""",Alfrd  Hajs
+Extract a suffix only at the end of a name,Use re.search() with an end-anchored pattern to capture suffixes.,"re.search(r""(Jr|Sr)"", name)","re.search(r"",?\s*(Jr\.?|Sr\.?|II|III|IV|V)\s*$"", name)",re.search(),"name = ""John Pearson, Jr.""",<match object>
+Remove punctuation from an extracted suffix,Use group(1) and remove punctuation with replace().,suffix_match.group(),"suffix_match.group(1).replace(""."", """")","match.group(), str.replace()","suffix_match from John Pearson, Jr.",Jr
+Remove name suffixes with a reusable regex,Use re.sub() with the same suffix pattern to remove all valid suffixes consistently.,"name.replace(""Jr."", """")","re.sub(r"",?\s*(Jr\.?|Sr\.?|II|III|IV|V)\s*$"", """", name)",re.sub(),"name = ""John Pearson, Jr.""",John Pearson
+Keep only the name before a comma,"Split on ',' and keep only the first part.",name.split(),"name.split("","")[0]",str.split(),"name = ""Sndor Kzmr, Count""",Sndor Kzmr
+Clean spacing before splitting names,Use split() and join() to collapse extra spaces.,"text.replace(""  "", "" "")",'.join(text.split()),"str.split(), str.join()","text = ""a   b   c""",a b c
+Split a full name into first and last name,Split the name and use indexing to keep the first and last elements.,parts[1] + ' ' + parts[2],parts[0] + ' ' + parts[-1],str.split(),"name = \Britt-Marie Louise Smedh\""""",Britt-Marie Smedh'
+Add a suffix back after cleaning a name,Append the suffix after constructing the cleaned name.,cleaned = suffix + ' ' + cleaned,cleaned += ' ' + suffix,string concatenation,"cleaned = \John Pearson\""","suffix = \""Jr\"""""
+Expand a Series of dictionaries into DataFrame columns,"Use pd.DataFrame() on the Series converted to a list of dicts. Repeated keys become columns, and missing keys become NaN.",df_counts = ex3_df['MedalCounts'].tolist(),df_counts = pd.DataFrame(ex3_df['MedalCounts'].tolist()),"pd.DataFrame(), pd.Series.tolist()","import pandas as pd\nex3_df = pd.DataFrame({'MedalCounts': [{'Gold': 1, 'Silver': 0, 'Bronze': 2}, {'Gold': 0, 'Silver': 1, 'Bronze': 0}]})",Gold Silver Bronze\n0 1 0 2\n1 0 1 0
+Convert dictionary rows into separate medal columns,Use .apply(pd.Series) to expand each dictionary into its own row of columns where keys become column names.,df_counts = ex3_df['MedalCounts'].apply(dict),df_counts = ex3_df['MedalCounts'].apply(pd.Series),"pd.Series.apply(), pd.Series()","import pandas as pd\nex3_df = pd.DataFrame({'MedalCounts': [{'Gold': 1, 'Silver': 0, 'Bronze': 2}, {'Gold': 0, 'Silver': 1, 'Bronze': 0}]})",Gold Silver Bronze\n0 1 0 2\n1 0 1 0
+Count how many times each medal appears in a string,"Use re.findall() to extract all matches and Counter() to count occurrences, then update a default dictionary so missing medals stay at 0.","counts = Counter(re.search(r'Gold|Bronze|Silver', medals))","from collections import Counter\nimport re\n\ndef count_medals(medals):\n result = {'Gold': 0, 'Silver': 0, 'Bronze': 0}\n if medals != 0:\n found = re.findall(r'Gold|Bronze|Silver', medals)\n counts = dict(Counter(found))\n result.update(counts)\n return result","re.findall(), Counter(), dict.update()",from collections import Counter\nimport re\nmedals = 'GoldGoldSilverBronze',"{'Gold': 2, 'Silver': 1, 'Bronze': 1}"
+Pivot long medal data into wide team columns,Use pivot() to transform unique category values into separate columns.,"wide = df.melt(id_vars=['Team'], var_name='MedalType', value_name='Count')","wide = df.pivot(index='Team', columns='MedalType', values='Count')",pd.DataFrame.pivot(),"import pandas as pd\ndf = pd.DataFrame({'Team': ['USA', 'USA', 'Japan'], 'MedalType': ['Gold', 'Silver', 'Gold'], 'Count': [5, 2, 3]})",MedalType Gold Silver\nTeam \nJapan 3.0 NaN\nUSA 5.0 2.0
+Melt wide medal columns into long rows,Use melt() to convert wide columns into two columns: one for medal type and one for counts.,"long_df = df.pivot(index='Team', columns='MedalType', values='Count')","long_df = df.melt(id_vars=['Team'], value_vars=['Gold', 'Silver', 'Bronze'], var_name='MedalType', value_name='Count')",pd.DataFrame.melt(),"import pandas as pd\ndf = pd.DataFrame({'Team': ['USA', 'Japan'], 'Gold': [5, 3], 'Silver': [2, 1], 'Bronze': [1, 4]})",Team MedalType Count\n0 USA Gold 5\n1 Japan Gold 3\n2 USA Silver 2\n3 Japan Silver 1\n4 USA Bronze 1\n5 Japan Bronze 4
+Extract digits before the word kg,"Use a lookahead so the pattern checks that ""kg"" comes next without consuming it. This is useful when you want the value before a marker.","match = re.search(r""\d+kg"", label)
+match.group()","match = re.search(r""\d+(?=kg)"", label)
+match.group()","re.search(), match.group()","import re
+label = ""Rice bag 25kg ready for shipping""",25'
+Split text on one or more whitespace characters,Use a quantifier like + or * to control how many times a pattern can repeat. Quantifiers are useful when the number of repeated characters is not fixed.,"re.split(r""\s"", note)","re.split(r""\s+"", note)",re.split(),"import re
+note = ""paid   by\tcard\nconfirmed""","['paid', 'by', 'card', 'confirmed']"
+Rank tied race times with the same rank,Use RANK() when ties should receive the same rank and later ranks should skip numbers. This is common in leaderboards and race standings.,"SELECT runner, time,
+ROW_NUMBER() OVER (PARTITION BY event ORDER BY time) AS finish_rank
+FROM results;","SELECT runner, time,
+RANK() OVER (PARTITION BY event ORDER BY time) AS finish_rank
+FROM results;",RANK(),"results table:
+event runner time
+5k    Ana    20.1
+5k    Bea    20.1
+5k    Cam    20.5","runner time finish_rank
+Ana    20.1 1
+Bea    20.1 1
+Cam    20.5 3"
+Give each row a unique number within a group,Use ROW_NUMBER() when every row must get a unique sequential number in its partition. It does not preserve ties the way RANK() does.,"SELECT customer_id, order_date,
+RANK() OVER (PARTITION BY customer_id ORDER BY order_date) AS seq
+FROM orders;","SELECT customer_id, order_date,
+ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS seq
+FROM orders;",ROW_NUMBER(),"orders table:
+customer_id order_date
+101         2024-01-01
+101         2024-01-01
+101         2024-01-03","customer_id order_date  seq
+101         2024-01-01  1
+101         2024-01-01  2
+101         2024-01-03  3"
+Compare each row to the previous row in SQLite,Use LAG() to look at a value from an earlier row in the same ordered partition. This is helpful for change-over-time comparisons.,"SELECT store, sale_date, sales,
+sales - LEAD(sales) OVER (PARTITION BY store ORDER BY sale_date) AS diff_from_prev
+FROM daily_sales;","SELECT store, sale_date, sales,
+sales - LAG(sales) OVER (PARTITION BY store ORDER BY sale_date) AS diff_from_prev
+FROM daily_sales;",LAG(),"daily_sales table:
+store sale_date   sales
+A     2024-01-01  100
+A     2024-01-02  120
+A     2024-01-03  90","store sale_date   sales diff_from_prev
+A     2024-01-01  100   NULL
+A     2024-01-02  120   20
+A     2024-01-03  90   -30"
+Create a reusable filtered table with a CTE,Use a CTE with WITH to create a named intermediate result that later queries can reference. This makes multi-step SQL easier to read and debug.,"SELECT customer_id, SUM(amount) AS total_spent
+FROM orders
+WHERE amount >= 50
+GROUP BY customer_id;","WITH filtered_orders AS (
+SELECT customer_id, amount
+FROM orders
+WHERE amount >= 50
+)
+SELECT customer_id, SUM(amount) AS total_spent
+FROM filtered_orders
+GROUP BY customer_id;",WITH,"orders table:
+customer_id amount
+1           40
+1           60
+2           70","customer_id total_spent
+1           60
+2           70"
+Sort strings without case sensitivity,Use COLLATE NOCASE so text comparison ignores case during sorting or matching. This is helpful for user-facing alphabetical order.,"SELECT name
+FROM customers
+ORDER BY name;","SELECT name
+FROM customers
+ORDER BY name COLLATE NOCASE;",COLLATE,"customers table:
+name
+alice
+Bob
+carol","name
+alice
+Bob
+carol"
+Convert a dictionary into a one-row DataFrame,Pass the existing dictionary inside a list so pandas treats it as one row. Passing the dict directly would make the keys act like columns but the values may need an index.,df = pd.DataFrame(monthly_sales),df = pd.DataFrame([monthly_sales]),pd.DataFrame(),"import pandas as pd
+monthly_sales = {'Jan': 1200, 'Feb': 1350, 'Mar': 1280}","Jan   Feb   Mar
+0  1200  1350  1280"
+Create a previous-row column in pandas,Use shift() after grouping so each row lines up with the previous value in the same store. This is useful for day-over-day comparisons.,df['prev_sales'] = df['sales'].shift(1),df['prev_sales'] = df.groupby('store')['sales'].shift(1),"groupby(), shift()","import pandas as pd
+df = pd.DataFrame({
+'store': ['A', 'A', 'B', 'B'],
+'sales': [100, 120, 80, 95]
+})","store  sales  prev_sales
+0     A    100         NaN
+1     A    120       100.0
+2     B     80         NaN
+3     B     95        80.0"
+Use SQL LAG to compare with the previous row,Use LAG() over a partition ordered by the race time or sequence column. This brings the earlier row's value into the current row.,"SELECT event, runner, time,
+time - time AS diff_from_prev
+FROM race_results;","SELECT event, runner, time,
+LAG(time) OVER (PARTITION BY event ORDER BY time) AS prev_time
+FROM race_results;",LAG(),"race_results table:
+event runner time
+400m  Mia    52.3
+400m  Ava    53.5
+400m  Eli    54.8","event runner time prev_time
+400m  Mia    52.3 NULL
+400m  Ava    53.5 52.3
+400m  Eli    54.8 53.5"
+Count how many times a substring appears,Use count() on the string when you want the number of non-overlapping occurrences of a substring. This is simpler than looping manually.,total_no = len([x for x in responses if x == 'no']),total_no = responses.count('no'),str.count(),responses = 'yes/no/no/yes',2
+Find or remove a value from a list,"Use index() to find the first matching position and pop() or remove() to delete it. index() returns the location, while pop() removes by position.",tasks.pop('urgent'),"i = tasks.index('urgent')
+removed = tasks.pop(i)","list.index(), list.pop()","tasks = ['email', 'urgent', 'call']","i = 1
+removed = 'urgent'
+tasks = ['email', 'call']"
+Remove the first matching value from a list,Use remove() when you want to delete the first occurrence of a known value. It is simpler than searching for the index first.,tags.pop('sale'),tags.remove('sale'),list.remove(),"tags = ['new', 'sale', 'popular']","tags = ['new', 'popular']"
+Filter DataFrame rows with multiple conditions,Use boolean masking with parentheses around each condition and combine them with &. This is the standard way to filter rows by multiple conditions.,filtered = df[df['price'] > 100 and df['stock'] > 0],filtered = df[(df['price'] > 100) & (df['stock'] > 0)],boolean masking,"import pandas as pd
+df = pd.DataFrame({
+'item': ['A', 'B', 'C'],
+'price': [80, 120, 150],
+'stock': [5, 0, 3]
+})","item  price  stock
+2    C    150      3"
+Avoid using a boolean mask on the wrong DataFrame,"Boolean masks align by index in pandas, so mismatched indexes can filter the wrong rows or raise errors. Build the mask from the same DataFrame you are filtering.","mask = df1['price'] > 100
+filtered = df2[mask]","mask = df2['price'] > 100
+filtered = df2[mask]",boolean masking,"import pandas as pd
+df1 = pd.DataFrame({'price': [80, 120]}, index=[0, 1])
+df2 = pd.DataFrame({'price': [150, 90]}, index=[10, 11])","price
+10   150"
+Convert a pandas Index to a mutable list,"Convert the Index to a list using tolist() because Index objects are immutable, then modify the list.","import pandas as pd
+
+idx = pd.Index(['P100','P200','P300'])
+idx.remove('P200')","import pandas as pd
+
+idx = pd.Index(['P100','P200','P300'])
+ids = idx.tolist()
+ids.remove('P200')
+ids",pd.Index.tolist(),"import pandas as pd
+
+idx = pd.Index(['P100','P200','P300'])
+ids = idx.tolist()
+ids.remove('P200')
+ids","['P100', 'P300']"
+Convert defaultdict to a normal dict,Convert the defaultdict to a regular dict using dict() so it behaves like a normal mapping without auto-creating keys.,"from collections import defaultdict
+
+counts = defaultdict(int)
+counts['A'] += 2
+counts['B'] += 1
+counts","from collections import defaultdict
+
+counts = defaultdict(int)
+counts['A'] += 2
+counts['B'] += 1
+result = dict(counts)
+result",dict(),"from collections import defaultdict
+
+counts = defaultdict(int)
+counts['A'] += 2
+counts['B'] += 1
+result = dict(counts)
+result","{'A': 2, 'B': 1}"
+Convert filtered Index values into a list,Use tolist() on the Index to convert it into a Python list for easy iteration and mutation.,"import pandas as pd
+
+df = pd.DataFrame({'sales':[80,120,150]}, index=['a','b','c'])
+df.loc[df['sales'] > 100].index.append('d')","import pandas as pd
+
+df = pd.DataFrame({'sales':[80,120,150]}, index=['a','b','c'])
+idx_list = df.loc[df['sales'] > 100].index.tolist()
+idx_list.append('d')
+idx_list",pd.Index.tolist(),"import pandas as pd
+
+df = pd.DataFrame({'sales':[80,120,150]}, index=['a','b','c'])
+idx_list = df.loc[df['sales'] > 100].index.tolist()
+idx_list.append('d')
+idx_list","['b', 'c', 'd']"
+Convert pandas Index to NumPy array for math,Convert the Index to a NumPy array using to_numpy() so you can apply vectorized numeric operations.,"import pandas as pd
+
+temps = pd.Index([68,72,75])
+temps - 70","import pandas as pd
+import numpy as np
+
+temps = pd.Index([68,72,75])
+arr = temps.to_numpy()
+arr - 70",pd.Index.to_numpy(),"import pandas as pd
+import numpy as np
+
+temps = pd.Index([68,72,75])
+arr = temps.to_numpy()
+arr - 70","array([-2, 2, 5])"
+Convert Python list to NumPy array for fast math,Convert the list into a NumPy array using np.array() to enable vectorized operations.,"readings = [1.0,2.0,3.0]
+readings * 2","import numpy as np
+
+readings = [1.0,2.0,3.0]
+arr = np.array(readings)
+arr * 2",np.array(),"import numpy as np
+
+readings = [1.0,2.0,3.0]
+arr = np.array(readings)
+arr * 2","array([2., 4., 6.])"
+Convert dictionary data into a DataFrame,Convert the dictionary into a DataFrame using pd.DataFrame() so you can perform tabular operations like sorting and plotting.,"import pandas as pd
+
+revenue = {'Jan':100,'Feb':150}
+pd.DataFrame(revenue)","import pandas as pd
+
+revenue = {'Jan':100,'Feb':150}
+df = pd.DataFrame(list(revenue.items()), columns=['month','revenue'])
+df",pd.DataFrame(),"import pandas as pd
+
+revenue = {'Jan':100,'Feb':150}
+df = pd.DataFrame(list(revenue.items()), columns=['month','revenue'])
+df","month revenue
+0 Jan 100
+1 Feb 150"
+Melt wide columns into long rows,Use melt() to convert wide columns into a long format with variable and value columns.,"import pandas as pd
+
+df = pd.DataFrame({
+'quarter':['Q1','Q2'],
+'East':[100,120],
+'West':[90,110]
+})
+
+df.stack()","import pandas as pd
+
+df = pd.DataFrame({
+'quarter':['Q1','Q2'],
+'East':[100,120],
+'West':[90,110]
+})
+
+long_df = df.melt(
+id_vars='quarter',
+var_name='region',
+value_name='sales'
+)
+long_df",pd.DataFrame.melt(),"import pandas as pd
+
+df = pd.DataFrame({
+'quarter':['Q1','Q2'],
+'East':[100,120],
+'West':[90,110]
+})
+
+long_df = df.melt(
+id_vars='quarter',
+var_name='region',
+value_name='sales'
+)
+long_df","quarter region sales
+0 Q1 East 100
+1 Q2 East 120
+2 Q1 West 90
+3 Q2 West 110"
+Stack columns into a hierarchical Series,"Use stack() to move columns into the index, creating a Series with a multi-level index.","import pandas as pd
+
+df = pd.DataFrame({
+'East':[100,120],
+'West':[90,110]
+}, index=['Q1','Q2'])
+
+df.melt()","import pandas as pd
+
+df = pd.DataFrame({
+'East':[100,120],
+'West':[90,110]
+}, index=['Q1','Q2'])
+
+stacked = df.stack()
+stacked",pd.DataFrame.stack(),"import pandas as pd
+
+df = pd.DataFrame({
+'East':[100,120],
+'West':[90,110]
+}, index=['Q1','Q2'])
+
+stacked = df.stack()
+stacked","Q1 East 100
+West 90
+Q2 East 120
+West 110
+dtype: int64"
+Unstack index levels back into columns,Use unstack() to pivot one index level back into columns.,"import pandas as pd
+
+s = pd.Series(
+[100,90,120,110],
+index=[['Q1','Q1','Q2','Q2'],['East','West','East','West']]
+)
+
+s.melt()","import pandas as pd
+
+s = pd.Series(
+[100,90,120,110],
+index=[['Q1','Q1','Q2','Q2'],['East','West','East','West']]
+)
+
+df = s.unstack()
+df",pd.Series.unstack(),"import pandas as pd
+
+s = pd.Series(
+[100,90,120,110],
+index=[['Q1','Q1','Q2','Q2'],['East','West','East','West']]
+)
+
+df = s.unstack()
+df","East West
+Q1 100 90
+Q2 120 110"
+Use pivot to rebuild wide data from long data,Use pivot() to reshape long data back into wide format when each combination is unique.,"import pandas as pd
+
+long_df = pd.DataFrame({
+'month':['Jan','Jan','Feb','Feb'],
+'type':['A','B','A','B'],
+'value':[1,2,3,4]
+})
+
+long_df.unmelt()","import pandas as pd
+
+long_df = pd.DataFrame({
+'month':['Jan','Jan','Feb','Feb'],
+'type':['A','B','A','B'],
+'value':[1,2,3,4]
+})
+
+wide_df = long_df.pivot(
+index='month',
+columns='type',
+values='value'
+)
+wide_df",pd.DataFrame.pivot(),"import pandas as pd
+
+long_df = pd.DataFrame({
+'month':['Jan','Jan','Feb','Feb'],
+'type':['A','B','A','B'],
+'value':[1,2,3,4]
+})
+
+wide_df = long_df.pivot(
+index='month',
+columns='type',
+values='value'
+)
+wide_df","type A B
+month
+Feb 3 4
+Jan 1 2"
+Count total group rows including missing values,"Use groupby().size() because it counts all rows regardless of missing values, ensuring you include every appearance.","import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+df.groupby('Name')['Medal'].count()","import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+result = df.groupby('Name').size()
+result",pd.DataFrame.groupby(),"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+result = df.groupby('Name').size()
+result","Name
+A    2
+B    1
+dtype: int64"
+Count non-missing values in each group,Use groupby().count() on the Medal column because it only counts non-missing values.,"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+df.groupby('Name').size()","import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+result = df.groupby('Name')['Medal'].count()
+result",pd.DataFrame.groupby(),"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+result = df.groupby('Name')['Medal'].count()
+result","Name
+A    1
+B    1
+Name: Medal, dtype: int64"
+Group missing values without dropping them,"Group only by the stable column (Name) and avoid grouping on Medal, because grouping on a column with NaN will drop those rows.","import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+df.groupby(['Name','Medal']).size()","import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+result = df.groupby('Name').size()
+result",pd.DataFrame.groupby(),"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['A', 'A', 'B'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+result = df.groupby('Name').size()
+result","Name
+A    2
+B    1
+dtype: int64"
+Avoid division by zero with conditional logic,Use np.where() to conditionally handle zero denominators and safely compute the percentage.,"import pandas as pd
+
+df = pd.DataFrame({
+'Golds': [1, 0],
+'Opportunity Count': [2, 0]
+})
+
+df['Gold Pct'] = df['Golds'] / df['Opportunity Count']","import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+'Golds': [1, 0],
+'Opportunity Count': [2, 0]
+})
+
+df['Gold Pct'] = np.where(
+df['Opportunity Count'] == 0,
+0,
+df['Golds'] / df['Opportunity Count']
+)
+df",np.where(),"import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+'Golds': [1, 0],
+'Opportunity Count': [2, 0]
+})
+
+df['Gold Pct'] = np.where(
+df['Opportunity Count'] == 0,
+0,
+df['Golds'] / df['Opportunity Count']
+)
+df","Golds  Opportunity Count  Gold Pct
+0      1                  2      0.50
+1      0                  0      0.00"
+Join grouped results by shared index,Use join() because both objects share the same index and you want to align them directly.,"import pandas as pd
+
+df1 = pd.DataFrame({
+'Name': ['A','B'],
+'Golds': [2,1]
+}).set_index('Name')
+
+df2 = pd.DataFrame({
+'Name': ['A','B'],
+'Count': [3,2]
+}).set_index('Name')
+
+df1.merge(df2, on='Name')","import pandas as pd
+
+df1 = pd.DataFrame({
+'Name': ['A','B'],
+'Golds': [2,1]
+}).set_index('Name')
+
+df2 = pd.DataFrame({
+'Name': ['A','B'],
+'Count': [3,2]
+}).set_index('Name')
+
+result = df1.join(df2)
+result",pd.DataFrame.join(),"import pandas as pd
+
+df1 = pd.DataFrame({
+'Name': ['A','B'],
+'Golds': [2,1]
+}).set_index('Name')
+
+df2 = pd.DataFrame({
+'Name': ['A','B'],
+'Count': [3,2]
+}).set_index('Name')
+
+result = df1.join(df2)
+result","Golds  Count
+Name
+A         2      3
+B         1      2"
+Merge DataFrames on a shared column,Use merge() because the join key is a column rather than an index.,"import pandas as pd
+
+df1 = pd.DataFrame({
+'Name': ['A','B'],
+'Golds': [2,1]
+})
+
+df2 = pd.DataFrame({
+'Name': ['A','B'],
+'Count': [3,2]
+})
+
+df1.join(df2)","import pandas as pd
+
+df1 = pd.DataFrame({
+'Name': ['A','B'],
+'Golds': [2,1]
+})
+
+df2 = pd.DataFrame({
+'Name': ['A','B'],
+'Count': [3,2]
+})
+
+result = df1.merge(df2, on='Name')
+result",pd.DataFrame.merge(),"import pandas as pd
+
+df1 = pd.DataFrame({
+'Name': ['A','B'],
+'Golds': [2,1]
+})
+
+df2 = pd.DataFrame({
+'Name': ['A','B'],
+'Count': [3,2]
+})
+
+result = df1.merge(df2, on='Name')
+result","Name  Golds  Count
+0    A      2      3
+1    B      1      2"
+Write multiple CTEs in one WITH statement,Use one WITH clause and separate each CTE with a comma. The last CTE is followed directly by the final SELECT with no trailing comma.,"WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+)
+totals AS (
+SELECT SUM(amount) AS total_amount
+FROM sales
+)
+SELECT *
+FROM totals;","WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+),
+totals AS (
+SELECT SUM(amount) AS total_amount
+FROM sales
+)
+SELECT *
+FROM totals;",WITH,"WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+),
+totals AS (
+SELECT SUM(amount) AS total_amount
+FROM sales
+)
+SELECT *
+FROM totals;","total_amount
+100"
+Write one CTE before a final SELECT,"A single CTE does not need a comma before the final SELECT, because there is no second CTE to separate.","WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+)
+totals AS (
+SELECT SUM(amount) AS total_amount
+FROM sales
+)
+SELECT *
+FROM totals;","WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+),
+totals AS (
+SELECT SUM(amount) AS total_amount
+FROM sales
+)
+SELECT *
+FROM totals;",WITH,"WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+),
+totals AS (
+SELECT SUM(amount) AS total_amount
+FROM sales
+)
+SELECT *
+FROM totals;","total_amount
+100"
+Repeat one constant value across every row,"Use a scalar subquery in the SELECT list. If the subquery returns one value, SQL repeats that same value for every output row.","WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+),
+SELECT *
+FROM sales;","WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+)
+SELECT *
+FROM sales;",WITH,"WITH sales AS (
+SELECT 'Ava' AS name, 100 AS amount
+)
+SELECT *
+FROM sales;","name	amount
+Ava	100"
+Access nested keys without raising errors if missing,"d.get(key1, {}).get(key2)",built-in,"## Convert the below to safe nested access using get
+
+result = None
+
+if 'color' in mapping:
+    if 'red' in mapping['color']:
+        result = mapping['color']['red']",.get(),mapping = {'color': {'red': '#FF0000'}},result = '#FF0000'
+Access a value inside a nested dictionary,d[key1][key2],built-in,"## Convert the below to access a nested value
+
+result = None
+
+if 'user' in data and 'age' in data['user']:
+    result = data['user']['age']",built-in,data = {'user': {'age': 25}},result = 25
+Convert all values in a dictionary to a new type,"{k: int(v) for k, v in d.items()}",built-in,"## Convert the below to a dict comprehension
+
+result = {}
+
+for k, v in d.items():
+    result[k] = int(v)",built-in,"d = {'a': '1', 'b': '2', 'c': '3'}","result = {'a': 1, 'b': 2, 'c': 3}"
+Convert all keys in a dictionary to a new type,"{int(k): v for k, v in d.items()}",built-in,"## Convert the below to a dict comprehension
+
+result = {}
+
+for k, v in d.items():
+    result[int(k)] = v",built-in,"d = {'1': 'apple', '2': 'banana', '3': 'orange'}","result = {1: 'apple', 2: 'banana', 3: 'orange'}"
+Add a value to a list stored inside a dictionary key,d[key].append(value),built-in,"## Convert the below to direct append syntax
+
+for item in values:
+    data['nums'].append(item)",built-in,"data = {'nums': []}
+values = [10, 20, 30]","data = {'nums': [10, 20, 30]}"
+Convert all elements in a list to a new type,[int(x) for x in lst],built-in,"## Convert the below to a list comprehension
+
+result = []
+
+for x in lst:
+    result.append(int(x))",built-in,"lst = ['1', '2', '3']","result = [1, 2, 3]"
+Convert all list values inside a dictionary to a new type,"{k: [int(x) for x in v] for k, v in d.items()}",built-in,"## Convert the below to a nested comprehension
+
+result = {}
+
+for k, v in d.items():
+    inner = []
+    for x in v:
+        inner.append(int(x))
+    result[k] = inner",built-in,"d = {'a': ['1', '2'], 'b': ['3', '4']}","result = {'a': [1, 2], 'b': [3, 4]}"
+Select only certain keys from a dictionary,"{k: v for k, v in d.items() if k in keys}",built-in,"## Convert the below to a dict comprehension
+
+result = {}
+
+for k, v in d.items():
+    if k in keys:
+        result[k] = v",built-in,"d = {'a': 10, 'b': 20, 'c': 30}
+keys = {'a', 'c'}","result = {'a': 10, 'c': 30}"
+Select only items where values meet a condition,"{k: v for k, v in d.items() if v > threshold}",built-in,"## Convert the below to a dict comprehension
+
+result = {}
+
+for k, v in d.items():
+    if v > threshold:
+        result[k] = v",built-in,"d = {'a': 5, 'b': 12, 'c': 20}","threshold = 10 result = {'b': 12, 'c': 20}"
+Pull a specific nested key from each inner dictionary,"{outer_k: inner_d[inner_k] for outer_k, inner_d in d.items()}",built-in,"## Convert the below to a dict comprehension
+
+result = {}
+
+for outer_k, inner_d in d.items():
+    result[outer_k] = inner_d['val']",built-in,"d = {'x': {'val': 100}, 
+'y': {'val': 200}}","result = {'x': 100, 'y': 200}"
+Conditionally transform values based on key,"{k: (int(v) if k in keys else v) for k, v in d.items()}",built-in,"## Convert the below to a dict comprehension
+
+result = {}
+
+for k, v in d.items():
+    if k in keys:
+        result[k] = int(v)
+    else:
+        result[k] = v",built-in,"d = {'a': '1', 'b': '2', 'c': '3'}
+keys = {'a', 'c'}","result = {'a': 1, 'b': '2', 'c': 3}"
+Add a value to each list in a dictionary without mutating original,"{k: v + [new_val] for k, v in d.items()}",built-in,"## Convert the below to a dict comprehension
+
+result = {}
+
+for k, v in d.items():
+    result[k] = v + [new_val]",built-in,"d = {'a': [1, 2], 'b': [3, 4]}
+new_val = 99","result = {'a': [1, 2, 99], 'b': [3, 4, 99]}"
+Build a regex pattern safely from a variable,Use a raw string for regex boundaries and re.escape() for the variable so special characters inside the token are treated literally.,"import re\n\ntoken = 'a+b'\nsentence = 'a+b aab cab'\npattern = re.compile(r'\b' + token + r'\b')\nresult = re.findall(pattern, sentence)","import re\n\ntoken = 'a+b'\nsentence = 'a+b aab cab'\npattern = re.compile(r'\b' + re.escape(token) + r'\b')\nresult = re.findall(pattern, sentence)","re.compile(),re.escape(),re.findall()","import re\n\ntoken = 'a+b'\nsentence = 'a+b aab cab'\npattern = re.compile(r'\b' + re.escape(token) + r'\b')\nresult = re.findall(pattern, sentence)",['a+b']
+Count full-word matches in a sentence,"Split the string into tokens when exact token matching is enough, then count the word in the token list.",sentence = 'book bookshelf book review'\nword = 'book'\ncount = sentence.count(word),sentence = 'book bookshelf book review'\nword = 'book'\ntokens = sentence.split()\ncount = tokens.count(word),"str.split(),list.count()",sentence = 'book bookshelf book review'\nword = 'book'\ntokens = sentence.split()\ncount = tokens.count(word),2
+"Sort dictionary counts by highest count, then alphabetical tie-break",Sort the dictionary items using negative value for descending counts and key for ascending alphabetical tie-breaks.,"counts = {'book': 2, 'academic': 3, 'page': 3, 'reviews': 2}\nsorted_counts = sorted(counts.items())","counts = {'book': 2, 'academic': 3, 'page': 3, 'reviews': 2}\nsorted_counts = sorted(counts.items(), key=lambda item: (-item[1], item[0]))","sorted(),dict.items()","counts = {'book': 2, 'academic': 3, 'page': 3, 'reviews': 2}\nsorted_counts = sorted(counts.items(), key=lambda item: (-item[1], item[0]))","[('academic', 3), ('page', 3), ('book', 2), ('reviews', 2)]"
+Find missing required columns,Use set difference with required columns on the left and existing columns on the right; switching the operands answers a different question.,"required = {'id', 'title', 'pseudodoc'}\nexisting = {'id', 'title', 'date'}\nmissing = existing - required","required = {'id', 'title', 'pseudodoc'}\nexisting = {'id', 'title', 'date'}\nmissing = required - existing",set(),"required = {'id', 'title', 'pseudodoc'}\nexisting = {'id', 'title', 'date'}\nmissing = required - existing",{'pseudodoc'}
+Find extra columns that are not required,Use set difference with existing columns on the left and required columns on the right to find extras.,"required = {'id', 'title', 'pseudodoc'}\nexisting = {'id', 'title', 'date'}\nextra = required - existing","required = {'id', 'title', 'pseudodoc'}\nexisting = {'id', 'title', 'date'}\nextra = existing - required",set(),"required = {'id', 'title', 'pseudodoc'}\nexisting = {'id', 'title', 'date'}\nextra = existing - required",{'date'}
+Flatten nested lists into one list,Use extend() to add each group’s elements into the result list instead of appending the whole group as one nested item.,"row1 = ['A', 10]\nrow2 = ['B', 20]\nrow3 = ['C', 30]\nresults = []\nresults.append([row1, row2, row3])","row1 = ['A', 10]\nrow2 = ['B', 20]\nrow3 = ['C', 30]\nresults = []\nresults.extend([row1, row2, row3])",list.extend(),"row1 = ['A', 10]\nrow2 = ['B', 20]\nrow3 = ['C', 30]\nresults = []\nresults.extend([row1, row2, row3])","[['A', 10], ['B', 20], ['C', 30]]"
+Add one list into another list in place,Use extend() when you want to mutate the original list instead of creating a new list with +.,"a = [1, 2]\nb = [3, 4]\nold_id = id(a)\na = a + b\nsame_object = id(a) == old_id","a = [1, 2]\nb = [3, 4]\nold_id = id(a)\na.extend(b)\nsame_object = id(a) == old_id","list.extend(),id()","a = [1, 2]\nb = [3, 4]\nold_id = id(a)\na.extend(b)\nsame_object = id(a) == old_id",TRUE
+Upsample the minority class to match the majority class,"Split the majority and minority classes, resample the minority with replacement, then concatenate it with the majority class.","import pandas as pd\nfrom sklearn.utils import resample\n\nrandom_state = 42\ndf = pd.DataFrame({'label': [0, 0, 0, 1], 'score': [10, 20, 30, 99]})\nmajority = df[df['label'] == 0]\nminority = df[df['label'] == 1]\nresampled = resample(minority, replace=False, n_samples=len(majority), random_state=random_state)\nbalanced = pd.concat([majority, resampled])","import pandas as pd\nfrom sklearn.utils import resample\n\nrandom_state = 42\ndf = pd.DataFrame({'label': [0, 0, 0, 1], 'score': [10, 20, 30, 99]})\nmajority = df[df['label'] == 0]\nminority = df[df['label'] == 1]\nresampled = resample(minority, replace=True, n_samples=len(majority), random_state=random_state)\nbalanced = pd.concat([majority, resampled], ignore_index=True)","resample(),pd.concat()","import pandas as pd\nfrom sklearn.utils import resample\n\nrandom_state = 42\ndf = pd.DataFrame({'label': [0, 0, 0, 1], 'score': [10, 20, 30, 99]})\nmajority = df[df['label'] == 0]\nminority = df[df['label'] == 1]\nresampled = resample(minority, replace=True, n_samples=len(majority), random_state=random_state)\nbalanced = pd.concat([majority, resampled], ignore_index=True)",label score\n0 0 10\n1 0 20\n2 0 30\n3 1 99\n4 1 99\n5 1 99
+Preserve class proportions during train/test split,Use train_test_split() with stratify=y so each split keeps roughly the same class balance as the original target.,"from sklearn.model_selection import train_test_split\n\nX = [[1], [2], [3], [4], [5], [6]]\ny = [0, 0, 0, 1, 1, 1]\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)","from sklearn.model_selection import train_test_split\n\nX = [[1], [2], [3], [4], [5], [6]]\ny = [0, 0, 0, 1, 1, 1]\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42, stratify=y)",train_test_split(),"from sklearn.model_selection import train_test_split\n\nX = [[1], [2], [3], [4], [5], [6]]\ny = [0, 0, 0, 1, 1, 1]\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42, stratify=y)","X_train = [[2], [4], [6], [3]]\nX_test = [[1], [5]]\ny_train = [0, 1, 1, 0]\ny_test = [0, 1]"
+Filter a NumPy array by one condition,Create a boolean mask and place it inside square brackets to return only matching values.,"import numpy as np\n\narr = np.array([5, 12, 8, 20])\nfiltered = arr[arr > 10 and arr < 20]","import numpy as np\n\narr = np.array([5, 12, 8, 20])\nfiltered = arr[arr > 10]",np.array(),"import numpy as np\n\narr = np.array([5, 12, 8, 20])\nfiltered = arr[arr > 10]","array([12, 20])"
+Filter a NumPy array using multiple conditions,Use parentheses around each condition and combine them with & instead of Python's and.,"import numpy as np\n\narr = np.array([5, 12, 18, 20])\nfiltered = arr[arr > 10 and arr < 20]","import numpy as np\n\narr = np.array([5, 12, 18, 20])\nfiltered = arr[(arr > 10) & (arr < 20)]",np.array(),"import numpy as np\n\narr = np.array([5, 12, 18, 20])\nfiltered = arr[(arr > 10) & (arr < 20)]","array([12, 18])"
+Filter DataFrame rows by a column condition,"A DataFrame filter usually uses a boolean Series created from a column, then applies it to the DataFrame.","import pandas as pd\n\ndf = pd.DataFrame({'name': ['Mia', 'Ava', 'Leo'], 'score': [90, 75, 88]})\nfiltered = df[df > 80]","import pandas as pd\n\ndf = pd.DataFrame({'name': ['Mia', 'Ava', 'Leo'], 'score': [90, 75, 88]})\nfiltered = df[df['score'] > 80]",pd.DataFrame(),"import pandas as pd\n\ndf = pd.DataFrame({'name': ['Mia', 'Ava', 'Leo'], 'score': [90, 75, 88]})\nfiltered = df[df['score'] > 80]",name score\n0 Mia 90\n2 Leo 88
+Filter a Python list by a condition,"Regular Python lists do not support vectorized comparisons, so use a list comprehension instead.","values = [5, 12, 8, 20]\nfiltered = values[values > 10]","values = [5, 12, 8, 20]\nfiltered = [x for x in values if x > 10]",list(),"values = [5, 12, 8, 20]\nfiltered = [x for x in values if x > 10]","[12, 20]"
+Count how many clusters each token appears in,"Use Counter() and update() each token set one group at a time. Because each group is a set, each token contributes at most +1 per cluster.",from collections import Counter\n\ntoken_counts = Counter(token_sets.values()),from collections import Counter\n\ntoken_counts = Counter()\nfor tokens in token_sets.values():\n token_counts.update(tokens),"collections.Counter(),collections.Counter.update(),dict.values()","from collections import Counter\n\ntoken_sets = {\n 'cluster_1': {'apple', 'banana'},\n 'cluster_2': {'apple', 'cherry'},\n 'cluster_3': {'banana', 'date'}\n}\n\ntoken_counts = Counter()\nfor tokens in token_sets.values():\n token_counts.update(tokens)","Counter({'apple': 2, 'banana': 2, 'cherry': 1, 'date': 1})"
+Keep tokens that appear in at most one cluster,Use a set comprehension to filter each cluster's token set based on the global Counter counts. This keeps the original cluster structure while removing common tokens.,kept = []\nfor token in tokens:\n if token_counts[token] <= max_occur:\n kept.append(token),kept = {token for token in tokens if token_counts[token] <= max_occur},"set(),collections.Counter()","from collections import Counter\n\ntokens = {'apple', 'banana', 'cherry'}\ntoken_counts = Counter({'apple': 2, 'banana': 1, 'cherry': 1})\nmax_occur = 1\n\nkept = {token for token in tokens if token_counts[token] <= max_occur}","{'banana', 'cherry'}"
+Rebuild a dictionary with only distinctive tokens,Loop through dict.items() so you have both the cluster name and its token set. Then assign the filtered set back to the same cluster key only if the set is not empty.,for tokens in token_sets.values():\n distinctive[cluster] = kept,"distinctive = {}\nfor cluster, tokens in token_sets.items():\n kept = {token for token in tokens if token_counts[token] <= max_occur}\n if kept:\n distinctive[cluster] = kept","dict.items(),set()","from collections import Counter\n\ntoken_sets = {\n 'cluster_1': {'apple', 'banana'},\n 'cluster_2': {'apple', 'cherry'},\n 'cluster_3': {'banana', 'date'}\n}\nmax_occur = 1\n\ntoken_counts = Counter()\nfor tokens in token_sets.values():\n token_counts.update(tokens)\n\ndistinctive = {}\nfor cluster, tokens in token_sets.items():\n kept = {token for token in tokens if token_counts[token] <= max_occur}\n if kept:\n distinctive[cluster] = kept","{'cluster_2': {'cherry'}, 'cluster_3': {'date'}}"
+Only add non-empty filtered results to a dictionary,"Use the truthiness of a set in an if statement. An empty set is False, and a non-empty set is True.",if kept != None:\n distinctive[cluster] = kept,if kept:\n distinctive[cluster] = kept,set(),kept = set()\ndistinctive = {}\ncluster = 'cluster_1'\n\nif kept:\n distinctive[cluster] = kept,{}
+Loop through both keys and values in a dictionary,Use dict.items() when you need both the key and value from a dictionary. Use dict.values() only when you only need the values.,"for tokens in token_sets.values():\n print(cluster, tokens)","for cluster, tokens in token_sets.items():\n print(cluster, tokens)","dict.items(),dict.values()","token_sets = {\n 'cluster_1': {'apple', 'banana'},\n 'cluster_2': {'apple', 'cherry'}\n}\n\nresult = []\nfor cluster, tokens in token_sets.items():\n result.append((cluster, tokens))","[('cluster_1', {'apple', 'banana'}), ('cluster_2', {'apple', 'cherry'})]"
+Update a Counter using values from a dictionary,"Loop through the dictionary values and call update() on each set separately. update() counts the elements inside the set, not the set object itself.",token_counts = Counter(token_sets.values()),token_counts = Counter()\nfor tokens in token_sets.values():\n token_counts.update(tokens),"collections.Counter(),collections.Counter.update(),dict.values()","from collections import Counter\n\ntoken_sets = {\n 'cluster_1': {'red', 'blue'},\n 'cluster_2': {'red', 'green'}\n}\n\ntoken_counts = Counter()\nfor tokens in token_sets.values():\n token_counts.update(tokens)","Counter({'red': 2, 'blue': 1, 'green': 1})"
+Flatten nested token groups before counting tokens,Flatten the nested list before passing values into Counter(). Counter() does not automatically go inside nested lists.,counts = Counter(token_groups),counts = Counter(token for group in token_groups for token in group),collections.Counter(),"from collections import Counter\n\ntoken_groups = [\n ['apple', 'banana'],\n ['apple', 'cherry']\n]\n\ncounts = Counter(token for group in token_groups for token in group)","Counter({'apple': 2, 'banana': 1, 'cherry': 1})"
+Keep valid values and replace invalid values with NaN,Use pd.where() when you want to keep values where a condition is True and replace values where the condition is False.,df_clean = df[df >= 0],"df_clean = df.where(df >= 0, np.nan)",pd.where(),"import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({\n 'quiz1': [10, -1, 8],\n 'quiz2': [9, 7, -1]\n})",quiz1 quiz2\n0 10.0 9.0\n1 NaN 7.0\n2 8.0 NaN
+Replace impossible values while keeping everything else,Use pd.mask() when you want to replace values where a condition is True. It is the opposite mental model of pd.where().,"df_clean = df.where(df > 120, np.nan)","df_clean = df.mask(df > 120, np.nan)",pd.mask(),"import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({\n 'city_a': [72, 130, 85],\n 'city_b': [90, 95, 140]\n})",city_a city_b\n0 72.0 90.0\n1 NaN 95.0\n2 85.0 NaN
+Filter DataFrame columns by partial column name,Use pd.filter() to select columns by label patterns like partial text or regex without manually listing every column.,"problem_cols = ['problem1', 'problem2']\ndf_problems = df[problem_cols]",df_problems = df.filter(like='problem'),pd.filter(),"import pandas as pd\n\ndf = pd.DataFrame({\n 'Email': ['a@school.edu
+', 'b@school.edu
+'],\n 'problem1': [10, 8],\n 'problem2': [9, 7],\n 'notes': ['late', 'ok']\n})",problem1 problem2\n0 10 9\n1 8 7
+Filter DataFrame columns by regex pattern,Use pd.filter() with regex when column selection depends on a naming pattern instead of an exact list.,df_problems = df.filter(like='problem'),df_problems = df.filter(regex=r'^problem\d+$'),pd.filter(),"import pandas as pd\n\ndf = pd.DataFrame({\n 'Email': ['a@school.edu
+', 'b@school.edu
+'],\n 'problem1': [10, 8],\n 'problem2': [9, 7],\n 'problem_extra': [0, 1]\n})",problem1 problem2\n0 10 9\n1 8 7
+Add group totals without collapsing the DataFrame,Use .transform() when you need group-level results returned back to the original row shape. It is useful when you want summaries without losing individual rows.,df['region_total'] = df.groupby('region')['sales'].sum(),df['region_total'] = df.groupby('region')['sales'].transform('sum'),pd.SeriesGroupBy.transform(),"import pandas as pd\n\ndf = pd.DataFrame({\n 'region': ['West', 'West', 'East', 'East'],\n 'sales': [100, 150, 80, 120]\n})",region sales region_total\n0 West 100 250\n1 West 150 250\n2 East 80 200\n3 East 120 200
+Subtract each row from its group average,Use .transform() when the calculation depends on a group but the output should stay aligned with the original rows.,df['centered'] = df.groupby('class')['score'].mean() - df['score'],df['centered'] = df['score'] - df.groupby('class')['score'].transform('mean'),pd.SeriesGroupBy.transform(),"import pandas as pd\n\ndf = pd.DataFrame({\n 'class': ['A', 'A', 'B', 'B'],\n 'score': [80, 90, 70, 100]\n})",class score centered\n0 A 80 -5.0\n1 A 90 5.0\n2 B 70 -15.0\n3 B 100 15.0
+Convert dictionary keys to integers,Use a dictionary comprehension to rebuild the dictionary with transformed keys. Use dict.items() so you can access each key and value together.,"new_scores = dict(int(scores.keys()), scores.values())","new_scores = {int(key): value for key, value in scores.items()}",dict.items(),"scores = {\n '101': 88,\n '102': 91,\n '103': 76\n}","{101: 88, 102: 91, 103: 76}"
+Convert dictionary values to floats,Use a dictionary comprehension to rebuild the dictionary with transformed values. This is useful when imported data stores numbers as strings.,"prices = {key: float(prices) for key, value in prices.items()}","prices_float = {key: float(value) for key, value in prices.items()}",dict.items(),"prices = {\n 'apple': '1.25',\n 'banana': '0.75',\n 'orange': '1.50'\n}","{'apple': 1.25, 'banana': 0.75, 'orange': 1.5}"
+Convert DataFrame columns from strings to floats,Use pd.DataFrame.astype() when you want to convert one or more DataFrame columns to a specific dtype.,df['score'] = float(df['score']),"df[['score', 'attempts']] = df[['score', 'attempts']].astype(float)",pd.DataFrame.astype(),"import pandas as pd\n\ndf = pd.DataFrame({\n 'student': ['Ava', 'Mia'],\n 'score': ['88.5', '91.0'],\n 'attempts': ['2', '3']\n})",student score attempts\n0 Ava 88.5 2.0\n1 Mia 91.0 3.0
+Convert a string column to lowercase strings,Use pd.Series.astype() before .str methods when you need to guarantee the column is treated as strings. Then use the string accessor to apply string methods elementwise.,df['name'] = df['name'].lower(),df['name'] = df['name'].astype(str).str.lower(),"pd.Series.astype(),pd.Series.str.lower()","import pandas as pd\n\ndf = pd.DataFrame({\n 'name': ['Alice', 'BOB', 'Charlie']\n})",name\n0 alice\n1 bob\n2 charlie
+Show overall total without collapsing rows,Use SUM() OVER() to compute the overall total and repeat it on every row without collapsing the table.,SELECT SUM(amount) AS total_revenue FROM orders;,"SELECT order_id, amount, SUM(amount) OVER () AS total_revenue FROM orders;",SUM(),"WITH orders AS (\nSELECT 1 AS order_id, 50 AS amount\nUNION ALL\nSELECT 2, 30\nUNION ALL\nSELECT 3, 20\n)\nSELECT order_id, amount, SUM(amount) OVER () AS total_revenue FROM orders;",order_id amount total_revenue\n1 50 100\n2 30 100\n3 20 100
+Calculate running maximum within each group,Use MAX() OVER(PARTITION BY ... ORDER BY ...) to track the highest value so far inside each group.,MAX(amount),MAX(amount) OVER (PARTITION BY region ORDER BY sale_day),MAX(),"WITH sales AS (\nSELECT 'East' AS region, 1 AS sale_day, 100 AS amount\nUNION ALL\nSELECT 'East', 2, 80\nUNION ALL\nSELECT 'East', 3, 120\nUNION ALL\nSELECT 'West', 1, 90\nUNION ALL\nSELECT 'West', 2, 110\n)\nSELECT region, sale_day, amount, MAX(amount) OVER (PARTITION BY region ORDER BY sale_day) AS running_region_max FROM sales;",region sale_day amount running_region_max\nEast 1 100 100\nEast 2 80 100\nEast 3 120 120\nWest 1 90 90\nWest 2 110 110
+Drop rows with missing values in several columns,Use explicit IS NOT NULL checks joined with AND when every listed column must be present.,"COALESCE(country, cost, cpi_index) IS NOT NULL",country IS NOT NULL AND cost IS NOT NULL AND cpi_index IS NOT NULL,AND,"WITH olympics AS (\nSELECT 'Japan' AS country, 10 AS cost, 120 AS cpi_index\nUNION ALL\nSELECT NULL, 20, 130\nUNION ALL\nSELECT 'Brazil', NULL, 140\nUNION ALL\nSELECT 'Canada', 30, NULL\n)\nSELECT * FROM olympics WHERE country IS NOT NULL AND cost IS NOT NULL AND cpi_index IS NOT NULL;",country cost cpi_index\nJapan 10 120
+Force one value to sort first,Use CASE WHEN in ORDER BY to give one value a custom priority.,ORDER BY country,"ORDER BY CASE WHEN country = 'United States' THEN 0 ELSE 1 END, country",CASE WHEN,"WITH olympics AS (\nSELECT 'Japan' AS country\nUNION ALL\nSELECT 'United States'\nUNION ALL\nSELECT 'Brazil'\n)\nSELECT country FROM olympics ORDER BY CASE WHEN country = 'United States' THEN 0 ELSE 1 END, country;",country\nUnited States\nBrazil\nJapan
+Choose the first non-missing value,Use COALESCE() to return the first non-NULL value.,nickname,"COALESCE(nickname, first_name, email)",COALESCE(),"WITH users AS (\nSELECT 1 AS user_id, NULL AS nickname, 'Ava' AS first_name, 'ava@example.com' AS email\nUNION ALL\nSELECT 2, 'Benny', 'Ben', 'ben@example.com'\nUNION ALL\nSELECT 3, NULL, NULL, 'cam@example.com'\n)\nSELECT user_id, COALESCE(nickname, first_name, email) AS display_name FROM users;",user_id display_name\n1 Ava\n2 Benny\n3 cam@example.com
+Filter rows first then aggregate,Use a subquery to filter first then aggregate the filtered result.,"SELECT customer_id, SUM(amount) FROM orders GROUP BY customer_id;","SELECT t.customer_id, SUM(t.amount) FROM (SELECT customer_id, amount FROM orders WHERE amount >= 50) t GROUP BY t.customer_id;",SUM(),"WITH orders AS (\nSELECT 1 AS customer_id, 40 AS amount\nUNION ALL\nSELECT 1, 60\nUNION ALL\nSELECT 2, 70\n)\nSELECT t.customer_id, SUM(t.amount) FROM (SELECT customer_id, amount FROM orders WHERE amount >= 50) t GROUP BY t.customer_id;",customer_id total_amount\n1 60\n2 70
+Fix SQL integer division,Use a decimal or cast so SQL performs floating-point division.,SELECT 5 / 10,SELECT 5 / 10.0,CAST(),SELECT 5 / 10.0;,pct\n0.5
+Show group totals without collapsing rows,Use SUM() OVER(PARTITION BY ...) to repeat group totals.,GROUP BY category,SUM(price) OVER (PARTITION BY category),SUM(),"WITH sales AS (\nSELECT 'Books' AS category, 1 AS order_id, 20 AS price\nUNION ALL\nSELECT 'Books', 2, 30\nUNION ALL\nSELECT 'Games', 3, 50\n)\nSELECT category, order_id, price, SUM(price) OVER (PARTITION BY category) FROM sales;",category order_id price total\nBooks 1 20 50\nBooks 2 30 50\nGames 3 50 50
+Use row numbers inside each partition,Use ROW_NUMBER() with ORDER BY inside OVER().,ROW_NUMBER() OVER (PARTITION BY event),ROW_NUMBER() OVER (PARTITION BY event ORDER BY time),ROW_NUMBER(),"WITH results AS (\nSELECT '400m' AS event, 'Mia' AS runner, 52.3 AS time\nUNION ALL\nSELECT '400m', 'Ava', 53.5\nUNION ALL\nSELECT '400m', 'Eli', 54.8\n)\nSELECT event, runner, ROW_NUMBER() OVER (PARTITION BY event ORDER BY time) FROM results;",event runner seq\n400m Mia 1\n400m Ava 2\n400m Eli 3
+Separate window ORDER BY from final display ORDER BY,ORDER BY inside OVER() controls calculation; final ORDER BY controls display.,ROW_NUMBER() OVER (PARTITION BY event) ORDER BY runner DESC,ROW_NUMBER() OVER (PARTITION BY event ORDER BY finish_time) ORDER BY runner DESC,ROW_NUMBER(),"WITH results AS (\nSELECT '5k' AS event, 'Ana' AS runner, 20.1 AS finish_time\nUNION ALL\nSELECT '5k', 'Bea', 20.3\nUNION ALL\nSELECT '5k', 'Cam', 20.5\n)\nSELECT event, runner, ROW_NUMBER() OVER (PARTITION BY event ORDER BY finish_time) FROM results ORDER BY runner DESC;",event runner seq\n5k Cam 3\n5k Bea 2\n5k Ana 1
+Count rows that meet a condition,Use SUM(CASE WHEN ...) to count matches.,COUNT(CASE WHEN amount >= 100 THEN 1 END),SUM(CASE WHEN amount >= 100 THEN 1 ELSE 0 END),SUM(),"WITH orders AS (\nSELECT 1 AS customer_id, 80 AS amount\nUNION ALL\nSELECT 1, 120\nUNION ALL\nSELECT 1, 150\nUNION ALL\nSELECT 2, 90\n)\nSELECT customer_id, SUM(CASE WHEN amount >= 100 THEN 1 ELSE 0 END) FROM orders GROUP BY customer_id;",customer_id count\n1 2\n2 0
+Create labels with CASE WHEN,Use CASE WHEN to create conditional labels.,SELECT age,SELECT CASE WHEN age >= 18 THEN 'Adult' ELSE 'Minor' END,CASE WHEN,"WITH people AS (\nSELECT 'Ava' AS name, 17 AS age\nUNION ALL\nSELECT 'Ben', 22\n)\nSELECT name, CASE WHEN age >= 18 THEN 'Adult' ELSE 'Minor' END FROM people;",name label\nAva Minor\nBen Adult
+Extract text after a delimiter,Use INSTR() + SUBSTR() to extract text after delimiter.,"SUBSTR(code,1,...)","SUBSTR(code,INSTR(code,'-')+1)","SUBSTR(), INSTR()","WITH items AS (\nSELECT 'SKU-2048-RED' AS code\nUNION ALL\nSELECT 'ITEM-55-BLUE'\n)\nSELECT code, SUBSTR(code,INSTR(code,'-')+1) FROM items;",code suffix\nSKU-2048-RED 2048-RED\nITEM-55-BLUE 55-BLUE
+Trim spaces,Use TRIM() to remove leading and trailing whitespace.,SELECT name,SELECT TRIM(name),TRIM(),WITH athletes AS (\nSELECT '  Ava  ' AS name\nUNION ALL\nSELECT ' Ben'\n)\nSELECT TRIM(name) FROM athletes;,Ava\nBen
+Replace text inside SQL values,Use REPLACE() to substitute exact substrings.,SELECT name,"SELECT REPLACE(name,'Ltd.','Limited')",REPLACE(),"WITH companies AS (\nSELECT 'Acme Ltd.' AS name\nUNION ALL\nSELECT 'Northwind Ltd.'\n)\nSELECT REPLACE(name,'Ltd.','Limited') FROM companies;",Acme Limited\nNorthwind Limited
+Extract structured values from string,Use str.extract() with regex capture group.,"df['text'].str.replace('ID:','')",df['text'].str.extract('ID:(\\d+)'),pd.Series.str.extract(),"import pandas as pd\ndf = pd.DataFrame({'text':['ID:123','ID:456']})",123\n456
+I have start and end timestamps in a pandas column and want the duration in hours,what should I do?,Subtract the columns then convert using dt.total_seconds and divide by 3600,df['hours'] = (df['end'] - df['start']) / 3600,df['hours'] = (df['end'] - df['start']).dt.total_seconds().div(3600),pd.Series.dt.total_seconds(); pd.Series.div(),"import pandas as pd
+df = pd.DataFrame({'start': pd.to_datetime(['2024-01-01 10:00']), 'end': pd.to_datetime(['2024-01-01 12:30'])})"
+I have a timedelta column and want it rounded to 3 decimal places in hours,how should I format it?,Convert to hours then apply round on the Series,df['hours'] = df['td'].dt.total_seconds() / 3600,df['hours'] = df['td'].dt.total_seconds().div(3600).round(3),pd.Series.dt.total_seconds(); pd.Series.div(); pd.Series.round(),"import pandas as pd
+df = pd.DataFrame({'td': pd.to_timedelta(['0 days 02:30:00'])})"
+I want to extract just the hour from a datetime column in pandas,what should I use?,Use the dt accessor to extract the hour component,df['hour'] = df['time'].hour,df['hour'] = df['time'].dt.hour,pd.Series.dt.hour,"import pandas as pd
+df = pd.DataFrame({'time': pd.to_datetime(['2024-01-01 15:45'])})"
+I need to get the day of the week from a datetime column as a name,how do I do that?,Use dt.day_name to extract the weekday string,df['day'] = df['date'].day_name(),df['day'] = df['date'].dt.day_name(),pd.Series.dt.day_name(),"import pandas as pd
+df = pd.DataFrame({'date': pd.to_datetime(['2024-01-01'])})"
+I have numeric columns and want to divide one column by a constant using pandas methods,what should I use?,Use the div method for vectorized division,df['result'] = df['value'] / 100,df['result'] = df['value'].div(100),pd.Series.div(),"import pandas as pd
+df = pd.DataFrame({'value': [200]})"
+I want to multiply a pandas column by a scalar inside a chain,what should I use?,Use the mul method for multiplication,df['result'] = df['value'] * 2,df['result'] = df['value'].mul(2),pd.Series.mul(),"import pandas as pd
+df = pd.DataFrame({'value': [3]})"
+I want to add a constant to a pandas column in a chain,what method should I use?,Use the add method for addition,df['result'] = df['value'] + 5,df['result'] = df['value'].add(5),pd.Series.add(),"import pandas as pd
+df = pd.DataFrame({'value': [10]})"
+I want to subtract a constant from a pandas column in a chain,what method should I use?,Use the sub method for subtraction,df['result'] = df['value'] - 3,df['result'] = df['value'].sub(3),pd.Series.sub(),"import pandas as pd
+df = pd.DataFrame({'value': [10]})"
+I have a datetime column and want to floor timestamps to the nearest hour,how should I do it?,Use dt.floor with the desired frequency,df['rounded'] = df['time'].floor('H'),df['rounded'] = df['time'].dt.floor('H'),pd.Series.dt.floor(),"import pandas as pd
+df = pd.DataFrame({'time': pd.to_datetime(['2024-01-01 10:45'])})"
+I want to create a formatted string using values from a pandas row,how do I do it?,Use f string formatting with variables,df['msg'] = 'Value is ' + str(df['value']),"df['msg'] = f""Value is {df['value'][0]}""",Python f-string,"import pandas as pd
+df = pd.DataFrame({'value': [10]})"
+"I have bike trip events with station changes, and I need the running net inventory over time for each station in pandas. What should I use?",Use a change column and calculate a running total within each station group. Sort before the running total so the cumulative values follow time order.,df['netinv'] = df['change'].cumsum(),"import pandas as pd\n\n df = pd.DataFrame({\n 'station': ['A','A','B','A','B'],\n 'time': pd.to_datetime(['2024-01-01 08:00','2024-01-01 09:00','2024-01-01 08:30','2024-01-01 10:00','2024-01-01 09:30']),\n 'change': [-1, 1, -1, -1, 1]\n})\n\ndf = df.sort_values(['station','time'])\ndf['netinv'] = df.groupby('station')['change'].cumsum()\nprint(df)",pd.DataFrame.groupby()\npd.Series.cumsum()\npd.DataFrame.sort_values(),"import pandas as pd\n\n df = pd.DataFrame({\n 'station': ['A','A','B','A','B'],\n 'time': pd.to_datetime(['2024-01-01 08:00','2024-01-01 09:00','2024-01-01 08:30','2024-01-01 10:00','2024-01-01 09:30']),\n 'change': [-1, 1, -1, -1, 1]\n})\n\ndf = df.sort_values(['station','time'])\ndf['netinv'] = df.groupby('station')['change'].cumsum()\nprint(df)",station time change netinv\n0 A 2024-01-01 08:00:00 -1 -1\n1 A 2024-01-01 09:00:00 1 0\n3 A 2024-01-01 10:00:00 -1 -1\n2 B 2024-01-01 08:30:00 -1 -1\n4 B 2024-01-01 09:30:00 1 0
+"I have sales by store and date, and I need a running revenue total for each store in pandas. What should I use?",Use groupby with cumsum after sorting by store and date. This resets the running total for each store.,df['running_revenue'] = df['revenue'].cumsum(),"import pandas as pd\n\n df = pd.DataFrame({\n 'store': ['North','North','South','North','South'],\n 'date': pd.to_datetime(['2024-01-01','2024-01-03','2024-01-01','2024-01-02','2024-01-02']),\n 'revenue': [100, 50, 80, 25, 20]\n})\n\ndf = df.sort_values(['store','date'])\ndf['running_revenue'] = df.groupby('store')['revenue'].cumsum()\nprint(df)",pd.DataFrame.groupby()\npd.Series.cumsum()\npd.DataFrame.sort_values(),"import pandas as pd\n\n df = pd.DataFrame({\n 'store': ['North','North','South','North','South'],\n 'date': pd.to_datetime(['2024-01-01','2024-01-03','2024-01-01','2024-01-02','2024-01-02']),\n 'revenue': [100, 50, 80, 25, 20]\n})\n\ndf = df.sort_values(['store','date'])\ndf['running_revenue'] = df.groupby('store')['revenue'].cumsum()\nprint(df)",store date revenue running_revenue\n0 North 2024-01-01 100 100\n3 North 2024-01-02 25 125\n1 North 2024-01-03 50 175\n2 South 2024-01-01 80 80\n4 South 2024-01-02 20 100
+I have sales rows in SQL and need a running total by store ordered by date. What should I use?,Use SUM as a window function with PARTITION BY and ORDER BY. PARTITION BY resets the running total for each store.,"SELECT store, date, revenue, SUM(revenue) AS running_revenue\nFROM sales\nGROUP BY store, date, revenue;","SELECT\n store,\n date,\n revenue,\n SUM(revenue) OVER (\n PARTITION BY store\n ORDER BY date\n ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n ) AS running_revenue\nFROM sales\nORDER BY store, date;",SUM(),"CREATE TABLE sales (store TEXT, date TEXT, revenue INTEGER);\nINSERT INTO sales VALUES\n('North','2024-01-01',100),\n('North','2024-01-03',50),\n('South','2024-01-01',80),\n('North','2024-01-02',25),\n('South','2024-01-02',20);\n\nSELECT\n store,\n date,\n revenue,\n SUM(revenue) OVER (\n PARTITION BY store\n ORDER BY date\n ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n ) AS running_revenue\nFROM sales\nORDER BY store, date;",store date revenue running_revenue\nNorth 2024-01-01 100 100\nNorth 2024-01-02 25 125\nNorth 2024-01-03 50 175\nSouth 2024-01-01 80 80\nSouth 2024-01-02 20 100
+I have customer transactions and need each transaction numbered in order per customer in pandas. What should I use?,Use groupby with cumcount to create a row number inside each customer group. Add 1 because cumcount starts at 0.,df['transaction_number'] = df.groupby('customer')['amount'].rank(),"import pandas as pd\n\n df = pd.DataFrame({\n 'customer': ['A','A','B','A','B'],\n 'date': pd.to_datetime(['2024-01-01','2024-01-03','2024-01-01','2024-01-02','2024-01-02']),\n 'amount': [20, 40, 15, 30, 25]\n})\n\ndf = df.sort_values(['customer','date'])\ndf['transaction_number'] = df.groupby('customer').cumcount() + 1\nprint(df)",pd.DataFrame.groupby()\npd.core.groupby.DataFrameGroupBy.cumcount()\npd.DataFrame.sort_values(),"import pandas as pd\n\n df = pd.DataFrame({\n 'customer': ['A','A','B','A','B'],\n 'date': pd.to_datetime(['2024-01-01','2024-01-03','2024-01-01','2024-01-02','2024-01-02']),\n 'amount': [20, 40, 15, 30, 25]\n})\n\ndf = df.sort_values(['customer','date'])\ndf['transaction_number'] = df.groupby('customer').cumcount() + 1\nprint(df)",customer date amount transaction_number\n0 A 2024-01-01 20 1\n3 A 2024-01-02 30 2\n1 A 2024-01-03 40 3\n2 B 2024-01-01 15 1\n4 B 2024-01-02 25 2
+I have customer transactions in SQL and need each transaction numbered by date per customer. What should I use?,Use ROW_NUMBER as a window function. It gives each row a unique sequence number inside each customer group.,"SELECT customer, date, amount, COUNT(*) AS transaction_number\nFROM transactions\nGROUP BY customer;","SELECT\n customer,\n date,\n amount,\n ROW_NUMBER() OVER (\n PARTITION BY customer\n ORDER BY date\n ) AS transaction_number\nFROM transactions\nORDER BY customer, date;",ROW_NUMBER(),"CREATE TABLE transactions (customer TEXT, date TEXT, amount INTEGER);\nINSERT INTO transactions VALUES\n('A','2024-01-01',20),\n('A','2024-01-03',40),\n('B','2024-01-01',15),\n('A','2024-01-02',30),\n('B','2024-01-02',25);\n\nSELECT\n customer,\n date,\n amount,\n ROW_NUMBER() OVER (\n PARTITION BY customer\n ORDER BY date\n ) AS transaction_number\nFROM transactions\nORDER BY customer, date;",customer date amount transaction_number\nA 2024-01-01 20 1\nA 2024-01-02 30 2\nA 2024-01-03 40 3\nB 2024-01-01 15 1\nB 2024-01-02 25 2
+I have player scores and need leaderboard ranks where ties skip the next rank in pandas. What should I use?,Use rank with method='min' and ascending=False. This gives competition-style ranks with gaps after ties.,df['rank'] = df['score'].rank(ascending=False),"import pandas as pd\n\n df = pd.DataFrame({\n 'player': ['Mia','Noah','Ava','Leo'],\n 'score': [100, 100, 90, 80]\n})\n\ndf['rank'] = df['score'].rank(method='min', ascending=False).astype(int)\nprint(df)",pd.Series.rank(),"import pandas as pd\n\n df = pd.DataFrame({\n 'player': ['Mia','Noah','Ava','Leo'],\n 'score': [100, 100, 90, 80]\n})\n\ndf['rank'] = df['score'].rank(method='min', ascending=False).astype(int)\nprint(df)",player score rank\n0 Mia 100 1\n1 Noah 100 1\n2 Ava 90 3\n3 Leo 80 4
+I have player scores and need leaderboard tiers where ties do not create rank gaps in pandas. What should I use?,Use rank with method='dense' and ascending=False. This ranks distinct score levels without skipping numbers.,"df['rank'] = df['score'].rank(method='min', ascending=False)","import pandas as pd\n\n df = pd.DataFrame({\n 'player': ['Mia','Noah','Ava','Leo'],\n 'score': [100, 100, 90, 80]\n})\n\ndf['dense_rank'] = df['score'].rank(method='dense', ascending=False).astype(int)\nprint(df)",pd.Series.rank(),"import pandas as pd\n\n df = pd.DataFrame({\n 'player': ['Mia','Noah','Ava','Leo'],\n 'score': [100, 100, 90, 80]\n})\n\ndf['dense_rank'] = df['score'].rank(method='dense', ascending=False).astype(int)\nprint(df)",player score dense_rank\n0 Mia 100 1\n1 Noah 100 1\n2 Ava 90 2\n3 Leo 80 3
+I have scores by team and need each player ranked within their own team in pandas. What should I use?,Use groupby with rank so ranking resets for each team. Use ascending=False when higher scores should rank first.,"df['rank'] = df['score'].rank(method='dense', ascending=False)","import pandas as pd\n\n df = pd.DataFrame({\n 'team': ['Red','Red','Blue','Red','Blue'],\n 'player': ['Mia','Noah','Ava','Leo','Zoe'],\n 'score': [90, 100, 80, 90, 95]\n})\n\ndf['team_rank'] = df.groupby('team')['score'].rank(method='dense', ascending=False).astype(int)\nprint(df)",pd.DataFrame.groupby()\npd.Series.rank(),"import pandas as pd\n\n df = pd.DataFrame({\n 'team': ['Red','Red','Blue','Red','Blue'],\n 'player': ['Mia','Noah','Ava','Leo','Zoe'],\n 'score': [90, 100, 80, 90, 95]\n})\n\ndf['team_rank'] = df.groupby('team')['score'].rank(method='dense', ascending=False).astype(int)\nprint(df)",team player score team_rank\n0 Red Mia 90 2\n1 Red Noah 100 1\n2 Blue Ava 80 2\n3 Red Leo 90 2\n4 Blue Zoe 95 1
+I have player scores in SQL and need competition ranks where ties skip rank numbers. What should I use?,Use RANK as a window function. It gives tied rows the same rank and leaves gaps after ties.,"SELECT player, score, ROW_NUMBER() OVER (ORDER BY score DESC) AS rank\nFROM scores;","SELECT\n player,\n score,\n RANK() OVER (ORDER BY score DESC) AS rank\nFROM scores\nORDER BY rank, player;",RANK(),"CREATE TABLE scores (player TEXT, score INTEGER);\nINSERT INTO scores VALUES\n('Mia',100),\n('Noah',100),\n('Ava',90),\n('Leo',80);\n\nSELECT\n player,\n score,\n RANK() OVER (ORDER BY score DESC) AS rank\nFROM scores\nORDER BY rank, player;",player score rank\nMia 100 1\nNoah 100 1\nAva 90 3\nLeo 80 4
+I have player scores in SQL and need tier-style ranks where ties do not create gaps. What should I use?,Use DENSE_RANK as a window function. It ranks distinct values without skipping rank numbers.,"SELECT player, score, RANK() OVER (ORDER BY score DESC) AS dense_rank\nFROM scores;","SELECT\n player,\n score,\n DENSE_RANK() OVER (ORDER BY score DESC) AS dense_rank\nFROM scores\nORDER BY dense_rank, player;",DENSE_RANK(),"CREATE TABLE scores (player TEXT, score INTEGER);\nINSERT INTO scores VALUES\n('Mia',100),\n('Noah',100),\n('Ava',90),\n('Leo',80);\n\nSELECT\n player,\n score,\n DENSE_RANK() OVER (ORDER BY score DESC) AS dense_rank\nFROM scores\nORDER BY dense_rank, player;",player score dense_rank\nMia 100 1\nNoah 100 1\nAva 90 2\nLeo 80 3
+I have player scores in SQL and need ranks within each team instead of across all players. What should I use?,Use a ranking window function with PARTITION BY team. This resets the rank calculation inside each team.,"SELECT team, player, score, DENSE_RANK() OVER (ORDER BY score DESC) AS team_rank\nFROM team_scores;","SELECT\n team,\n player,\n score,\n DENSE_RANK() OVER (\n PARTITION BY team\n ORDER BY score DESC\n ) AS team_rank\nFROM team_scores\nORDER BY team, team_rank, player;",DENSE_RANK(),"CREATE TABLE team_scores (team TEXT, player TEXT, score INTEGER);\nINSERT INTO team_scores VALUES\n('Red','Mia',90),\n('Red','Noah',100),\n('Blue','Ava',80),\n('Red','Leo',90),\n('Blue','Zoe',95);\n\nSELECT\n team,\n player,\n score,\n DENSE_RANK() OVER (\n PARTITION BY team\n ORDER BY score DESC\n ) AS team_rank\nFROM team_scores\nORDER BY team, team_rank, player;",team player score team_rank\nBlue Zoe 95 1\nBlue Ava 80 2\nRed Noah 100 1\nRed Leo 90 2\nRed Mia 90 2
+I have daily balances and need yesterday's balance next to today's balance in pandas. What should I use?,Use groupby with shift after sorting by account and date. shift(1) pulls the previous row within each group.,df['previous_balance'] = df['balance'].shift(-1),"import pandas as pd\n\n df = pd.DataFrame({\n 'account': ['A','A','B','A','B'],\n 'date': pd.to_datetime(['2024-01-01','2024-01-03','2024-01-01','2024-01-02','2024-01-02']),\n 'balance': [100, 130, 50, 115, 70]\n})\n\ndf = df.sort_values(['account','date'])\ndf['previous_balance'] = df.groupby('account')['balance'].shift(1)\nprint(df)",pd.DataFrame.groupby()\npd.Series.shift()\npd.DataFrame.sort_values(),"import pandas as pd\n\n df = pd.DataFrame({\n 'account': ['A','A','B','A','B'],\n 'date': pd.to_datetime(['2024-01-01','2024-01-03','2024-01-01','2024-01-02','2024-01-02']),\n 'balance': [100, 130, 50, 115, 70]\n})\n\ndf = df.sort_values(['account','date'])\ndf['previous_balance'] = df.groupby('account')['balance'].shift(1)\nprint(df)",account date balance previous_balance\n0 A 2024-01-01 100 NaN\n3 A 2024-01-02 115 100.0\n1 A 2024-01-03 130 115.0\n2 B 2024-01-01 50 NaN\n4 B 2024-01-02 70 50.0
+I have daily balances in SQL and need the previous balance for each account. What should I use?,Use LAG as a window function. It looks at a previous row within the same account when ordered by date.,"SELECT account, date, balance, balance - 1 AS previous_balance\nFROM balances;","SELECT\n account,\n date,\n balance,\n LAG(balance) OVER (\n PARTITION BY account\n ORDER BY date\n ) AS previous_balance\nFROM balances\nORDER BY account, date;",LAG(),"CREATE TABLE balances (account TEXT, date TEXT, balance INTEGER);\nINSERT INTO balances VALUES\n('A','2024-01-01',100),\n('A','2024-01-03',130),\n('B','2024-01-01',50),\n('A','2024-01-02',115),\n('B','2024-01-02',70);\n\nSELECT\n account,\n date,\n balance,\n LAG(balance) OVER (\n PARTITION BY account\n ORDER BY date\n ) AS previous_balance\nFROM balances\nORDER BY account, date;",account date balance previous_balance\nA 2024-01-01 100 NULL\nA 2024-01-02 115 100\nA 2024-01-03 130 115\nB 2024-01-01 50 NULL\nB 2024-01-02 70 50
+I have a table with duplicate customer IDs and I want only unique customer IDs in SQLite. What should I use?,Use DISTINCT in the SELECT clause to return unique values from a column.,SELECT customer_id FROM orders;,SELECT DISTINCT customer_id\nFROM orders;,DISTINCT,"CREATE TABLE orders (customer_id INTEGER);\nINSERT INTO orders VALUES (1),(1),(2),(3),(3);\n\nSELECT DISTINCT customer_id\nFROM orders;",customer_id\n1\n2\n3
+I have orders with customer_id and product_id and I want unique customer-product combinations in SQLite. What should I use?,Use DISTINCT across multiple columns to return unique row combinations.,SELECT customer_id FROM orders;,"SELECT DISTINCT customer_id, product_id\nFROM orders;",DISTINCT,"CREATE TABLE orders (customer_id INTEGER, product_id INTEGER);\nINSERT INTO orders VALUES (1,10),(1,10),(1,20),(2,10),(2,10);\n\nSELECT DISTINCT customer_id, product_id\nFROM orders;",customer_id product_id\n1 10\n1 20\n2 10
+I have duplicate full rows in a table and I want to remove exact duplicates in SQLite. What should I use?,Use SELECT DISTINCT * to return only unique rows across all columns.,SELECT * FROM orders;,SELECT DISTINCT *\nFROM orders;,DISTINCT,"CREATE TABLE orders (customer_id INTEGER, product_id INTEGER);\nINSERT INTO orders VALUES (1,10),(1,10),(1,20),(2,10),(2,10);\n\nSELECT DISTINCT *\nFROM orders;",customer_id product_id\n1 10\n1 20\n2 10
+I want to count how many unique customers placed orders in SQLite. What should I use?,Use COUNT with DISTINCT to count unique values in a column.,SELECT COUNT(customer_id) FROM orders;,SELECT COUNT(DISTINCT customer_id)\nFROM orders;,COUNT(),"CREATE TABLE orders (customer_id INTEGER);\nINSERT INTO orders VALUES (1),(1),(2),(3),(3);\n\nSELECT COUNT(DISTINCT customer_id)\nFROM orders;",COUNT(DISTINCT customer_id)\n3
+I want to get unique customers per product and also count them in SQLite. What should I use?,Use COUNT with DISTINCT inside a GROUP BY to count unique values per group.,"SELECT product_id, COUNT(customer_id)\nFROM orders\nGROUP BY product_id;","SELECT product_id, COUNT(DISTINCT customer_id) AS unique_customers\nFROM orders\nGROUP BY product_id;",COUNT()\nDISTINCT,"CREATE TABLE orders (customer_id INTEGER, product_id INTEGER);\nINSERT INTO orders VALUES (1,10),(1,10),(2,10),(2,20),(3,20);\n\nSELECT product_id, COUNT(DISTINCT customer_id) AS unique_customers\nFROM orders\nGROUP BY product_id;",product_id unique_customers\n10 2\n20 2
+I tried using DISTINCT with a window function partition but got unexpected duplicates in SQLite. How should I fix it?,DISTINCT does not work per partition; use a window function like ROW_NUMBER and filter to get one row per group.,"SELECT DISTINCT customer_id, product_id\nFROM orders;","SELECT customer_id, product_id\nFROM (\n SELECT customer_id, product_id,\n ROW_NUMBER() OVER (\n PARTITION BY customer_id\n ORDER BY product_id\n ) AS rn\n FROM orders\n)\nWHERE rn = 1;",ROW_NUMBER(),"CREATE TABLE orders (customer_id INTEGER, product_id INTEGER);\nINSERT INTO orders VALUES (1,10),(1,20),(1,30),(2,10),(2,20);\n\nSELECT customer_id, product_id\nFROM (\n SELECT customer_id, product_id,\n ROW_NUMBER() OVER (\n PARTITION BY customer_id\n ORDER BY product_id\n ) AS rn\n FROM orders\n)\nWHERE rn = 1;",customer_id product_id\n1 10\n2 10
+I want the first order per customer based on date in SQLite and thought DISTINCT would work. What should I use instead?,"Use ROW_NUMBER with PARTITION BY and ORDER BY date, then filter to the first row.","SELECT DISTINCT customer_id, order_date\nFROM orders;","SELECT customer_id, order_date\nFROM (\n SELECT customer_id, order_date,\n ROW_NUMBER() OVER (\n PARTITION BY customer_id\n ORDER BY order_date\n ) AS rn\n FROM orders\n)\nWHERE rn = 1;",ROW_NUMBER(),"CREATE TABLE orders (customer_id INTEGER, order_date TEXT);\nINSERT INTO orders VALUES\n(1,'2024-01-02'),(1,'2024-01-01'),(2,'2024-01-03'),(2,'2024-01-01');\n\nSELECT customer_id, order_date\nFROM (\n SELECT customer_id, order_date,\n ROW_NUMBER() OVER (\n PARTITION BY customer_id\n ORDER BY order_date\n ) AS rn\n FROM orders\n)\nWHERE rn = 1;",customer_id order_date\n1 2024-01-01\n2 2024-01-01
+I want unique values within each group and tried DISTINCT with PARTITION BY in SQLite. Why is it wrong and what should I use?,"DISTINCT applies to the entire result set, not per partition; use DENSE_RANK or ROW_NUMBER depending on the goal.","SELECT DISTINCT customer_id, product_id\nFROM orders;","SELECT customer_id, product_id\nFROM (\n SELECT customer_id, product_id,\n DENSE_RANK() OVER (\n PARTITION BY customer_id\n ORDER BY product_id\n ) AS rnk\n FROM orders\n)\nWHERE rnk = 1;",DENSE_RANK(),"CREATE TABLE orders (customer_id INTEGER, product_id INTEGER);\nINSERT INTO orders VALUES (1,10),(1,20),(1,30),(2,20),(2,30);\n\nSELECT customer_id, product_id\nFROM (\n SELECT customer_id, product_id,\n DENSE_RANK() OVER (\n PARTITION BY customer_id\n ORDER BY product_id\n ) AS rnk\n FROM orders\n)\nWHERE rnk = 1;",customer_id product_id\n1 10\n2 20
+I want to remove duplicate rows based on one column but keep other columns in SQLite. DISTINCT is not working correctly. What should I use?,Use ROW_NUMBER with PARTITION BY the column and filter to keep one row per group.,"SELECT DISTINCT customer_id, product_id, order_date\nFROM orders;","SELECT customer_id, product_id, order_date\nFROM (\n SELECT customer_id, product_id, order_date,\n ROW_NUMBER() OVER (\n PARTITION BY customer_id\n ORDER BY order_date\n ) AS rn\n FROM orders\n)\nWHERE rn = 1;",ROW_NUMBER(),"CREATE TABLE orders (customer_id INTEGER, product_id INTEGER, order_date TEXT);\nINSERT INTO orders VALUES\n(1,10,'2024-01-02'),(1,20,'2024-01-01'),(1,30,'2024-01-03'),\n(2,10,'2024-01-02'),(2,20,'2024-01-01');\n\nSELECT customer_id, product_id, order_date\nFROM (\n SELECT customer_id, product_id, order_date,\n ROW_NUMBER() OVER (\n PARTITION BY customer_id\n ORDER BY order_date\n ) AS rn\n FROM orders\n)\nWHERE rn = 1;",customer_id product_id order_date\n1 20 2024-01-01\n2 20 2024-01-01
+"I have a feature matrix with a bias column, true labels, and weights, and I need to compute both sigmoid predictions and gradients for logistic regression. What should I use?","Compute z using matrix multiplication, apply sigmoid with np.exp(), then compute the gradient using X transposed times the prediction error divided by the number of rows.",gradient = (X @ (sigmoid - y_true)) / X.shape[0],"import numpy as np\n\nX = np.array([[1, 1, 2],\n [1, 3, 4],\n [1, 5, 6]])\ny_true = np.array([0, 1, 1])\nweights = np.array([0.5, 0.1, 0.2])\n\nz = np.dot(X, weights)\nsigmoid = 1 / (1 + np.exp(-z))\ngradient = (np.transpose(X) @ (sigmoid - y_true)) / X.shape[0]\n\nprint(sigmoid)\nprint(gradient)","np.dot(),np.exp(),np.transpose()","import numpy as np\n\nX = np.array([[1, 1, 2],\n [1, 3, 4],\n [1, 5, 6]])\ny_true = np.array([0, 1, 1])\nweights = np.array([0.5, 0.1, 0.2])\n\nz = np.dot(X, weights)\nsigmoid = 1 / (1 + np.exp(-z))\ngradient = (np.transpose(X) @ (sigmoid - y_true)) / X.shape[0]\n\nprint(sigmoid)\nprint(gradient)",[0.73105858 0.83201839 0.90024951]\n[ 0.15444216 -0.0903789 -0.24503961]
+"I have order-level sales data, and I need each store's total revenue plus a custom revenue range using lambda logic. What should I use?",Use pd.DataFrame.groupby() with pd.core.groupby.DataFrameGroupBy.agg() to apply built-in aggregations and custom lambda calculations to each group.,"summary = df.groupby('store').agg(total_revenue=('revenue', 'sum'), revenue_range=('revenue', lambda x: df['revenue'].max() - df['revenue'].min()))","import pandas as pd\n\ndf = pd.DataFrame({\n 'store': ['A', 'A', 'B', 'B'],\n 'revenue': [100, 250, 80, 120]\n})\n\nsummary = df.groupby('store').agg(\n total_revenue=('revenue', 'sum'),\n revenue_range=('revenue', lambda x: x.max() - x.min())\n)\n\nprint(summary)","pd.DataFrame.groupby(),pd.core.groupby.DataFrameGroupBy.agg()","import pandas as pd\n\ndf = pd.DataFrame({\n 'store': ['A', 'A', 'B', 'B'],\n 'revenue': [100, 250, 80, 120]\n})\n\nsummary = df.groupby('store').agg(\n total_revenue=('revenue', 'sum'),\n revenue_range=('revenue', lambda x: x.max() - x.min())\n)\n\nprint(summary)",total_revenue revenue_range\nstore \nA 350 150\nB 200 40
+"I have a pandas Series of product counts, and I need to convert it into a DataFrame with clear column names. What should I use?","Use pd.Series.to_frame() to turn the Series values into a single-column DataFrame, then reset the index if the index should become a regular column.",df = counts.reset_index(name='count'),"import pandas as pd\n\ncounts = pd.Series([12, 7, 5], index=['Laptop', 'Tablet', 'Monitor'], name='count')\n\nproduct_counts = counts.to_frame().reset_index()\nproduct_counts.columns = ['product', 'count']\n\nprint(product_counts)","pd.Series.to_frame(),pd.DataFrame.reset_index()","import pandas as pd\n\ncounts = pd.Series([12, 7, 5], index=['Laptop', 'Tablet', 'Monitor'], name='count')\n\nproduct_counts = counts.to_frame().reset_index()\nproduct_counts.columns = ['product', 'count']\n\nprint(product_counts)",product count\n0 Laptop 12\n1 Tablet 7\n2 Monitor 5
+I have a SQLite database and need to quickly inspect the columns and data types in a table before writing queries. What should I use?,"Use PRAGMA table_info to return metadata for each column in a table. This is useful for checking column names, types, null rules, defaults, and primary keys.",PRAGMA customers;,"CREATE TABLE customers (\n    customer_id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL,\n    signup_date TEXT\n);\n\nPRAGMA table_info(customers);",PRAGMA(),"CREATE TABLE customers (\n    customer_id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL,\n    signup_date TEXT\n);\n\nPRAGMA table_info(customers);",0|customer_id|INTEGER|0||1\n1|name|TEXT|1||0\n2|signup_date|TEXT|0||0
+"I have order dates stored as text, and I need to return only orders from a specific calendar date. What should I use?",Use SQLite date() to normalize a datetime value into YYYY-MM-DD format before comparing dates. This avoids mismatches caused by time values.,SELECT * FROM orders WHERE order_time = '2026-05-04';,"CREATE TABLE orders (\n    order_id INTEGER,\n    order_time TEXT\n);\n\nINSERT INTO orders VALUES\n(1, '2026-05-04 09:15:00'),\n(2, '2026-05-04 17:30:00'),\n(3, '2026-05-05 10:00:00');\n\nSELECT order_id, date(order_time) AS order_date\nFROM orders\nWHERE date(order_time) = '2026-05-04';",date(),"CREATE TABLE orders (\n    order_id INTEGER,\n    order_time TEXT\n);\n\nINSERT INTO orders VALUES\n(1, '2026-05-04 09:15:00'),\n(2, '2026-05-04 17:30:00'),\n(3, '2026-05-05 10:00:00');\n\nSELECT order_id, date(order_time) AS order_date\nFROM orders\nWHERE date(order_time) = '2026-05-04';",1|2026-05-04\n2|2026-05-04
+"I have subscription start dates, and I need to calculate each customer's renewal date 30 days later. What should I use?",Use SQLite date() with a date modifier to add calendar time to an existing date. The modifier belongs inside the function call as a string.,"SELECT customer_id, start_date + 30 AS renewal_date FROM subscriptions;","CREATE TABLE subscriptions (\n    customer_id INTEGER,\n    start_date TEXT\n);\n\nINSERT INTO subscriptions VALUES\n(101, '2026-01-01'),\n(102, '2026-02-10');\n\nSELECT customer_id, date(start_date, '+30 days') AS renewal_date\nFROM subscriptions;",date(),"CREATE TABLE subscriptions (\n    customer_id INTEGER,\n    start_date TEXT\n);\n\nINSERT INTO subscriptions VALUES\n(101, '2026-01-01'),\n(102, '2026-02-10');\n\nSELECT customer_id, date(start_date, '+30 days') AS renewal_date\nFROM subscriptions;",101|2026-01-31\n102|2026-03-12
+"I have login timestamps, and I need to group activity by month for a monthly usage report. What should I use?",Use strftime() to extract a formatted part of a date or timestamp. Formatting as YYYY-MM creates a clean monthly grouping key.,"SELECT login_time, COUNT(*) FROM logins GROUP BY login_time;","CREATE TABLE logins (\n    user_id INTEGER,\n    login_time TEXT\n);\n\nINSERT INTO logins VALUES\n(1, '2026-01-05 08:00:00'),\n(2, '2026-01-20 12:30:00'),\n(3, '2026-02-02 09:15:00');\n\nSELECT strftime('%Y-%m', login_time) AS login_month,\n       COUNT(*) AS login_count\nFROM logins\nGROUP BY login_month;","strftime(),COUNT()","CREATE TABLE logins (\n    user_id INTEGER,\n    login_time TEXT\n);\n\nINSERT INTO logins VALUES\n(1, '2026-01-05 08:00:00'),\n(2, '2026-01-20 12:30:00'),\n(3, '2026-02-02 09:15:00');\n\nSELECT strftime('%Y-%m', login_time) AS login_month,\n       COUNT(*) AS login_count\nFROM logins\nGROUP BY login_month;",2026-01|2\n2026-02|1
+"I have project start and end dates, and I need to calculate how many days each project lasted. What should I use?","Use julianday() to convert dates into numeric day values, then subtract start from end. This is useful for duration calculations in SQLite.","SELECT project_id, end_date - start_date AS duration_days FROM projects;","CREATE TABLE projects (\n    project_id INTEGER,\n    start_date TEXT,\n    end_date TEXT\n);\n\nINSERT INTO projects VALUES\n(1, '2026-03-01', '2026-03-10'),\n(2, '2026-04-15', '2026-04-20');\n\nSELECT project_id,\n       julianday(end_date) - julianday(start_date) AS duration_days\nFROM projects;",julianday(),"CREATE TABLE projects (\n    project_id INTEGER,\n    start_date TEXT,\n    end_date TEXT\n);\n\nINSERT INTO projects VALUES\n(1, '2026-03-01', '2026-03-10'),\n(2, '2026-04-15', '2026-04-20');\n\nSELECT project_id,\n       julianday(end_date) - julianday(start_date) AS duration_days\nFROM projects;",1|9.0\n2|5.0
+I have event dates and need to show the current timestamp next to each row for an audit export. What should I use?,Use datetime() with 'now' to generate the current timestamp in SQLite format. This is useful when creating query-time audit columns.,"SELECT event_id, datetime FROM events;","CREATE TABLE events (\n    event_id INTEGER,\n    event_name TEXT\n);\n\nINSERT INTO events VALUES\n(1, 'Upload'),\n(2, 'Review');\n\nSELECT event_id,\n       event_name,\n       datetime('2026-05-04 14:30:00') AS exported_at\nFROM events;",datetime(),"CREATE TABLE events (\n    event_id INTEGER,\n    event_name TEXT\n);\n\nINSERT INTO events VALUES\n(1, 'Upload'),\n(2, 'Review');\n\nSELECT event_id,\n       event_name,\n       datetime('2026-05-04 14:30:00') AS exported_at\nFROM events;",1|Upload|2026-05-04 14:30:00\n2|Review|2026-05-04 14:30:00
+I have dates in SQLite and I want to display them as 01-JAN format using a simple approach. What should I use?,Use strftime() to get the month number and a CASE statement to map it to month names. This is readable and straightforward for formatting.,"SELECT strftime('%m', clean_date) || '-' || strftime('%b', clean_date) FROM inner_query;","WITH inner_query AS (\n SELECT date('2023-01-01') AS clean_date\n)\nSELECT\n strftime('%m', clean_date) || '-' ||\n CASE strftime('%m', clean_date)\n WHEN '01' THEN 'JAN'\n WHEN '02' THEN 'FEB'\n WHEN '03' THEN 'MAR'\n WHEN '04' THEN 'APR'\n WHEN '05' THEN 'MAY'\n WHEN '06' THEN 'JUN'\n WHEN '07' THEN 'JUL'\n WHEN '08' THEN 'AUG'\n WHEN '09' THEN 'SEP'\n WHEN '10' THEN 'OCT'\n WHEN '11' THEN 'NOV'\n WHEN '12' THEN 'DEC'\n END AS formatted_month\nFROM inner_query;",strftime(),"WITH inner_query AS (\n SELECT date('2023-01-01') AS clean_date\n)\nSELECT\n strftime('%m', clean_date) || '-' ||\n CASE strftime('%m', clean_date)\n WHEN '01' THEN 'JAN'\n WHEN '02' THEN 'FEB'\n WHEN '03' THEN 'MAR'\n WHEN '04' THEN 'APR'\n WHEN '05' THEN 'MAY'\n WHEN '06' THEN 'JUN'\n WHEN '07' THEN 'JUL'\n WHEN '08' THEN 'AUG'\n WHEN '09' THEN 'SEP'\n WHEN '10' THEN 'OCT'\n WHEN '11' THEN 'NOV'\n WHEN '12' THEN 'DEC'\n END AS formatted_month\nFROM inner_query;",01-JAN
+I have dates in SQLite and want a cleaner reusable way to convert month numbers into names without repeating logic. What should I use?,Use a lookup table (CTE) to map month numbers to names and join it to your data. This is scalable and reusable.,"SELECT strftime('%m', clean_date) || '-' || name FROM inner_query;","WITH inner_query AS (\n SELECT date('2023-01-01') AS clean_date\n),\nmonths AS (\n SELECT '01' AS num, 'JAN' AS name UNION ALL\n SELECT '02','FEB' UNION ALL\n SELECT '03','MAR' UNION ALL\n SELECT '04','APR' UNION ALL\n SELECT '05','MAY' UNION ALL\n SELECT '06','JUN' UNION ALL\n SELECT '07','JUL' UNION ALL\n SELECT '08','AUG' UNION ALL\n SELECT '09','SEP' UNION ALL\n SELECT '10','OCT' UNION ALL\n SELECT '11','NOV' UNION ALL\n SELECT '12','DEC'\n)\nSELECT\n m.num || '-' || m.name AS formatted_month\nFROM inner_query i\nJOIN months m\nON strftime('%m', i.clean_date) = m.num;",strftime(),"WITH inner_query AS (\n SELECT date('2023-01-01') AS clean_date\n),\nmonths AS (\n SELECT '01' AS num, 'JAN' AS name UNION ALL\n SELECT '02','FEB' UNION ALL\n SELECT '03','MAR' UNION ALL\n SELECT '04','APR' UNION ALL\n SELECT '05','MAY' UNION ALL\n SELECT '06','JUN' UNION ALL\n SELECT '07','JUL' UNION ALL\n SELECT '08','AUG' UNION ALL\n SELECT '09','SEP' UNION ALL\n SELECT '10','OCT' UNION ALL\n SELECT '11','NOV' UNION ALL\n SELECT '12','DEC'\n)\nSELECT\n m.num || '-' || m.name AS formatted_month\nFROM inner_query i\nJOIN months m\nON strftime('%m', i.clean_date) = m.num;",01-JAN
+I have dates in SQLite and want the shortest possible way to convert month numbers into 3-letter names without CASE or joins. What should I use?,Use a substring trick on a concatenated month string to extract the correct 3-letter month name dynamically. This is compact but less readable.,"SELECT strftime('%m', clean_date) || '-' || substr('JANFEB...',1,3) FROM inner_query;","WITH inner_query AS (\n SELECT date('2023-01-01') AS clean_date\n)\nSELECT\n strftime('%m', clean_date) || '-' ||\n substr('JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC',\n (cast(strftime('%m', clean_date) as integer) - 1) * 3 + 1,\n 3\n ) AS formatted_month\nFROM inner_query;","strftime(),substr()","WITH inner_query AS (\n SELECT date('2023-01-01') AS clean_date\n)\nSELECT\n strftime('%m', clean_date) || '-' ||\n substr('JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC',\n (cast(strftime('%m', clean_date) as integer) - 1) * 3 + 1,\n 3\n ) AS formatted_month\nFROM inner_query;",01-JAN
+DISTINCT,SQL,SQLite,Removes duplicate rows from the result set.,Get unique values from a column.,Applies to the entire selected row.,I have repeated categories and need each category once.
+DISTINCT expr,SQL,SQLite,Returns unique values of a specific expression.,Get unique computed results like formatted labels.,"Expression is evaluated first, then duplicates removed.",I have city and state columns and need unique combined location labels.
+GROUP BY,SQL,SQLite,Groups rows that share the same column values.,Aggregate data like counts or sums per group.,Every non-aggregated column should be in GROUP BY.,I have crimes and need counts per category.
+GROUP BY multiple columns,SQL,SQLite,Groups rows by combinations of multiple columns.,Aggregate by more specific categories.,Creates groups for each unique combination.,I have sales by store and product and need totals per combination.
+HAVING,SQL,SQLite,Filters grouped results after aggregation.,Filter groups based on aggregate values.,"Used after GROUP BY, not before.",I have sales per store and only want stores with totals over 10.
+COUNT(DISTINCT column),SQL,SQLite,Counts unique non-null values in a column.,Measure diversity or number of unique entries.,Ignores NULL values.,I have user logins and need number of unique users.
+DISTINCT vs GROUP BY,SQL,SQLite,DISTINCT removes duplicates while GROUP BY aggregates.,Choose based on whether you need aggregation.,DISTINCT cannot compute aggregates like SUM().,I need unique categories without counts.
+GROUP BY with DISTINCT-like behavior,SQL,SQLite,GROUP BY can mimic DISTINCT when no aggregation is used.,Use GROUP BY when you may later add aggregates.,Returns one row per group.,I need unique categories but might later count them.
+|| with DISTINCT,SQL,SQLite,Concatenates values before applying DISTINCT.,Create unique combined keys from multiple columns.,DISTINCT applies after concatenation.,I have first and last names and need unique full names.
+GROUP BY with expression,SQL,SQLite,Groups rows using computed expressions.,Group by derived values like month or formatted keys.,Expression must match SELECT or be repeated.,I have dates and need counts per month.
+NTILE(n) OVER(...),SQL,SQLite,Divides rows into n buckets as evenly as possible.,Group rows into percentiles or segments.,Earlier buckets may have more rows if uneven.,I have scores and need to split them into 2 groups.
+PERCENT_RANK() OVER(...),SQL,SQLite,Calculates relative rank between 0 and 1.,Measure how a value compares across dataset.,Formula is (rank-1)/(total_rows-1).,I have scores and need normalized ranking.
+CUME_DIST() OVER(...),SQL,SQLite,Returns cumulative distribution up to current row.,See percentage of values less than or equal to current.,Always between 0 and 1.,I have scores and need cumulative distribution.
+I need to split a string on a delimiter and recombine parts into a new format in SQLite. What technique should I use?,"Use instr() to locate the delimiter, substr() to extract parts, and || to recombine them.",SELECT name || '-' || name FROM users;,"SELECT substr(name, 1, instr(name, ' ') - 1) || '-' || substr(name, instr(name, ' ') + 1) FROM users;","instr(),substr(),||","CREATE TABLE users (name TEXT);\nINSERT INTO users VALUES ('Mia Chen');\nSELECT substr(name, 1, instr(name, ' ') - 1) || '-' || substr(name, instr(name, ' ') + 1) FROM users;",Mia-Chen
+I need to extract parts of a string before and after a specific character in SQLite. What technique should I use?,Use instr() to find the character position and substr() to extract the parts.,"SELECT substr(email, 1, 5) FROM users;","SELECT substr(email, 1, instr(email, '@') - 1), substr(email, instr(email, '@') + 1) FROM users;","instr(),substr()","CREATE TABLE users (email TEXT);\nINSERT INTO users VALUES ('test@gmail.com
+');\nSELECT substr(email, 1, instr(email, '@') - 1), substr(email, instr(email, '@') + 1) FROM users;",test|gmail.com
+I need to extract the last segment of a string based on a delimiter in SQLite. What technique should I use?,"Use reverse logic with length(), instr(), and substr() to extract the last part.","SELECT substr(path, 1, 5) FROM files;","SELECT substr(path, length(path) - instr(reverse(path), '/') + 2) FROM files;","length(),instr(),substr()","CREATE TABLE files (path TEXT);\nINSERT INTO files VALUES ('/home/user/file.txt');\nSELECT substr(path, length(path) - instr(reverse(path), '/') + 2) FROM files;",file.txt
+I need to clean and reformat a string by removing characters and rebuilding it in SQLite. What technique should I use?,"Use replace() to clean the string, then substr() and || to rebuild the format.",SELECT phone FROM contacts;,"SELECT '(' || substr(clean,1,3) || ')' || substr(clean,4,3) || '-' || substr(clean,7) FROM (SELECT replace(phone,'-','') AS clean FROM contacts);","replace(),substr(),||","CREATE TABLE contacts (phone TEXT);\nINSERT INTO contacts VALUES ('123-456-7890');\nSELECT '(' || substr(clean,1,3) || ')' || substr(clean,4,3) || '-' || substr(clean,7) FROM (SELECT replace(phone,'-','') AS clean FROM contacts);",(123)456-7890
+I need to convert a text date into ISO format and then extract formatted components in SQLite. What technique should I use?,"Use substr() and || to rearrange into ISO format, then apply date() and strftime() for extraction.",SELECT d FROM dates;,"SELECT substr(d,7,4)||'-'||substr(d,1,2)||'-'||substr(d,4,2), substr('JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC',(CAST(strftime('%m', date(substr(d,7,4)||'-'||substr(d,1,2)||'-'||substr(d,4,2))) AS INTEGER)-1)*3+1,3) FROM dates;","substr(),||,date(),strftime()","CREATE TABLE dates (d TEXT);\nINSERT INTO dates VALUES ('01/15/2024');\nSELECT substr(d,7,4)||'-'||substr(d,1,2)||'-'||substr(d,4,2), substr('JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC',(CAST(strftime('%m', date(substr(d,7,4)||'-'||substr(d,1,2)||'-'||substr(d,4,2))) AS INTEGER)-1)*3+1,3) FROM dates;",2024-01-15|JAN
+I need to modify a specific segment of a delimited string and reconstruct it in SQLite. What technique should I use?,Use instr() and substr() to isolate segments and || to rebuild with a new value.,SELECT code FROM products;,"SELECT substr(code,1,instr(code,'-')) || '999' || substr(code, instr(code,'-', instr(code,'-')+1)) FROM products;","instr(),substr(),||","CREATE TABLE products (code TEXT);\nINSERT INTO products VALUES ('A-123-B');\nSELECT substr(code,1,instr(code,'-')) || '999' || substr(code, instr(code,'-', instr(code,'-')+1)) FROM products;",A-999-B
+"I have rows grouped by activity, and I need to count how many total records are in each activity group. What should I use?","Use groupby().size() in pandas or GROUP BY with COUNT(*) in SQL. This counts rows per group, including rows with missing values in other columns.",df.groupby('activity')['module'].nunique(),"import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'forum', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'BBB', 'BBB', None]\n})\n\nresult = df.groupby('activity').size()\nprint(result)","pd.DataFrame.groupby(),pd.core.groupby.DataFrameGroupBy.size()","import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'forum', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'BBB', 'BBB', None]\n})\n\nresult = df.groupby('activity').size()\nprint(result)",activity\nforum    3\nquiz     2\ndtype: int64
+"I have rows grouped by activity, and I need to count how many unique module values appear inside each activity. What should I use?",Use groupby() with nunique() on one column. This gives one unique-value count per activity group.,df.groupby('activity').size(),"import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'forum', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'BBB', 'CCC', 'CCC']\n})\n\nresult = df.groupby('activity')['module'].nunique()\nprint(result)","pd.DataFrame.groupby(),pd.core.groupby.SeriesGroupBy.nunique()","import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'forum', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'BBB', 'CCC', 'CCC']\n})\n\nresult = df.groupby('activity')['module'].nunique()\nprint(result)","activity\nforum    2\nquiz     1\nName: module, dtype: int64"
+"I have activity, module, and presentation columns, and I need to count unique course combinations inside each activity group in pandas. What should I use?","Use groupby().apply() with drop_duplicates() on the two columns. This counts unique module-presentation pairs per activity, not just unique modules.",df.groupby('activity')['module'].nunique(),"import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'quiz', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'AAA', 'BBB', 'BBB'],\n    'presentation': ['2023J', '2023J', '2024B', '2023J', '2024B']\n})\n\nresult = df.groupby('activity').apply(\n    lambda x: x[['module', 'presentation']].drop_duplicates().shape[0]\n)\nprint(result)","pd.DataFrame.groupby(),pd.core.groupby.DataFrameGroupBy.apply(),pd.DataFrame.drop_duplicates()","import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'quiz', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'AAA', 'BBB', 'BBB'],\n    'presentation': ['2023J', '2023J', '2024B', '2023J', '2024B']\n})\n\nresult = df.groupby('activity').apply(\n    lambda x: x[['module', 'presentation']].drop_duplicates().shape[0]\n)\nprint(result)",activity\nforum    2\nquiz     2\ndtype: int64
+"I have activity, module, and presentation columns, and I need to count unique course combinations inside each activity group using a combo column first. What should I use?","Create a combined key column, then use groupby() with nunique(). This works because nunique() counts unique values from one column.",df.groupby('activity')['module+presentation'].nunique(),"import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'quiz', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'AAA', 'BBB', 'BBB'],\n    'presentation': ['2023J', '2023J', '2024B', '2023J', '2024B']\n})\n\ndf['course_combo'] = df['module'] + '-' + df['presentation']\nresult = df.groupby('activity')['course_combo'].nunique()\nprint(result)","pd.DataFrame.groupby(),pd.core.groupby.SeriesGroupBy.nunique()","import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'quiz', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'AAA', 'BBB', 'BBB'],\n    'presentation': ['2023J', '2023J', '2024B', '2023J', '2024B']\n})\n\ndf['course_combo'] = df['module'] + '-' + df['presentation']\nresult = df.groupby('activity')['course_combo'].nunique()\nprint(result)","activity\nforum    2\nquiz     2\nName: course_combo, dtype: int64"
+"I have module and presentation columns, and I need one total count of unique course combinations across the entire pandas DataFrame. What should I use?","Use drop_duplicates() on both columns, then shape[0]. This gives one global count, not one count per activity.","df.groupby('activity')[['module', 'presentation']].drop_duplicates().shape[0]","import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'BBB', 'BBB'],\n    'presentation': ['2023J', '2023J', '2023J', '2024B']\n})\n\nresult = df[['module', 'presentation']].drop_duplicates().shape[0]\nprint(result)",pd.DataFrame.drop_duplicates(),"import pandas as pd\n\ndf = pd.DataFrame({\n    'activity': ['quiz', 'quiz', 'forum', 'forum'],\n    'module': ['AAA', 'AAA', 'BBB', 'BBB'],\n    'presentation': ['2023J', '2023J', '2023J', '2024B']\n})\n\nresult = df[['module', 'presentation']].drop_duplicates().shape[0]\nprint(result)",3
+"I have VLE activity rows in SQLite, and I need total resources plus unique course combinations per activity type. What should I use?","Use GROUP BY activity_type, COUNT(*) for total rows, and COUNT(DISTINCT combined columns) for unique course combinations.","SELECT activity_type, code_module, code_presentation, COUNT(*) FROM vle GROUP BY activity_type;","CREATE TABLE vle (\n    activity_type TEXT,\n    code_module TEXT,\n    code_presentation TEXT\n);\n\nINSERT INTO vle VALUES\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2024B'),\n('forum', 'BBB', '2023J'),\n('forum', 'BBB', '2024B');\n\nSELECT\n    activity_type,\n    COUNT(*) AS resource_count,\n    COUNT(DISTINCT code_module || '-' || code_presentation) AS courses_using\nFROM vle\nGROUP BY activity_type\nORDER BY resource_count DESC, courses_using ASC;","COUNT(),GROUP BY","CREATE TABLE vle (\n    activity_type TEXT,\n    code_module TEXT,\n    code_presentation TEXT\n);\n\nINSERT INTO vle VALUES\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2024B'),\n('forum', 'BBB', '2023J'),\n('forum', 'BBB', '2024B');\n\nSELECT\n    activity_type,\n    COUNT(*) AS resource_count,\n    COUNT(DISTINCT code_module || '-' || code_presentation) AS courses_using\nFROM vle\nGROUP BY activity_type\nORDER BY resource_count DESC, courses_using ASC;",quiz|3|2\nforum|2|2
+"I have VLE activity rows in SQLite, and I need to count unique course combinations overall, not per activity. What should I use?",Use COUNT(DISTINCT combined columns) without GROUP BY. This returns one single number for the whole table.,"SELECT activity_type, COUNT(DISTINCT code_module || '-' || code_presentation) FROM vle GROUP BY activity_type;","CREATE TABLE vle (\n    activity_type TEXT,\n    code_module TEXT,\n    code_presentation TEXT\n);\n\nINSERT INTO vle VALUES\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2023J'),\n('forum', 'AAA', '2024B'),\n('forum', 'BBB', '2023J');\n\nSELECT COUNT(DISTINCT code_module || '-' || code_presentation) AS unique_courses\nFROM vle;",COUNT(),"CREATE TABLE vle (\n    activity_type TEXT,\n    code_module TEXT,\n    code_presentation TEXT\n);\n\nINSERT INTO vle VALUES\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2023J'),\n('forum', 'AAA', '2024B'),\n('forum', 'BBB', '2023J');\n\nSELECT COUNT(DISTINCT code_module || '-' || code_presentation) AS unique_courses\nFROM vle;",3
+"I have activity rows in SQLite, and I need one row for each unique activity-course combination before counting anything else. What should I use?","Use GROUP BY activity_type, code_module, and code_presentation when you want separate rows for each combination. This changes the result granularity instead of returning a distinct count inside each activity.","SELECT activity_type, COUNT(DISTINCT code_module || '-' || code_presentation) FROM vle GROUP BY activity_type;","CREATE TABLE vle (\n    activity_type TEXT,\n    code_module TEXT,\n    code_presentation TEXT\n);\n\nINSERT INTO vle VALUES\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2024B'),\n('forum', 'BBB', '2023J');\n\nSELECT\n    activity_type,\n    code_module,\n    code_presentation,\n    COUNT(*) AS rows_in_combo\nFROM vle\nGROUP BY activity_type, code_module, code_presentation;","COUNT(),GROUP BY","CREATE TABLE vle (\n    activity_type TEXT,\n    code_module TEXT,\n    code_presentation TEXT\n);\n\nINSERT INTO vle VALUES\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2023J'),\n('quiz', 'AAA', '2024B'),\n('forum', 'BBB', '2023J');\n\nSELECT\n    activity_type,\n    code_module,\n    code_presentation,\n    COUNT(*) AS rows_in_combo\nFROM vle\nGROUP BY activity_type, code_module, code_presentation;",forum|BBB|2023J|1\nquiz|AAA|2023J|2\nquiz|AAA|2024B|1
+"I have repeated values in one SQL column, and I need to count unique values inside each group. What should I use?",Use GROUP BY for the outer group and COUNT(DISTINCT column) for the unique values inside each group.,"SELECT activity_type, COUNT(*) FROM vle GROUP BY activity_type;","CREATE TABLE vle (\n    activity_type TEXT,\n    code_module TEXT\n);\n\nINSERT INTO vle VALUES\n('quiz', 'AAA'),\n('quiz', 'AAA'),\n('quiz', 'BBB'),\n('forum', 'CCC');\n\nSELECT\n    activity_type,\n    COUNT(DISTINCT code_module) AS unique_modules\nFROM vle\nGROUP BY activity_type;","COUNT(),GROUP BY","CREATE TABLE vle (\n    activity_type TEXT,\n    code_module TEXT\n);\n\nINSERT INTO vle VALUES\n('quiz', 'AAA'),\n('quiz', 'AAA'),\n('quiz', 'BBB'),\n('forum', 'CCC');\n\nSELECT\n    activity_type,\n    COUNT(DISTINCT code_module) AS unique_modules\nFROM vle\nGROUP BY activity_type;",forum|1\nquiz|2
+"I have text timestamps for orders, and I need SQLite to normalize them into a standard date-time format. What should I use?",Use datetime() to convert a valid SQLite time-value into YYYY-MM-DD HH:MM:SS text. SQLite does not create a Python-style datetime object; it returns normalized text.,SELECT created_at AS normalized_time FROM orders;,SELECT datetime(created_at) AS normalized_time FROM orders;,datetime(),"CREATE TABLE orders(order_id INTEGER, created_at TEXT);\nINSERT INTO orders VALUES\n(1, '2024-01-15 03:00:00'),\n(2, '2024-01-16 14:30:10');\n\nSELECT datetime(created_at) AS normalized_time FROM orders;",normalized_time\n2024-01-15 03:00:00\n2024-01-16 14:30:10
+"I have order timestamps, and I only need the calendar date for daily grouping. What should I use?",Use date() to extract the YYYY-MM-DD portion from a timestamp. This is useful before grouping by day.,SELECT created_at FROM orders GROUP BY created_at;,"SELECT date(created_at) AS order_date, COUNT() AS order_count\nFROM orders\nGROUP BY date(created_at);",date(),"CREATE TABLE orders(order_id INTEGER, created_at TEXT);\nINSERT INTO orders VALUES\n(1, '2024-01-15 03:00:00'),\n(2, '2024-01-15 14:30:10'),\n(3, '2024-01-16 09:00:00');\n\nSELECT date(created_at) AS order_date, COUNT() AS order_count\nFROM orders\nGROUP BY date(created_at);",order_date|order_count\n2024-01-15|2\n2024-01-16|1
+"I have event timestamps, and I only need the time of day without the date. What should I use?",Use time() to extract the HH:MM:SS portion from a timestamp. This keeps only the clock time as text.,SELECT created_at AS event_time FROM events;,SELECT time(created_at) AS event_time FROM events;,time(),"CREATE TABLE events(event_id INTEGER, created_at TEXT);\nINSERT INTO events VALUES\n(1, '2024-01-15 03:05:00'),\n(2, '2024-01-15 14:30:10');\n\nSELECT time(created_at) AS event_time FROM events;",event_time\n03:05:00\n14:30:10
+"I have rental start dates, and I need to calculate the checkout date 3 days later. What should I use?",Use date() with a duration modifier like '+3 days'. SQLite applies the modifier and returns a new date text value.,SELECT start_date + 3 AS checkout_date FROM rentals;,"SELECT date(start_date, '+3 days') AS checkout_date FROM rentals;",date(),"CREATE TABLE rentals(rental_id INTEGER, start_date TEXT);\nINSERT INTO rentals VALUES\n(1, '2024-01-15'),\n(2, '2024-02-27');\n\nSELECT date(start_date, '+3 days') AS checkout_date FROM rentals;",checkout_date\n2024-01-18\n2024-03-01
+"I have appointment start times, and I need to calculate when each appointment ends after 90 minutes. What should I use?",Use datetime() with a minute modifier like '+90 minutes'. This preserves both the date and time in the result.,SELECT start_time + 90 AS end_time FROM appointments;,"SELECT datetime(start_time, '+90 minutes') AS end_time FROM appointments;",datetime(),"CREATE TABLE appointments(appointment_id INTEGER, start_time TEXT);\nINSERT INTO appointments VALUES\n(1, '2024-01-15 09:00:00'),\n(2, '2024-01-15 23:30:00');\n\nSELECT datetime(start_time, '+90 minutes') AS end_time FROM appointments;",end_time\n2024-01-15 10:30:00\n2024-01-16 01:00:00
+"I have login and logout timestamps, and I need the session duration in hours. What should I use?",Use julianday() to subtract two timestamps and multiply the day difference by 24. This gives a numeric duration in hours.,SELECT logout_time - login_time AS hours_active FROM sessions;,"SELECT ROUND((julianday(logout_time) - julianday(login_time)) * 24, 2) AS hours_active\nFROM sessions;","julianday(),ROUND()","CREATE TABLE sessions(session_id INTEGER, login_time TEXT, logout_time TEXT);\nINSERT INTO sessions VALUES\n(1, '2024-01-15 09:00:00', '2024-01-15 11:30:00'),\n(2, '2024-01-15 22:00:00', '2024-01-16 01:15:00');\n\nSELECT ROUND((julianday(logout_time) - julianday(login_time)) * 24, 2) AS hours_active\nFROM sessions;",hours_active\n2.5\n3.25
+"I have task start and finish timestamps, and I need the duration in minutes. What should I use?","Use strftime() with '%s' to convert each timestamp to Unix seconds, then subtract and divide by 60. This is useful for minute-level duration math.",SELECT finish_time - start_time AS minutes_taken FROM tasks;,"SELECT (strftime('%s', finish_time) - strftime('%s', start_time)) / 60 AS minutes_taken\nFROM tasks;",strftime(),"CREATE TABLE tasks(task_id INTEGER, start_time TEXT, finish_time TEXT);\nINSERT INTO tasks VALUES\n(1, '2024-01-15 10:00:00', '2024-01-15 10:45:00'),\n(2, '2024-01-15 23:50:00', '2024-01-16 00:10:00');\n\nSELECT (strftime('%s', finish_time) - strftime('%s', start_time)) / 60 AS minutes_taken\nFROM tasks;",minutes_taken\n45\n20
+I have timestamps and need to extract the month for monthly reporting. What should I use?,Use strftime() with '%Y-%m' to extract the year-month value. This is better than only extracting month when your data spans multiple years.,"SELECT strftime('%m', created_at) AS order_month FROM orders;","SELECT strftime('%Y-%m', created_at) AS order_month, COUNT() AS order_count\nFROM orders\nGROUP BY strftime('%Y-%m', created_at);",strftime(),"CREATE TABLE orders(order_id INTEGER, created_at TEXT);\nINSERT INTO orders VALUES\n(1, '2024-01-15 03:00:00'),\n(2, '2024-01-20 10:00:00'),\n(3, '2024-02-01 08:00:00');\n\nSELECT strftime('%Y-%m', created_at) AS order_month, COUNT() AS order_count\nFROM orders\nGROUP BY strftime('%Y-%m', created_at);",order_month|order_count\n2024-01|2\n2024-02|1
+I have timestamps and need to extract only the year for annual summaries. What should I use?,"Use strftime() with '%Y' to extract the four-digit year. The result is text, which is fine for grouping and labels.",SELECT year(created_at) AS order_year FROM orders;,"SELECT strftime('%Y', created_at) AS order_year, COUNT() AS order_count\nFROM orders\nGROUP BY strftime('%Y', created_at);",strftime(),"CREATE TABLE orders(order_id INTEGER, created_at TEXT);\nINSERT INTO orders VALUES\n(1, '2023-12-31 23:00:00'),\n(2, '2024-01-01 01:00:00'),\n(3, '2024-06-15 12:00:00');\n\nSELECT strftime('%Y', created_at) AS order_year, COUNT() AS order_count\nFROM orders\nGROUP BY strftime('%Y', created_at);",order_year|order_count\n2023|1\n2024|2
+I have due dates and need to find items due within the next 7 days from a fixed report date. What should I use?,Use date() with BETWEEN and a '+7 days' modifier. This creates a clear inclusive date range.,SELECT task_name FROM tasks WHERE due_date <= '+7 days';,"SELECT task_name\nFROM tasks\nWHERE date(due_date) BETWEEN date('2024-01-15') AND date('2024-01-15', '+7 days');",date(),"CREATE TABLE tasks(task_name TEXT, due_date TEXT);\nINSERT INTO tasks VALUES\n('Submit report', '2024-01-16'),\n('Renew license', '2024-01-22'),\n('Plan event', '2024-01-30');\n\nSELECT task_name\nFROM tasks\nWHERE date(due_date) BETWEEN date('2024-01-15') AND date('2024-01-15', '+7 days');",task_name\nSubmit report\nRenew license
+I have timestamps stored in UTC and need to shift them to local time by subtracting 8 hours. What should I use?,Use datetime() with an hour modifier like '-8 hours'. This returns an adjusted date-time text value.,SELECT created_at_utc AS local_time FROM logs;,"SELECT datetime(created_at_utc, '-8 hours') AS local_time FROM logs;",datetime(),"CREATE TABLE logs(log_id INTEGER, created_at_utc TEXT);\nINSERT INTO logs VALUES\n(1, '2024-01-15 12:00:00'),\n(2, '2024-01-16 02:30:00');\n\nSELECT datetime(created_at_utc, '-8 hours') AS local_time FROM logs;",local_time\n2024-01-15 04:00:00\n2024-01-15 18:30:00
+"I have event timestamps, and I need the first day of each event's month for month buckets. What should I use?",Use date() with the 'start of month' modifier. This normalizes any date in the same month to the same monthly bucket.,SELECT date(event_time) AS month_bucket FROM events;,"SELECT date(event_time, 'start of month') AS month_bucket, COUNT() AS event_count\nFROM events\nGROUP BY date(event_time, 'start of month');",date(),"CREATE TABLE events(event_id INTEGER, event_time TEXT);\nINSERT INTO events VALUES\n(1, '2024-01-15 10:00:00'),\n(2, '2024-01-31 20:00:00'),\n(3, '2024-02-01 09:00:00');\n\nSELECT date(event_time, 'start of month') AS month_bucket, COUNT() AS event_count\nFROM events\nGROUP BY date(event_time, 'start of month');",month_bucket|event_count\n2024-01-01|2\n2024-02-01|1
+I have three players and need every possible 2-person lineup where order matters. What should I use?,"Use itertools.permutations() when order matters. ('Mia', 'Noah') and ('Noah', 'Mia') are treated as different arrangements.","result = list(itertools.combinations(players, 2))","result = list(itertools.permutations(players, 2))",itertools.permutations(),"import itertools\n\nplayers = ['Mia', 'Noah', 'Ava']\nresult = list(itertools.permutations(players, 2))","[('Mia', 'Noah'), ('Mia', 'Ava'), ('Noah', 'Mia'), ('Noah', 'Ava'), ('Ava', 'Mia'), ('Ava', 'Noah')]"
+I have three players and need every possible 2-person team where order does not matter. What should I use?,"Use itertools.combinations() when order does not matter. ('Mia', 'Noah') and ('Noah', 'Mia') are treated as the same group.","result = list(itertools.permutations(players, 2))","result = list(itertools.combinations(players, 2))",itertools.combinations(),"import itertools\n\nplayers = ['Mia', 'Noah', 'Ava']\nresult = list(itertools.combinations(players, 2))","[('Mia', 'Noah'), ('Mia', 'Ava'), ('Noah', 'Ava')]"
+I have menu items and need every possible 2-item combo where the same item can be chosen twice. What should I use?,"Use itertools.combinations_with_replacement() when order does not matter but repeated choices are allowed. This includes pairs like ('Tea', 'Tea').","result = list(itertools.combinations(items, 2))","result = list(itertools.combinations_with_replacement(items, 2))",itertools.combinations_with_replacement(),"import itertools\n\nitems = ['Tea', 'Coffee', 'Juice']\nresult = list(itertools.combinations_with_replacement(items, 2))","[('Tea', 'Tea'), ('Tea', 'Coffee'), ('Tea', 'Juice'), ('Coffee', 'Coffee'), ('Coffee', 'Juice'), ('Juice', 'Juice')]"
+"I have shirt colors and sizes, and I need every color-size pairing. What should I use?",Use itertools.product() when choosing one item from each separate list. This creates the Cartesian product across the input collections.,"result = list(itertools.combinations(colors + sizes, 2))","result = list(itertools.product(colors, sizes))",itertools.product(),"import itertools\n\ncolors = ['red', 'blue']\nsizes = ['S', 'M']\nresult = list(itertools.product(colors, sizes))","[('red', 'S'), ('red', 'M'), ('blue', 'S'), ('blue', 'M')]"
+I have three quiz answers and need every possible 2-answer sequence where answers can repeat. What should I use?,"Use itertools.product() with repeat when order matters and repeated choices are allowed. This is useful for passwords, answer sequences, or grid searches.","result = list(itertools.permutations(answers, 2))","result = list(itertools.product(answers, repeat=2))",itertools.product(),"import itertools\n\nanswers = ['A', 'B', 'C']\nresult = list(itertools.product(answers, repeat=2))","[('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'B'), ('B', 'C'), ('C', 'A'), ('C', 'B'), ('C', 'C')]"
+I need to count how many ordered 2-person arrangements can be made from 4 people without generating every arrangement. What should I use?,Use math.perm() when you only need the number of permutations. It counts ordered arrangements without building the full list.,"result = len(list(itertools.permutations(players, 2)))","result = math.perm(len(players), 2)",math.perm(),"import math\n\nplayers = ['Mia', 'Noah', 'Ava', 'Liam']\nresult = math.perm(len(players), 2)",12
+I need to count how many 2-person teams can be made from 4 people without generating every team. What should I use?,Use math.comb() when you only need the number of combinations. It counts unordered selections without building the full list.,"result = len(list(itertools.combinations(players, 2)))","result = math.comb(len(players), 2)",math.comb(),"import math\n\nplayers = ['Mia', 'Noah', 'Ava', 'Liam']\nresult = math.comb(len(players), 2)",6
+"I have product categories and need all possible bundles made of one color, one size, and one material. What should I use?",Use itertools.product() when each position comes from a different list. Each output tuple contains one choice from each input collection.,"result = list(itertools.permutations(colors + sizes + materials, 3))","result = list(itertools.product(colors, sizes, materials))",itertools.product(),"import itertools\n\ncolors = ['black', 'white']\nsizes = ['S', 'M']\nmaterials = ['cotton']\nresult = list(itertools.product(colors, sizes, materials))","[('black', 'S', 'cotton'), ('black', 'M', 'cotton'), ('white', 'S', 'cotton'), ('white', 'M', 'cotton')]"
+I have a list of tasks and need every possible order to complete all tasks. What should I use?,Use itertools.permutations() without r when you want full-length orderings. It returns every possible ordering of all elements.,"result = list(itertools.combinations(tasks, len(tasks)))",result = list(itertools.permutations(tasks)),itertools.permutations(),"import itertools\n\ntasks = ['clean', 'study', 'email']\nresult = list(itertools.permutations(tasks))","[('clean', 'study', 'email'), ('clean', 'email', 'study'), ('study', 'clean', 'email'), ('study', 'email', 'clean'), ('email', 'clean', 'study'), ('email', 'study', 'clean')]"
+I have tags and need every unique 3-tag group for testing filters. What should I use?,Use itertools.combinations() when selecting groups where order does not matter. This avoids duplicate reversed groups.,"result = list(itertools.permutations(tags, 3))","result = list(itertools.combinations(tags, 3))",itertools.combinations(),"import itertools\n\ntags = ['new', 'sale', 'popular', 'staff_pick']\nresult = list(itertools.combinations(tags, 3))","[('new', 'sale', 'popular'), ('new', 'sale', 'staff_pick'), ('new', 'popular', 'staff_pick'), ('sale', 'popular', 'staff_pick')]"
+"I have customer emails mixed into support notes, and I need to find the first email address. What should I use?",Use re.search() when you need the first match anywhere in a string. Use a pattern that captures the basic email structure instead of searching for only one exact email.,"re.match(pattern, note)","result = re.search(pattern, note).group()","re.search(),re.Match.group()","import re\n\nnote = 'Customer email is [mia@test.com](mailto:mia@test.com) and needs help.'\npattern = r'[\w.-]+@[\w.-]+\.\w+'\nresult = re.search(pattern, note).group()",[mia@test.com](mailto:mia@test.com)
+"I have a list of order IDs inside a sentence, and I need all matching IDs. What should I use?",Use re.findall() when you need every matching substring. This returns a list of all matches instead of only the first one.,"result = re.search(pattern, text).group()","result = re.findall(pattern, text)",re.findall(),"import re\n\ntext = 'Orders ORD-1001, ORD-1002, and ORD-1003 shipped.'\npattern = r'ORD-\d{4}'\nresult = re.findall(pattern, text)","['ORD-1001', 'ORD-1002', 'ORD-1003']"
+"I have phone numbers written as 206-555-0199, and I need to validate that the whole string is exactly that format. What should I use?",Use re.fullmatch() when the entire string must match the pattern. Quantifiers like {3} and {4} enforce exact digit counts.,"result = re.search(pattern, phone) is not None","result = re.fullmatch(pattern, phone) is not None",re.fullmatch(),"import re\n\nphone = '206-555-0199'\npattern = r'\d{3}-\d{3}-\d{4}'\nresult = re.fullmatch(pattern, phone) is not None",True
+"I have a messy sentence with multiple spaces, and I need to replace repeated spaces with one space. What should I use?",Use re.sub() with the + quantifier to replace one or more spaces. The + quantifier prevents you from only replacing exactly one space at a time.,"result = text.replace('  ', ' ')","result = re.sub(pattern, ' ', text)",re.sub(),"import re\n\ntext = 'Mia   ordered     coffee'\npattern = r' +'\nresult = re.sub(pattern, ' ', text)",Mia ordered coffee
+"I have product codes where the prefix is one or more uppercase letters followed by digits, and I need to extract valid codes. What should I use?",Use re.findall() with + when a section can appear one or more times. This lets codes like A12 and SKU100 both match.,"result = re.findall(r'[A-Z]\d+', text)","result = re.findall(pattern, text)",re.findall(),"import re\n\ntext = 'Codes: A12, SKU100, x55, AB7'\npattern = r'[A-Z]+\d+'\nresult = re.findall(pattern, text)","['A12', 'SKU100', 'AB7']"
+"I have optional apartment numbers like Apt 4B, but some addresses do not include one. How do I capture the optional part?",Use ? when a piece of the pattern is optional. This lets the pattern match both addresses with and without the apartment label.,"result = re.findall(r'\d+ [A-Za-z]+ St Apt \w+', addresses)","result = re.findall(pattern, addresses)",re.findall(),"import re\n\naddresses = '123 Pine St Apt 4B; 88 Lake St; 42 Hill St Apt 2A'\npattern = r'\d+ [A-Za-z]+ St(?: Apt \w+)?'\nresult = re.findall(pattern, addresses)","['123 Pine St Apt 4B', '88 Lake St', '42 Hill St Apt 2A']"
+"I have usernames that must be 3 to 8 lowercase letters, and I need to validate them. What should I use?","Use re.fullmatch() with a range quantifier like {3,8}. This checks both allowed characters and allowed length.","result = re.search(pattern, username) is not None","result = re.fullmatch(pattern, username) is not None",re.fullmatch(),"import re\n\nusername = 'leanne'\npattern = r'[a-z]{3,8}'\nresult = re.fullmatch(pattern, username) is not None",True
+I have a log line and need to pull out the date and status into separate pieces. What should I use?,Use re.search() with capturing groups when you need specific parts of one match. Then use group() to retrieve each captured section.,"result = re.findall(pattern, log)","match = re.search(pattern, log)\nresult = (match.group(1), match.group(2))","re.search(),re.Match.group()","import re\n\nlog = '2024-01-15 ERROR payment failed'\npattern = r'(\d{4}-\d{2}-\d{2}) (ERROR|WARN|INFO)'\nmatch = re.search(pattern, log)\nresult = (match.group(1), match.group(2))","('2024-01-15', 'ERROR')"
+"I have text wrapped in brackets, and I need the shortest bracketed match instead of one giant match. What should I use?",Use a non-greedy quantifier like *? when you want the shortest possible match. A greedy .* pattern can capture too much.,"result = re.findall(r'[.*\]', text)","result = re.findall(pattern, text)",re.findall(),"import re\n\ntext = '[apple] and [banana]'\npattern = r'[.*?\]'\nresult = re.findall(pattern, text)","['[apple]', '[banana]']"
+"I have comma-separated tags with inconsistent spaces, and I need to split them cleanly. What should I use?",Use re.split() when the separator follows a pattern. A pattern like comma plus optional spaces handles messy spacing.,"result = tags.split(', ')","result = re.split(pattern, tags)",re.split(),"import re\n\ntags = 'python, sql,regex,  pandas'\npattern = r',\s*'\nresult = re.split(pattern, tags)","['python', 'sql', 'regex', 'pandas']"
+"I have words and numbers mixed together, and I need to extract only the numbers. What should I use?",Use re.findall() with \d+ to capture one or more consecutive digits. The + quantifier groups multi-digit numbers together.,"result = re.findall(r'\d', text)","result = re.findall(pattern, text)",re.findall(),"import re\n\ntext = 'Mia bought 12 apples and 3 coffees for 45 dollars.'\npattern = r'\d+'\nresult = re.findall(pattern, text)","['12', '3', '45']"
+I have a sentence and need to replace every price like $12 or $99 with [PRICE]. What should I use?,Use re.sub() when you need pattern-based replacement. Escape the dollar sign because $ has special meaning in regex.,"result = text.replace('$', '[PRICE]')","result = re.sub(pattern, '[PRICE]', text)",re.sub(),"import re\n\ntext = 'The shirt is $25 and the shoes are $80.'\npattern = r'\$\d+'\nresult = re.sub(pattern, '[PRICE]', text)",The shirt is [PRICE] and the shoes are [PRICE].

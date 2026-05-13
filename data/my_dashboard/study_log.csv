@@ -1,0 +1,333 @@
+Date,Hours,Notes
+2026-01-14,6.5,
+2026-01-15,6,
+2026-01-16,4.5,
+2026-01-17,1.5,
+2026-01-18,1,
+2026-01-19,4.5,
+2026-01-20,6.5,
+2026-01-21,5,
+2026-01-22,0,
+2026-01-23,5,
+2026-01-24,2,
+2026-01-27,2,
+2026-01-28,5,
+2026-01-29,1,
+2026-01-30,1,
+2026-01-31,3.5,
+2026-02-01,6.5,
+2026-02-02,6,
+2026-02-03,6,
+2026-02-04,6.5,
+2026-02-05,6,
+2026-02-06,6,
+2026-02-07,0,
+2026-02-08,0,
+2026-02-09,0.5,
+2026-02-10,6,
+2026-02-11,1,
+2026-02-12,0,
+2026-02-13,0,
+2026-02-14,0,
+2026-02-15,0.5,
+2026-02-16,0,
+2026-02-17,6,
+2026-02-18,6,
+2026-02-19,2,
+2026-02-20,0,
+2026-02-21,0,
+2026-02-22,0,
+2026-02-23,5,
+2026-02-24,2,
+2026-02-25,3,
+2026-02-26,4,
+2026-02-27,0,
+2026-02-28,0,
+2026-03-01,0,
+2026-03-02,6,
+2026-03-03,6,
+2026-03-04,6,
+2026-03-05,5,
+2026-03-06,4,
+2026-03-07,2.5,
+2026-03-08,3,
+2026-03-09,4,
+2026-03-10,4,
+2026-03-11,3,
+2026-03-12,3.5,
+2026-03-13,4.5,
+2026-03-14,0,
+2026-03-15,0,
+2026-03-16,3.5,
+2026-03-17,6,
+2026-03-18,2,
+2026-03-19,3.5,
+2026-03-20,5,
+2026-03-21,3,
+2026-03-22,1,
+2026-03-23,4,
+2026-03-24,2,
+2026-03-25,0,
+2026-03-26,0,
+2026-03-27,2.5,
+2026-03-28,6,
+2026-03-29,4.5,
+2026-03-30,2,
+2026-03-31,3,
+2026-04-01,0,
+2026-04-02,0,
+2026-04-03,0,
+2026-04-04,0,
+2026-04-05,0,
+2026-04-06,1.5,
+2026-04-07,3,
+2026-04-08,3.5,
+2026-04-09,6,
+2026-04-10,3,
+2026-04-11,2,
+2026-04-12,3,
+2026-04-13,6,
+2026-04-14,4,
+2026-04-15,2,
+2026-04-16,2.0,
+2026-04-17,3.0,
+2026-04-18,3.0,
+2026-04-19,0.5,"I’m building two reference tables for programming methods/functions. Follow these rules exactly.
+
+## OUTPUT REQUIREMENTS (VERY IMPORTANT)
+
+* Output **two separate CSV blocks with NO headers**
+* First block = **Table 1**
+* Second block = **Table 2**
+* Do NOT include any explanations or text outside the CSV blocks
+* Preserve column order exactly
+* Use quotes where needed so CSV formatting is valid
+* Keep rows consistent and aligned
+
+---
+
+## TABLE SCHEMAS
+
+### Table 1 (Methods)
+
+Method | Language | Library / Object | Returns | Description | Use Case | Example Problem | Example Answer | Import | Input example | Output example
+
+### Table 2 (Parameters)
+
+Method | Argument | Type | Valid Range | Required or Not Required | Default Value | Notes | Problem Example | Answer Example
+
+---
+
+## GENERAL RULES
+
+* Be concise but accurate
+* No extra columns
+* 1 row per method unless truly necessary
+* Use beginner-friendly but correct explanations
+* Avoid duplicates unless behavior is meaningfully different
+
+---
+
+## METHOD NAMING RULE
+
+* Use only method/function name with parentheses
+* No parameters inside
+* Examples:
+
+  * datetime.datetime()
+  * pd.DataFrame.sum()
+  * np.array()
+
+---
+
+## LIBRARY / OBJECT RULE
+
+Use the most specific object path possible:
+
+* pandas.core.frame.DataFrame
+* pandas.core.series.Series
+* pandas.core.groupby.DataFrameGroupBy
+* numpy.ndarray
+* datetime
+* re
+
+Language stays:
+
+* Python (unless SQL)
+
+---
+
+## CONTENT RULES (Table 1)
+
+### Returns
+
+* Simple description of what is returned
+
+### Description
+
+* What the method does (clear, short)
+
+### Use Case
+
+* When you would use it
+
+### Example Problem
+
+* Short real-world task
+
+### Example Answer
+
+* Short correct code
+
+### Import
+
+* Include import OR use ""—"" if built-in
+
+---
+
+## INPUT / OUTPUT RULES (CRITICAL)
+
+### Input example
+
+* Must match the Example Answer exactly
+* Show the actual variables/data used
+* Keep small:
+
+  * DataFrame: 2–4 rows
+  * Arrays/lists: 3–5 values
+  * Strings: short
+  * SQL: tiny conceptual rows
+
+### Output example
+
+* Must match what the Example Answer produces
+* Show actual output if practical
+* If output is complex:
+
+  * Use a short but concrete summary (not vague)
+
+### KEY RULE
+
+Input → Example Answer → Output must logically connect
+
+---
+
+## PARAMETER TABLE RULES (Table 2)
+
+* One row per parameter
+* Method name still has no parameters
+* Include only useful parameters
+* Be concise but clear
+
+---
+
+## EXAMPLE FORMAT
+
+Table 1:
+datetime.datetime() | Python | datetime | datetime object | Creates a datetime object | Create a date from parts | Create a date | obj = datetime.datetime(2024,1,1) | import datetime | year=2024, month=1, day=1 | 2024-01-01 00:00:00
+
+Table 2:
+datetime.datetime() | year | int | 1–9999 | Required | — | Required year | Create date | datetime.datetime(2024,1,1)
+
+---
+
+## TASK
+
+When I give methods/functions:
+
+1. Decide which table they belong in
+2. Follow all formatting rules exactly
+3. Ensure Input and Output examples are correct and helpful
+4. Keep everything clean, consistent, and realistic
+
+Wait for my methods/functions.
+"
+2026-04-20,4.5,"d2=d.copy(deep=True) ## deep copy function
+
+
+10 in
+
+I am building a structured reference table. Please follow ALL rules strictly.
+
+OUTPUT FORMAT:
+- Output MUST be raw CSV (comma-separated).
+- DO NOT include headers.
+- DO NOT include explanations outside the CSV.
+- Every row must have EXACTLY this column order:
+Question,Answer,Wrong Example,Correct Example,Methods,Input Example,Output Example
+
+CONTENT RULES:
+- Each row must be complete and self-contained.
+- ""Answer"" should be concise but clear (1–2 sentences max).
+- ""Wrong Example"" must be a realistic common mistake.
+- ""Correct Example"" must directly fix the wrong example.
+- ""Methods"" should ONLY contain method/function names with parentheses and NO parameters.
+  - Example: re.sub(), re.search(), pd.DataFrame.sum()
+  - DO NOT include arguments inside Methods.
+- Parameters/arguments should ONLY appear in the Correct Example or Input Example when needed.
+- ""Input Example"" and ""Output Example"" must form a clear before/after pair.
+- Input/Output must be simple, realistic, and easy to understand.
+- Avoid vague placeholders like ""text"" unless necessary—prefer concrete examples.
+
+FORMATTING RULES:
+- Only use quotes when required by CSV (e.g., commas inside a cell).
+- Escape quotes properly using double quotes ("""").
+- No extra spaces before or after commas.
+- No broken or partial rows.
+
+QUALITY RULES:
+- Examples must match the explanation exactly.
+- Regex must be correct and general (not overly restrictive).
+- Prefer clarity over cleverness.
+- Avoid redundant rows.
+
+VALIDATION:
+Before outputting:
+- Ensure every row has exactly 7 columns
+- Ensure Methods column has NO parameters
+- Ensure Input/Output pairs are correct and aligned
+- Ensure CSV is properly formatted (no broken quotes or commas)
+
+TASK:
+[PASTE YOUR TOPIC OR ROWS HERE]"
+2026-04-21,6.0,"turn a series of dict in each row, into its own dataframe with new columns (with the keys that reoccur in each row) 
+df_counts = pd.DataFrame(ex3_df['MedalCounts'].tolist()) 
+df_counts = ex3_df['MedalCounts'].apply(pd.Series)
+
+how to count the number of matches a regex finds 
+ def count_medals(row):
+        import regex as re
+        medals = row
+        result = {'Gold':0, 'Silver':0, 'Bronze':0}
+        
+        
+        if medals != 0:
+            get_medals = re.findall(r'Gold|Bronze|Silver', medals)
+            if get_medals:
+            #print(row['Team'])
+                counts = Counter(get_medals)
+                counts = dict(counts)
+                result.update(counts)
+
+
+how to use the pivot method (simple example)  and change the questions to something more scenario based where i would use melt method
+
+how to use melt method method (example) and change the questions to something more scenario based where i would use melt method
+
+
+
+"
+2026-04-22,6.0,
+2026-04-23,3.0,
+2026-04-24,6.0,
+2026-04-25,2.5,
+2026-04-26,6.0,
+2026-04-27,2.5,
+2026-04-28,1.88,
+2026-04-29,2.0,
+2026-04-30,2.0,
+2026-05-01,3.0,
+2026-05-02,5.5,
+2026-05-03,1.0,
+2026-05-04,4.5,
+2026-05-13,6.0,

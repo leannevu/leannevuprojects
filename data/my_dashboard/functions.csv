@@ -1,0 +1,277 @@
+Method,Language,Library / Object,Returns,Description,Use Case,Example Problem,Example Answer,Import,Input example,Output example
+datetime.datetime(),Python,datetime,datetime object,"Creates a datetime object from year, month, day, and optional time values.",Create a precise datetime from date parts,Create a custom datetime.,"obj_datetime = datetime.datetime(first_night.year, first_night.month, first_night.day)",import datetime,"first_night.year=2024, first_night.month=1, first_night.day=15",2024-01-15 0:00:00
+relativedelta(),Python,dateutil.relativedelta,relativedelta object or adjusted datetime/date,Represents a relative time difference and is often used to add or subtract calendar-based time such as days or months.,Shift dates by calendar-based units,Create a custom datetime and add a number of days using relativedelta.,"obj_datetime = datetime.datetime(first_night.year, first_night.month, first_night.day)
+last_night = obj_datetime + relativedelta(days=stay_length - 1)","import datetime
+from dateutil.relativedelta import relativedelta","obj_datetime=2024-01-15 00:00:00, stay_length=4",last_night=2024-01-18 00:00:00
+pd.DataFrame.groupby(),Python,pandas.core.frame.DataFrame,DataFrameGroupBy object,"Groups rows into buckets based on one or more keys for aggregation, transformation, or filtering.",Group records before aggregating or transforming,"Count the number of people injured, killed, and unspecified for every crash date.","ex2_df = ex2_df.groupby('CRASH_DATE').agg(
+  INJURY_COUNT=('PERSON_INJURY', lambda x: (x == 'Injured').sum()),
+  DEATHS_COUNT=('PERSON_INJURY', lambda x: (x == 'Killed').sum()),
+  UNSPECIFIED_COUNT=('PERSON_INJURY', lambda x: (x == 'Unspecified').sum())
+).reset_index()",import pandas as pd,"CRASH_DATE=[2024-01-01,2024-01-01,2024-01-02], PERSON_INJURY=[Injured,Killed,Unspecified]",Rows grouped into 2024-01-01 and 2024-01-02
+pd.agg(),Python,pandas.core.frame.DataFrame,Series or DataFrame,"Applies one or more aggregation functions across rows or columns, or within grouped data.",Summarize a DataFrame with one or more metrics,"Compute sum, min, and max for every column in a DataFrame.","df.agg(['sum', 'min', 'max'])",import pandas as pd,"df={'a':[1,2],'b':[3,4]}",a: sum=3 min=1 max=2; b: sum=7 min=3 max=4
+pd.sum(),Python,pandas,pandas,Computes the sum across an axis of a DataFrame.,Total values across DataFrame rows or columns,Compute the sum of every column in a DataFrame.,summary = df.sum(),import pandas as pd,"df={'a':[1,2],'b':[3,4]}","a=3, b=7"
+pd.sum(),Python,pandas,pandas,Computes the sum of all values in a Series.,Total values in a single Series,Compute the sum of values in a Series.,total = s.sum(),import pandas as pd,"s=[1,2,3]",6
+pd.any(),Python,pandas,pandas,Checks whether any value is True along the specified axis.,Check whether any value is True by axis,Find rows where any column has a missing value.,df[df.isnull().any(axis=1)],import pandas as pd,"df=[[1,None],[2,3]]",Keeps first row only
+pd.drop(),Python,pandas,pandas,Removes specified rows or columns by label.,Remove rows or columns by label,Drop the column 'age' from a dataset.,df = df.drop(columns=['age']),import pandas as pd,"df columns=['name','age']",Remaining columns=['name']
+pd.DataFrame.merge(),Python,pandas.core.frame.DataFrame,DataFrame,Performs a database-style join between two DataFrames using columns or indexes.,Join two tables using matching keys,Combine a table of reviews with a table of listing details using the listing_id column.,"merged_df = pd.merge(reviews, listings, on='listing_id', how='left')",import pandas as pd,"reviews listing_id=[1,2], listings listing_id=[1,2] with price=[100,200]",Merged table includes price for each review
+pd.DataFrame.join(),Python,pandas.core.frame.DataFrame,DataFrame,Joins columns of another DataFrame or Series using the index by default.,Join on index with another table or Series,Combine a grouped Series of averages back onto the original grouped DataFrame using the index.,final_df = grouped_df.join(weighted_avg_series.rename('avg')),import pandas as pd,"grouped_df index=[A,B], weighted_avg_series index=[A,B] values=[2.5,3.0]",grouped_df gains new avg column
+pd.concat(),Python,pandas,DataFrame or Series,Concatenates pandas objects along a specified axis.,Stack or align pandas objects together,Combine multiple Series into a single DataFrame by aligning their indexes.,"df = pd.concat([names_series, scores_series], axis=1)",import pandas as pd,"names_series=[Ana,Bob], scores_series=[90,85]",Two-column DataFrame with names and scores
+np.random.default_rng(),Python,numpy.random,Generator object,Creates a random number generator instance for reproducible random operations.,Create a reproducible random number generator,Create a repeatable random generator.,rng = np.random.default_rng(seed=42),import numpy as np,seed=42,Generator(PCG64)
+np.random.Generator.choice(),Python,numpy.random.Generator,ndarray or scalar,Generates a random sample from a 1D array or integer range.,Sample random values from a set,Randomly select unique items from an array X.,"rng = np.random.default_rng(seed=42)
+indices = rng.choice(len(X), size=3, replace=False)
+samples = X[indices]",import numpy as np,"X=[10,20,30,40,50], size=3, replace=False",Three selected values from X
+str.split(),Python,Built-in,list,Splits a string into a list based on a delimiter.,Split text into pieces,Split a sentence into words,"text = 'hello world'
+words = text.split()",—,text='hello world',"['hello', 'world']"
+dict.items(),Python,Built-in,dict_items object,Returns a view of key-value pairs from a dictionary.,Loop through dictionary key-value pairs,Iterate through dictionary key-value pairs,"for k, v in d.items():
+  print(k, v)",—,"d={'a':1,'b':2}","('a',1), ('b',2)"
+pd.DataFrame.iterrows(),Python,pandas.core.frame.DataFrame,iterator,"Iterates over DataFrame rows as (index, Series) pairs",Iterate through DataFrame rows,Loop through rows in a DataFrame,"for i, row in df.iterrows():
+  print(row['col'])",import pandas as pd,"df={'col':[10,20]}","Iteration yields (0,10) then (1,20)"
+enumerate(),Python,Built-in,iterator,Returns index and value pairs when looping,Loop with indexes and values together,Get index while looping a list,"for i, val in enumerate(lst):
+  print(i, val)",—,"lst=['a','b']","(0,'a'), (1,'b')"
+zip(),Python,Built-in,iterator,Combines multiple iterables element-wise,Loop through multiple iterables in parallel,Loop through two lists together,"for a, b in zip(list1, list2):
+  print(a, b)",—,"list1=[1,2], list2=['a','b']","(1,'a'), (2,'b')"
+map(),Python,Built-in,map object,Applies a function to all items in an iterable,Apply the same function to many values,Apply function to each element,"list(map(lambda x: x * 2, lst))",—,"lst=[1,2,3]","[2,4,6]"
+pd.DataFrame.drop_duplicates(),Python,pandas.core.frame.DataFrame,DataFrame,Removes duplicate rows from a DataFrame,Remove duplicate rows,Remove duplicate rows from a dataset.,df = df.drop_duplicates(),import pandas as pd,"df rows=[(1,'A'),(1,'A'),(2,'B')]","rows=[(1,'A'),(2,'B')]"
+pd.Series.tolist(),Python,pandas.core.series.Series,list,Converts a Series to a Python list,Convert a Series to a Python list,Convert a column to a Python list.,lst = df['col'].tolist(),import pandas as pd,"df['col']=[10,20,30]","[10,20,30]"
+pd.apply(),Python,pandas,Series or DataFrame,"Applies a function along an axis or to each value, depending on the pandas object.",Run a custom function across pandas data,Apply function to column values,df['col'] = df['col'].apply(lambda x: x*2),import pandas as pd,"df['col']=[1,2,3]","df['col'] becomes [2,4,6]"
+re.search(),Python,re,match object or None,Scans a string for the first location where a pattern matches.,Check whether a pattern appears anywhere in text,Find the first number in a string,"match = re.search(r'\d+', text)",import re,text = 'abc123def',"<re.Match object; span=(3, 6), match='123'>"
+re.match(),Python,re,match object or None,Checks for a match only at the beginning of a string.,Validate that text starts with a pattern,Check whether a string starts with digits,"match = re.match(r'\d+', text)",import re,text = '123abc',"<re.Match object; span=(0, 3), match='123'>"
+re.findall(),Python,re,list,Returns all non-overlapping matches in a string.,Extract all matching pieces from text,Get all numbers from a mixed string,"matches = re.findall(r'\d+', text)",import re,text = 'a1b22c333',"['1', '22', '333']"
+re.sub(),Python,re,str,Replaces matches in a string with a replacement value.,Clean or standardize text,Collapse multiple spaces into one,"cleaned = re.sub(r'\s+', ' ', text)",import re,text = 'a   b    c',a b c'
+re.split(),Python,re,list,Splits a string wherever the pattern matches.,Break text apart using a regex delimiter,Split text at one or more digits,"parts = re.split(r'\d+', text)",import re,text = 'abc123def45gh',"['abc', 'def', 'gh']"
+re.compile(),Python,re,Pattern object,Compiles a regex pattern for reuse.,Reuse the same regex multiple times efficiently,Create a reusable pattern for digits,pattern = re.compile(r'\d+'),import re,pattern text = r'\d+',re.Pattern object for '\\d+'
+re.group(),Python,re.Match,str,Returns the full match or a specific captured group from a match object.,Extract the matched text after search or match,Get the first number found in text,value = match.group(),import re,"match = re.search(r'\d+', 'abc123def')",123'
+re.groupdict(),Python,re.Match,dict,Returns named captured groups as a dictionary.,Extract labeled pieces from structured text,Get first and last name from a string,parts = match.groupdict(),import re,"match = re.search(r'(?P<first>\w+)\s+(?P<last>\w+)', 'Ada Lovelace')","{'first': 'Ada', 'last': 'Lovelace'}"
+pd.DataFrame.reset_index(),Python,pandas.core.frame.DataFrame,DataFrame,Resets index to default integer index and moves old index into a column,Convert index into a column for easier filtering,I want to turn the index into a column,df = df.reset_index(),import pandas as pd,"df = pd.DataFrame({'A':[10,20]}, index=['x','y'])","index A
+0 x 10
+1 y 20"
+pd.DataFrame.set_index(),Python,pandas.core.frame.DataFrame,DataFrame,Sets a column as the index,Use a meaningful column as row labels,I want to make column A my index,df = df.set_index('A'),import pandas as pd,"df = pd.DataFrame({'A':[10,20],'B':[1,2]})","B
+A
+10 1
+20 2"
+pd.loc,Python,pandas.core.indexing._LocIndexer,DataFrame or Series,Access rows/columns by label,Select rows using index labels,I want rows where index is 'x',df.loc['x'],import pandas as pd,"df = pd.DataFrame({'A':[10,20]}, index=['x','y'])","A 10
+Name: x, dtype: int64"
+pd.iloc,Python,pandas.core.indexing._LocIndexer,DataFrame or Series,Access rows/columns by integer position,Select rows by position,I want the first row,df.iloc[0],import pandas as pd,"df = pd.DataFrame({'A':[10,20]})","A 10
+Name: 0, dtype: int64"
+pd.idxmax(),Python,pandas,label,Returns index label of maximum value,Find row label with highest value,Which row has the highest value,s.idxmax(),import pandas as pd,"s = pd.Series([5,9,3], index=['a','b','c'])",b
+pd.idxmin(),Python,pandas,label,Returns index label of minimum value,Find row label with lowest value,Which row has the smallest value,s.idxmin(),import pandas as pd,"s = pd.Series([5,9,3], index=['a','b','c'])",c
+pd.Index.get_loc(),Python,pandas.core.indexes.base.Index,int,Returns integer location of a label,Find position of an index label,What position is label 'b',df.index.get_loc('b'),import pandas as pd,"df = pd.DataFrame({'A':[10,20,30]}, index=['a','b','c'])",1
+np.where(),Python,numpy.ndarray,numpy.ndarray,Returns indices where condition is True,Find positions matching a condition,Find indices where values > 5,np.where(arr > 5),import numpy as np,"arr = np.array([2,7,4,9])","(array([1, 3]),)"
+np.argmax(),Python,numpy.ndarray,int,Returns index of max value,Find position of largest value,Where is the max value,np.argmax(arr),import numpy as np,"arr = np.array([2,7,4,9])",3
+np.argmin(),Python,numpy.ndarray,int,Returns index of min value,Find position of smallest value,Where is the min value,np.argmin(arr),import numpy as np,"arr = np.array([2,7,4,9])",0
+pd.size(),Python,pandas,pandas,"Counts rows in each group, including rows where other columns have missing values.",Use when you want total row counts per group.,"Count how many rows each athlete has, even if Medal is missing.",result = df.groupby('Name').size(),import pandas as pd,"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['Ava', 'Ava', 'Ben'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+result = df.groupby('Name').size()","Name
+Ava 2
+Ben 1
+dtype: int64"
+pd.count(),Python,pandas,pandas,Counts non-missing values in each column for each group.,Use when you want filled-in value counts rather than total row counts.,Count how many medal values each athlete actually has.,result = df.groupby('Name').count(),import pandas as pd,"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['Ava', 'Ava', 'Ben'],
+'Medal': ['Gold', None, 'Silver']
+})
+
+result = df.groupby('Name').count()","Medal
+Name
+Ava 1
+Ben 1"
+pd.DataFrame.columns,Python,pandas.core.frame.DataFrame,Index,"Returns the column labels of a DataFrame.
+
+","Use when you want to inspect, reorder, or validate column names.",Check what columns a cleaned table has before selecting them.,result = df.columns,import pandas as pd,"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['Ava', 'Ben'],
+'Golds': [2, 1]
+})
+
+result = df.columns","Index(['Name', 'Golds'], dtype='object')"
+pd.Series.to_frame(),Python,pandas.core.series.Series,DataFrame,Converts a Series into a one-column DataFrame.,Use when you need to join or merge a Series like a table.,Turn grouped counts into a DataFrame before joining another result.,result = counts.to_frame(),import pandas as pd,"import pandas as pd
+
+counts = pd.Series(
+[2, 1],
+index=['Ava', 'Ben'],
+name='Golds'
+)
+
+result = counts.to_frame()","Golds
+Ava 2
+Ben 1"
+pd.isna(),Python,pandas,pandas,Returns a boolean DataFrame showing which values are missing.,Use when you need to detect missing values before cleaning data.,Find which medal entries are missing.,result = df.isna(),import pandas as pd,"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['Ava', 'Ben'],
+'Medal': ['Gold', None]
+})
+
+result = df.isna()","Name Medal
+0 False False
+1 False True"
+pd.notna(),Python,pandas,pandas,Returns a boolean DataFrame showing which values are not missing.,Use when you need to keep or count present values.,Check which medal entries are available.,result = df.notna(),import pandas as pd,"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['Ava', 'Ben'],
+'Medal': ['Gold', None]
+})
+
+result = df.notna()","Name Medal
+0 True True
+1 True False"
+pd.fillna(),Python,pandas,pandas,Replaces missing values with a specified value.,Use when missing values should be treated as a known fallback like 0.,Replace missing gold counts with 0 before computing percentages.,result = df.fillna(0),import pandas as pd,"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['Ava', 'Ben'],
+'Golds': [2, None]
+})
+
+result = df.fillna(0)","Name Golds
+0 Ava 2.0
+1 Ben 0.0"
+pd.dropna(),Python,pandas,pandas,Removes rows or columns containing missing values.,Use when records with missing data should be excluded from analysis.,Drop rows where Medal is missing.,result = df.dropna(),import pandas as pd,"import pandas as pd
+
+df = pd.DataFrame({
+'Name': ['Ava', 'Ben'],
+'Medal': ['Gold', None]
+})
+
+result = df.dropna()","Name Medal
+0 Ava Gold"
+pd.DataFrame.cumcount(),Python,pandas.core.groupby.GroupBy,int Series,Assigns a sequential number to each row within each group starting from 0,Useful for ranking rows within groups similar to SQL ROW_NUMBER,I have sales data per store and want to assign row numbers within each store,"import pandas as pd\ndf = pd.DataFrame({'store':['A','A','B','B'],'sales':[10,20,5,15]})\ndf['rn'] = df.groupby('store').cumcount() + 1",import pandas as pd,"import pandas as pd\ndf = pd.DataFrame({'store':['A','A','B','B'],'sales':[10,20,5,15]})\ndf['rn'] = df.groupby('store').cumcount() + 1",store sales rn\n0 A 10 1\n1 A 20 2\n2 B 5 1\n3 B 15 2
+pd.head(),Python,pandas,pandas,Returns the first n rows from each group,Used to get top N rows per group after sorting,I want the top 1 highest sale per store,"import pandas as pd\ndf = pd.DataFrame({'store':['A','A','B','B'],'sales':[10,20,5,15]})\ndf_sorted = df.sort_values(['store','sales'], ascending=[True,False])\ntop1 = df_sorted.groupby('store').head(1)",import pandas as pd,"import pandas as pd\ndf = pd.DataFrame({'store':['A','A','B','B'],'sales':[10,20,5,15]})\ndf_sorted = df.sort_values(['store','sales'], ascending=[True,False])\ntop1 = df_sorted.groupby('store').head(1)",store sales\n1 A 20\n3 B 15
+pd.filter(),Python,pandas,pandas,Filters entire groups based on a condition,Used when you want to keep or drop whole groups based on logic,I want to keep only stores with total sales greater than 20,"import pandas as pd\ndf = pd.DataFrame({'store':['A','A','B','B'],'sales':[10,20,5,15]})\nfiltered = df.groupby('store').filter(lambda x: x['sales'].sum() > 20)",import pandas as pd,"import pandas as pd\ndf = pd.DataFrame({'store':['A','A','B','B'],'sales':[10,20,5,15]})\nfiltered = df.groupby('store').filter(lambda x: x['sales'].sum() > 20)",store sales\n0 A 10\n1 A 20
+filter(),Python,Built-in,pandas,Filters elements from an iterable using a function that returns True or False,Use it when you want to keep only matching items from a list or other iterable,I have a list of numbers and want to keep only the even ones,"lst = [1, 2, 3, 4, 5]\nresult = list(filter(lambda x: x % 2 == 0, lst))",—,"lst = [1, 2, 3, 4, 5]\nresult = list(filter(lambda x: x % 2 == 0, lst))","[2, 4]"
+np.array(),Python,numpy.ndarray,ndarray,Creates a NumPy array from a list-like object,Convert Python list into NumPy array for vectorized operations,Convert list of values into NumPy array,arr = np.array(values),import numpy as np,"values = [1, 2, 3]","array([1, 2, 3])"
+np.reshape(),Python,numpy.ndarray,ndarray,Reshapes an array into a new shape without changing data,Add or change dimensions of array for matrix operations,Reshape 1D array into 2x2 matrix,"reshaped = np.reshape(arr, (2, 2))",import numpy as np,"arr = np.array([1, 2, 3, 4])","array([[1, 2],\n       [3, 4]])"
+np.expand_dims(),Python,numpy.ndarray,ndarray,Adds a new axis at a specified position,Increase dimensionality for broadcasting or ML input,Add new axis to 1D array,"expanded = np.expand_dims(arr, axis=0)",import numpy as np,"arr = np.array([1, 2, 3])","array([[1, 2, 3]])"
+np.squeeze(),Python,numpy.ndarray,ndarray,Removes single-dimensional entries from shape,Reduce unnecessary dimensions in array,Remove extra dimension from array,squeezed = np.squeeze(arr),import numpy as np,"arr = np.array([[1, 2, 3]])","array([1, 2, 3])"
+np.vstack(),Python,numpy,ndarray,Stacks arrays vertically (row-wise),Combine arrays by adding rows,Stack two arrays vertically,"stacked = np.vstack((a, b))",import numpy as np,"a = np.array([1, 2])\nb = np.array([3, 4])","array([[1, 2],\n       [3, 4]])"
+np.hstack(),Python,numpy,ndarray,Stacks arrays horizontally (column-wise),Combine arrays by adding columns,Stack arrays horizontally,"stacked = np.hstack((a, b))",import numpy as np,"a = np.array([1, 2])\nb = np.array([3, 4])","array([1, 2, 3, 4])"
+np.concatenate(),Python,numpy,ndarray,Joins arrays along an existing axis,Merge multiple arrays along specified axis,Concatenate arrays along rows,"combined = np.concatenate((a, b), axis=0)",import numpy as np,"a = np.array([1, 2])\nb = np.array([3, 4])","array([1, 2, 3, 4])"
+np.sort(),Python,numpy.ndarray,ndarray,Returns sorted copy of array,Sort values without modifying original array,Sort array values,sorted_arr = np.sort(arr),import numpy as np,"arr = np.array([3, 1, 2])","array([1, 2, 3])"
+sorted(),Python,Built-in,list,Returns new sorted list,Sort iterable without modifying original,Sort list values,sorted_list = sorted(values),-,"values = [3, 1, 2]","[1, 2, 3]"
+np.ndarray.sort(),Python,numpy.ndarray,None,Sorts array in-place,Modify array directly for efficiency,Sort array in place,arr.sort(),import numpy as np,"arr = np.array([3, 1, 2])","array([1, 2, 3])"
+np.flatten(),Python,numpy.ndarray,ndarray,Returns flattened copy of array,Convert multi-dimensional array into 1D,Flatten matrix into vector,flat = arr.flatten(),import numpy as np,"arr = np.array([[1, 2], [3, 4]])","array([1, 2, 3, 4])"
+np.ravel(),Python,numpy.ndarray,ndarray,Returns flattened view when possible,Efficient flatten without copying memory,Flatten array efficiently,flat = arr.ravel(),import numpy as np,"arr = np.array([[1, 2], [3, 4]])","array([1, 2, 3, 4])"
+reversed(),Python,Built-in,iterator,Returns an iterator that yields elements in reverse order without modifying the original iterable,Iterate through a sequence in reverse order efficiently,Reverse a list for iteration without changing it,rev = list(reversed(values)),-,"values = [1, 2, 3]","[3, 2, 1]"
+list.reverse(),Python,Built-in,None,Reverses a list in place without creating a new list,Modify a list directly when order needs to be reversed,Reverse a list in place,values.reverse(),-,"values = [1, 2, 3]","[3, 2, 1]"
+collections.Counter(),Python,collections.Counter,Counter object,Counts hashable items and stores frequencies as a dictionary-like object,Count occurrences of elements across iterables,I have a list of tokens and want to count how many times each appears,"from collections import Counter
+counts = Counter(tokens)",from collections import Counter,"tokens = ['a','b','a','c']","Counter({'a': 2, 'b': 1, 'c': 1})"
+collections.Counter.update(),Python,collections.Counter,None,Updates counts by adding elements from an iterable or mapping,Accumulate counts across multiple groups or batches,I have multiple sets of tokens and want to count how many clusters each token appears in,"from collections import Counter
+counts = Counter()
+for tokens in token_sets.values():
+counts.update(tokens)",from collections import Counter,"token_sets = {1:{'a','b'},2:{'a','c'}}
+counts = Counter()
+for tokens in token_sets.values():
+counts.update(tokens)","Counter({'a': 2, 'b': 1, 'c': 1})"
+collections.Counter.most_common(),Python,collections.Counter,list of tuples,Returns elements and their counts sorted by frequency,Get top-N most frequent elements,I want the top 2 most common tokens,"from collections import Counter
+counts = Counter(tokens)
+top = counts.most_common(2)",from collections import Counter,"tokens = ['a','b','a','c','a']
+counts = Counter(tokens)
+top = counts.most_common(2)","[('a', 3), ('b', 1)]"
+collections.Counter.keys(),Python,collections.Counter,dict_keys view,Returns unique elements in the Counter,Retrieve all unique counted elements,I want all unique tokens counted,"from collections import Counter
+counts = Counter(tokens)
+keys = list(counts.keys())",from collections import Counter,"tokens = ['a','b','a']
+counts = Counter(tokens)
+keys = list(counts.keys())","['a', 'b']"
+collections.Counter.values(),Python,collections.Counter,dict_values view,Returns counts of elements,Access frequency values only,I want just the counts of each token,"from collections import Counter
+counts = Counter(tokens)
+vals = list(counts.values())",from collections import Counter,"tokens = ['a','b','a']
+counts = Counter(tokens)
+vals = list(counts.values())","[2, 1]"
+collections.Counter.items(),Python,collections.Counter,dict_items view,"Returns (element, count) pairs",Iterate over tokens with their counts,I want token-count pairs for filtering,"from collections import Counter
+counts = Counter(tokens)
+pairs = list(counts.items())",from collections import Counter,"tokens = ['a','b','a']
+counts = Counter(tokens)
+pairs = list(counts.items())","[('a', 2), ('b', 1)]"
+pd.replace(),Python,pandas,Returns a DataFrame or Series with values replaced,Replaces specified values using scalar list dict or regex mappings,Standardize or clean inconsistent values in data,Replace 'N/A' with NaN in all columns,"df_clean = df.replace('N/A', np.nan)","import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'A':[1,'N/A',3],'B':['x','y','N/A']})",A    B\n0  1    x\n1 NaN   y\n2  3  NaN,
+pd.where(),Python,pandas,Returns a DataFrame or Series with values conditionally kept,Replaces values where condition is False while keeping True values,Keep valid values and replace invalid ones based on condition,Keep only positive numbers and replace others with NaN,"df_clean = df.where(df > 0, np.nan)","import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'A':[1,-2,3],'B':[0,5,-1]})",A    B\n0  1.0  NaN\n1  NaN  5.0\n2  3.0  NaN,
+pd.mask(),Python,pandas,Returns a DataFrame or Series with values conditionally replaced,Replaces values where condition is True while keeping False values,Mask out invalid or unwanted values,Replace negative values with NaN,"df_clean = df.mask(df < 0, np.nan)","import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'A':[1,-2,3],'B':[0,5,-1]})",A    B\n0  1.0  0.0\n1  NaN  5.0\n2  3.0  NaN,
+pd.astype(),Python,pandas,Returns a DataFrame or Series with converted dtype,Converts values to a specified data type,Ensure numeric operations by converting strings to numbers,Convert numeric strings to float,df_float = df.astype(float),"import pandas as pd\ndf = pd.DataFrame({'A':['1','2','3'],'B':['4','5','6']})",A    B\n0  1.0  4.0\n1  2.0  5.0\n2  3.0  6.0,
+pd.applymap(),Python,pandas,Returns a DataFrame after elementwise function application,Applies a function to each element of a DataFrame,Transform all values uniformly using a function,Add 1 to every value in DataFrame,df_new = df.applymap(lambda x: x + 1),"import pandas as pd\ndf = pd.DataFrame({'A':[1,2],'B':[3,4]})",A  B\n0  2  4\n1  3  5,
+pd.str.lower(),Python,pandas.core.series.Series,Returns a Series with lowercase strings,Converts all string values in a Series to lowercase,Standardize text formatting before analysis,Convert all names to lowercase,df['name'] = df['name'].astype(str).str.lower(),"import pandas as pd\ndf = pd.DataFrame({'name':['Alice','BOB','Charlie']})",name\n0    alice\n1      bob\n2  charlie,
+datetime.timedelta(),Python,datetime,timedelta object,Creates a fixed duration that can be added to or subtracted from datetime objects,Represent fixed time spans like days hours or minutes,I need to add 3 days to a start date,end = start + datetime.timedelta(days=3),import datetime,"start = datetime.datetime(2024, 1, 1)",2024-01-04 00:00:00
+pd.to_datetime(),Python,pandas,Timestamp Series or DatetimeIndex,Converts strings numbers or columns into pandas datetime values,Turn raw date strings into usable datetime data,I have a date column stored as strings and need datetime values,df['date'] = pd.to_datetime(df['date']),import pandas as pd,"df = pd.DataFrame({'date':['2024-01-01','2024-01-02']})",0 2024-01-01; 1 2024-01-02
+pd.to_timedelta(),Python,pandas,Timedelta Series or TimedeltaIndex,Converts numbers or strings into pandas timedelta durations,Create durations from numeric or text time values,I have hours as numbers and need timedelta durations,"df['duration'] = pd.to_timedelta(df['hours'], unit='h')",import pandas as pd,"df = pd.DataFrame({'hours':[1,2,3]})",0 days 01:00:00; 0 days 02:00:00; 0 days 03:00:00
+pd.diff(),Python,pandas,Series or DataFrame,Computes the difference between current and previous values,Calculate gaps between ordered values or timestamps,I have ordered submit times and need time between submissions,df['gap'] = df['Submit'].diff(),import pandas as pd,"df = pd.DataFrame({'Submit':pd.to_datetime(['2024-01-01 10:00','2024-01-01 12:30'])})",NaT; 0 days 02:30:00
+pd.shift(),Python,pandas,Series or DataFrame,Moves values down or up by row position,Create previous or next row values for comparison,I need each row to know the previous submit time,df['Prev_Submit'] = df['Submit'].shift(1),import pandas as pd,"df = pd.DataFrame({'Submit':pd.to_datetime(['2024-01-01 10:00','2024-01-01 12:30'])})",NaT; 2024-01-01 10:00:00
+pd.Series.dt.total_seconds(),Python,pandas.core.series.Series,Series,Converts timedelta values into total seconds as floats,Convert timedelta durations into numeric hours minutes or seconds,I have timedelta gaps and need hours,df['hours'] = df['gap'].dt.total_seconds() / 3600,import pandas as pd,"df = pd.DataFrame({'gap':pd.to_timedelta(['0 days 02:30:00','1 days 01:00:00'])})",2.5; 25.0
+pd.Series.dt.components,Python,pandas.core.series.Series,DataFrame,Breaks timedelta values into days hours minutes seconds and smaller units,Display durations in readable component columns,I want to split each duration into readable time parts,parts = df['gap'].dt.components,import pandas as pd,df = pd.DataFrame({'gap':pd.to_timedelta(['1 days 02:03:04'])}),days=1; hours=2; minutes=3; seconds=4
+pd.Series.dt,Python,pandas.core.series.Series,Series,Accesses datetime-like or timedelta-like properties for a pandas Series,Extract date parts or duration parts from a whole column,I have datetime values and need the year from each row,years = df['date'].dt.year,import pandas as pd,"df = pd.DataFrame({'date':pd.to_datetime(['2024-01-01','2025-03-15'])})",2024; 2025
+datetime.datetime.now(),Python,datetime,datetime object,Returns the current local date and time,Get the current timestamp,I need the current time for logging,now = datetime.datetime.now(),import datetime,-,current datetime
+datetime.datetime.strptime(),Python,datetime,datetime object,Parses a string into a datetime using a specified format,Convert formatted string into datetime,I have a date string and need a datetime object,"dt = datetime.datetime.strptime(date_str, '%Y-%m-%d')",import datetime,date_str = '2024-01-15',2024-01-15 00:00:00
+datetime.datetime.strftime(),Python,datetime,str,Formats a datetime object into a string,Convert datetime into readable string format,I want to display a date in custom format,s = dt.strftime('%Y/%m/%d'),import datetime,"dt = datetime.datetime(2024,1,15)",2024/01/15
+datetime.datetime.timestamp(),Python,datetime,float,Converts datetime to Unix timestamp in seconds,Convert datetime to numeric time for storage or comparison,I need seconds since epoch,ts = dt.timestamp(),import datetime,"dt = datetime.datetime(2024,1,1)",1704067200.0
+datetime.datetime.fromtimestamp(),Python,datetime,datetime object,Converts Unix timestamp into datetime,Convert numeric timestamp back to datetime,I have stored timestamp and need datetime,dt = datetime.datetime.fromtimestamp(ts),import datetime,ts = 1704067200.0,2024-01-01 00:00:00
+datetime.timedelta.total_seconds(),Python,datetime,float,Returns total duration in seconds including days,Convert duration to numeric value,I have a timedelta and need hours,hours = td.total_seconds() / 3600,import datetime,"td = datetime.timedelta(days=1, hours=2)",26.0
+datetime.timedelta.days,Python,datetime,int,Returns number of full days in the duration,Extract day component from duration,I want number of days from timedelta,d = td.days,import datetime,"td = datetime.timedelta(days=3, hours=5)",3
+datetime.timedelta.seconds,Python,datetime,int,Returns remaining seconds excluding days,Extract leftover seconds from duration,I want seconds excluding full days,s = td.seconds,import datetime,"td = datetime.timedelta(days=1, hours=2)",7200
+datetime.timedelta.microseconds,Python,datetime,int,Returns microseconds component of duration,Extract smallest time unit from timedelta,I need microsecond precision,us = td.microseconds,import datetime,"td = datetime.timedelta(seconds=1, microseconds=500)",500
+str.count(),Python,builtins.str,int,Returns the number of non-overlapping occurrences of a substring,Measure frequency of a substring in text,Does not count overlapping matches,Count how many times a letter appears in a word,result = text.count('l'),-,text = 'hello'
+substr(),SQL,SQLite,Extracts part of a text value by position.,"Pull pieces out of text, such as month, day, or year from a non-ISO date string.","SQLite positions start at 1, not 0.","I have a date stored as MM/DD/YYYY text, and I need only the year.","SELECT substr(date_occ, 7, 4) AS year_text FROM crimes;","CREATE TABLE crimes (date_occ TEXT);\nINSERT INTO crimes VALUES ('01/15/2024 12:00:00 AM');\nSELECT substr(date_occ, 7, 4) AS year_text FROM crimes;",2024,
+||,SQL,SQLite,Concatenates text values together.,Build a new string from multiple extracted or literal pieces.,"If one part is NULL, the result can become NULL unless COALESCE() is used.","I have a date stored as MM/DD/YYYY text, and I need to rearrange it into YYYY-MM-DD text.","SELECT substr(date_occ, 7, 4) || '-' || substr(date_occ, 1, 2) || '-' || substr(date_occ, 4, 2) AS iso_date_text FROM crimes;","CREATE TABLE crimes (date_occ TEXT);\nINSERT INTO crimes VALUES ('01/15/2024 12:00:00 AM');\nSELECT substr(date_occ, 7, 4) || '-' || substr(date_occ, 1, 2) || '-' || substr(date_occ, 4, 2) AS iso_date_text FROM crimes;",2024-01-15,
+date(),SQL,SQLite,Converts a valid date-like value into YYYY-MM-DD text.,Turn ISO-formatted text into a SQLite date result for filtering or grouping.,"SQLite returns dates as text, not as a separate date object type.","I have rearranged date text, and I need SQLite to treat it as a date-style value.","SELECT date(substr(date_occ, 7, 4) || '-' || substr(date_occ, 1, 2) || '-' || substr(date_occ, 4, 2)) AS clean_date FROM crimes;","CREATE TABLE crimes (date_occ TEXT);\nINSERT INTO crimes VALUES ('01/15/2024 12:00:00 AM');\nSELECT date(substr(date_occ, 7, 4) || '-' || substr(date_occ, 1, 2) || '-' || substr(date_occ, 4, 2)) AS clean_date FROM crimes;",2024-01-15,
+"strftime('%m', ...)",SQL,SQLite,Extracts the month number from a date as text.,Get the month from a cleaned SQLite date.,"The month is returned as two-digit text, such as 01 or 12.","I have a cleaned date, and I need the month number for grouping.","SELECT strftime('%m', clean_date) AS month_number FROM cleaned_crimes;","CREATE TABLE cleaned_crimes (clean_date TEXT);\nINSERT INTO cleaned_crimes VALUES ('2024-01-15');\nSELECT strftime('%m', clean_date) AS month_number FROM cleaned_crimes;",01,
+"strftime('%Y', ...)",SQL,SQLite,Extracts the year from a date as text.,Get the year from a cleaned SQLite date.,"The result is text, not an integer.","I have a cleaned date, and I need the year for filtering.","SELECT strftime('%Y', clean_date) AS year_text FROM cleaned_crimes;","CREATE TABLE cleaned_crimes (clean_date TEXT);\nINSERT INTO cleaned_crimes VALUES ('2024-01-15');\nSELECT strftime('%Y', clean_date) AS year_text FROM cleaned_crimes;",2024,
+"strftime('%Y-%m', ...)",SQL,SQLite,Formats a date into year-month text.,Group records by month across years.,Useful because 2024-01 sorts correctly as text.,"I have cleaned dates, and I need monthly crime counts.","SELECT strftime('%Y-%m', clean_date) AS month_key, COUNT() AS crime_count FROM cleaned_crimes GROUP BY month_key;","CREATE TABLE cleaned_crimes (clean_date TEXT);\nINSERT INTO cleaned_crimes VALUES ('2024-01-15'), ('2024-01-20'), ('2024-02-01');\nSELECT strftime('%Y-%m', clean_date) AS month_key, COUNT() AS crime_count FROM cleaned_crimes GROUP BY month_key;",2024-01|2\n2024-02|1,
+CASE WHEN ... THEN ... ELSE ... END,SQL,SQLite,Creates conditional output based on rules.,Convert coded or numeric values into readable labels.,Always close the expression with END.,"I have month numbers, and I want to display JAN for 01.","SELECT month_number, CASE WHEN month_number = '01' THEN 'JAN' ELSE 'OTHER' END AS month_name FROM months;","CREATE TABLE months (month_number TEXT);\nINSERT INTO months VALUES ('01'), ('02');\nSELECT month_number, CASE WHEN month_number = '01' THEN 'JAN' ELSE 'OTHER' END AS month_name FROM months;",01|JAN\n02|OTHER,
+COUNT(),SQL,SQLite,Counts the number of rows in each result or group.,Count records overall or per group.,COUNT() includes rows even when some column values are NULL.,"I have crimes by category, and I need the number of rows per category.","SELECT category, COUNT() AS crime_count FROM crimes GROUP BY category;","CREATE TABLE crimes (category TEXT);\nINSERT INTO crimes VALUES ('THEFT'), ('THEFT'), ('ROBBERY');\nSELECT category, COUNT() AS crime_count FROM crimes GROUP BY category;",ROBBERY|1\nTHEFT|2,
+SUM(),SQL,SQLite,Adds numeric values together.,Calculate totals by group.,NULL values are ignored.,"I have sales by store, and I need total revenue per store.","SELECT store, SUM(revenue) AS total_revenue FROM sales GROUP BY store;","CREATE TABLE sales (store TEXT, revenue INTEGER);\nINSERT INTO sales VALUES ('A', 100), ('A', 50), ('B', 80);\nSELECT store, SUM(revenue) AS total_revenue FROM sales GROUP BY store;",A|150\nB|80,
+AVG(),SQL,SQLite,Calculates the average of numeric values.,Find the mean value overall or per group.,NULL values are ignored.,"I have product ratings, and I need the average rating per product.","SELECT product, AVG(rating) AS avg_rating FROM reviews GROUP BY product;","CREATE TABLE reviews (product TEXT, rating INTEGER);\nINSERT INTO reviews VALUES ('Keyboard', 5), ('Keyboard', 3), ('Mouse', 4);\nSELECT product, AVG(rating) AS avg_rating FROM reviews GROUP BY product;",Keyboard|4.0\nMouse|4.0,
+MIN(),SQL,SQLite,Returns the smallest value.,Find the earliest date or lowest numeric value.,"Works with numbers, text, and ISO-formatted dates.","I have cleaned crime dates, and I need the earliest date.",SELECT MIN(clean_date) AS earliest_date FROM crimes;,"CREATE TABLE crimes (clean_date TEXT);\nINSERT INTO crimes VALUES ('2024-01-15'), ('2023-12-30'), ('2024-02-01');\nSELECT MIN(clean_date) AS earliest_date FROM crimes;",2023-12-30,
+MAX(),SQL,SQLite,Returns the largest value.,Find the latest date or highest numeric value.,"Works with numbers, text, and ISO-formatted dates.","I have cleaned crime dates, and I need the latest date.",SELECT MAX(clean_date) AS latest_date FROM crimes;,"CREATE TABLE crimes (clean_date TEXT);\nINSERT INTO crimes VALUES ('2024-01-15'), ('2023-12-30'), ('2024-02-01');\nSELECT MAX(clean_date) AS latest_date FROM crimes;",2024-02-01,
+ROUND(),SQL,SQLite,Rounds a numeric value to a chosen number of decimal places.,Make calculated numbers easier to read.,The second argument controls decimal places.,"I have average ratings, and I need them rounded to one decimal place.","SELECT product, ROUND(AVG(rating), 1) AS avg_rating FROM reviews GROUP BY product;","CREATE TABLE reviews (product TEXT, rating REAL);\nINSERT INTO reviews VALUES ('Keyboard', 4.25), ('Keyboard', 3.75), ('Mouse', 4.10);\nSELECT product, ROUND(AVG(rating), 1) AS avg_rating FROM reviews GROUP BY product;",Keyboard|4.0\nMouse|4.1,
+ABS(),SQL,SQLite,Returns the positive distance from zero.,Measure difference without caring about direction.,Useful for absolute error or distance-style calculations.,"I have expected and actual sales, and I need the absolute difference.",SELECT ABS(actual - expected) AS absolute_error FROM metrics;,"CREATE TABLE metrics (expected INTEGER, actual INTEGER);\nINSERT INTO metrics VALUES (100, 85);\nSELECT ABS(actual - expected) AS absolute_error FROM metrics;",15,
+CAST(... AS INTEGER),SQL,SQLite,Converts a value into an integer.,Turn extracted text into a number for math or numeric sorting.,Non-numeric text may convert to 0.,"I extracted a month as text, and I need it as a number.",SELECT CAST(month_text AS INTEGER) AS month_number FROM months;,"CREATE TABLE months (month_text TEXT);\nINSERT INTO months VALUES ('01'), ('12');\nSELECT CAST(month_text AS INTEGER) AS month_number FROM months;",1\n12,
+julianday(),SQL,SQLite,Converts a date into a numeric day count.,Subtract dates to calculate duration in days.,Useful for date differences.,"I have start and end dates, and I need the number of days between them.",SELECT julianday(end_date) - julianday(start_date) AS days_between FROM projects;,"CREATE TABLE projects (start_date TEXT, end_date TEXT);\nINSERT INTO projects VALUES ('2024-01-01', '2024-01-10');\nSELECT julianday(end_date) - julianday(start_date) AS days_between FROM projects;",9.0,
+datetime(),SQL,SQLite,Returns a date-time text value in YYYY-MM-DD HH:MM:SS format.,Create or modify timestamp-style values.,SQLite stores the result as text.,"I have a date, and I need to add 3 hours to create a timestamp.","SELECT datetime(clean_date, '+3 hours') AS shifted_time FROM events;","CREATE TABLE events (clean_date TEXT);\nINSERT INTO events VALUES ('2024-01-15');\nSELECT datetime(clean_date, '+3 hours') AS shifted_time FROM events;",2024-01-15 03:00:00,
+lower(),SQL,SQLite,Returns a lowercase version of text.,Convert text to lowercase.,Only affects alphabetic characters.,I have names in mixed case and need them lowercase.,SELECT lower(name) FROM users;,"CREATE TABLE users (name TEXT);\nINSERT INTO users VALUES ('Mia'), ('LEO');\nSELECT lower(name) FROM users;",mia\nleo,
+upper(),SQL,SQLite,Returns an uppercase version of text.,Convert text to uppercase.,Only affects alphabetic characters.,I have state codes and need them uppercase.,SELECT upper(state) FROM locations;,"CREATE TABLE locations (state TEXT);\nINSERT INTO locations VALUES ('wa'), ('tx');\nSELECT upper(state) FROM locations;",WA\nTX,
+length(),SQL,SQLite,Returns the number of characters in text.,Measure text length.,"Counts characters, not bytes.",I have product codes and need their length.,SELECT length(code) FROM products;,"CREATE TABLE products (code TEXT);\nINSERT INTO products VALUES ('ABC123'), ('X9');\nSELECT length(code) FROM products;",6\n2,
+trim(),SQL,SQLite,Removes leading and trailing spaces from text.,Clean text before comparison or display.,Does not remove internal spaces.,I have names with extra spaces and need them cleaned.,SELECT trim(name) FROM users;,CREATE TABLE users (name TEXT);\nINSERT INTO users VALUES (' Mia ');\nSELECT trim(name) FROM users;,Mia,
+ltrim(),SQL,SQLite,Removes leading characters from text.,Clean unwanted characters from the start.,Can remove specific characters.,I have codes with leading zeros and need them removed.,"SELECT ltrim(code, '0') FROM items;","CREATE TABLE items (code TEXT);\nINSERT INTO items VALUES ('00045');\nSELECT ltrim(code, '0') FROM items;",45,
+rtrim(),SQL,SQLite,Removes trailing characters from text.,Clean unwanted characters from the end.,Can remove specific characters.,I have codes with trailing X and need them removed.,"SELECT rtrim(code, 'X') FROM items;","CREATE TABLE items (code TEXT);\nINSERT INTO items VALUES ('45XX');\nSELECT rtrim(code, 'X') FROM items;",45,
+replace(),SQL,SQLite,Replaces occurrences of a substring within text.,Standardize or clean text values.,"Replaces all matches, not just the first.",I have phone numbers with dashes and need them removed.,"SELECT replace(phone, '-', '') FROM contacts;","CREATE TABLE contacts (phone TEXT);\nINSERT INTO contacts VALUES ('123-456-7890');\nSELECT replace(phone, '-', '') FROM contacts;",1234567890,
+instr(),SQL,SQLite,Returns the position of a substring in text.,Find where a substring appears.,Returns 0 if not found.,I need to find position of '@' in emails.,"SELECT instr(email, '@') FROM users;","CREATE TABLE users (email TEXT);\nINSERT INTO users VALUES ('test@email.com
+');\nSELECT instr(email, '@') FROM users;",5,
+printf(),SQL,SQLite,Formats text using placeholders.,Create formatted strings like padded numbers.,Works like C-style formatting.,I need to format numbers as 2-digit values.,"SELECT printf('%02d', num) FROM nums;","CREATE TABLE nums (num INTEGER);\nINSERT INTO nums VALUES (3), (12);\nSELECT printf('%02d', num) FROM nums;",03\n12,
+coalesce(),SQL,SQLite,Returns the first non-null value.,Handle missing data.,Evaluates arguments left to right.,I have nullable names and need a fallback value.,"SELECT coalesce(name, 'Unknown') FROM users;","CREATE TABLE users (name TEXT);\nINSERT INTO users VALUES (NULL), ('Mia');\nSELECT coalesce(name, 'Unknown') FROM users;",Unknown\nMia,
+ifnull(),SQL,SQLite,Returns a fallback if value is NULL.,Simpler version of coalesce with two values.,Only handles one fallback value.,I have nullable scores and need default 0.,"SELECT ifnull(score, 0) FROM results;","CREATE TABLE results (score INTEGER);\nINSERT INTO results VALUES (NULL), (5);\nSELECT ifnull(score, 0) FROM results;",0\n5,
+like,SQL,SQLite,Matches text patterns using wildcards.,Filter rows based on partial matches.,"% matches many characters, _ matches one.",I need users whose email contains gmail.,SELECT email FROM users WHERE email LIKE '%gmail%';,"CREATE TABLE users (email TEXT);\nINSERT INTO users VALUES ('a@gmail.com
+'), ('b@yahoo.com
+');\nSELECT email FROM users WHERE email LIKE '%gmail%';",a@gmail.com,
+glob,SQL,SQLite,Matches text using Unix-style patterns.,Alternative to LIKE with case-sensitive matching.,"* matches many characters, ? matches one.",I need codes starting with A.,SELECT code FROM items WHERE code GLOB 'A*';,"CREATE TABLE items (code TEXT);\nINSERT INTO items VALUES ('A12'), ('B34');\nSELECT code FROM items WHERE code GLOB 'A*';",A12,
+UNION ALL,SQL,SQLite compound SELECT syntax,Result set,Combines multiple SELECT results and keeps all rows including duplicates.,Append datasets with identical structure where duplicates matter.,Combine online and store sales into one list including duplicate amounts.,SELECT amount FROM online_sales UNION ALL SELECT amount FROM store_sales;,-,"CREATE TABLE online_sales(amount INTEGER);\nINSERT INTO online_sales VALUES (20),(30);\nCREATE TABLE store_sales(amount INTEGER);\nINSERT INTO store_sales VALUES (20),(40);",20\n30\n20\n40
+UNION,SQL,SQLite compound SELECT syntax,Result set,Combines multiple SELECT results and removes duplicate rows.,Create a unique combined dataset.,Combine customer emails from two sources without duplicates.,SELECT email FROM customers UNION SELECT email FROM newsletter;,-,"CREATE TABLE customers(email TEXT);\nINSERT INTO customers VALUES ('a@test.com
+'),('b@test.com
+');\nCREATE TABLE newsletter(email TEXT);\nINSERT INTO newsletter VALUES ('b@test.com
+'),('c@test.com
+');","a@test.com
+\nb@test.com
+\nc@test.com"
+INTERSECT,SQL,SQLite compound SELECT syntax,Result set,Returns rows that exist in both SELECT results.,Find overlapping records between datasets.,Find users who are both app users and paying customers.,SELECT user_id FROM app_users INTERSECT SELECT user_id FROM paying_users;,-,"CREATE TABLE app_users(user_id INTEGER);\nINSERT INTO app_users VALUES (1),(2),(3);\nCREATE TABLE paying_users(user_id INTEGER);\nINSERT INTO paying_users VALUES (2),(3),(4);",2\n3
+EXCEPT,SQL,SQLite compound SELECT syntax,Result set,Returns rows from the first SELECT not present in the second.,Find differences between datasets.,Find users who signed up but never paid.,SELECT user_id FROM app_users EXCEPT SELECT user_id FROM paying_users;,-,"CREATE TABLE app_users(user_id INTEGER);\nINSERT INTO app_users VALUES (1),(2),(3);\nCREATE TABLE paying_users(user_id INTEGER);\nINSERT INTO paying_users VALUES (2),(3),(4);",1
+set(),Python,Built-in,set,Creates a set of unique elements from an iterable.,Remove duplicates or perform set operations.,I have a list with duplicates and need only unique values.,result = set(nums),-,"nums = [1,2,2,3,3,3]\nresult = set(nums)","{1,2,3}"
+set.union(),Python,Built-in,set,Returns a new set containing all unique elements from both sets.,Combine two datasets without duplicates.,I have two user ID sets and want all unique users.,result = set1.union(set2),-,"set1 = {1,2,3}\nset2 = {3,4,5}\nresult = set1.union(set2)","{1,2,3,4,5}"
+set.intersection(),Python,Built-in,set,Returns a set of elements common to both sets.,Find overlap between datasets.,I need users present in both groups.,result = set1.intersection(set2),-,"set1 = {1,2,3}\nset2 = {2,3,4}\nresult = set1.intersection(set2)","{2,3}"
+set.difference(),Python,Built-in,set,Returns elements in the first set but not in the second.,Find items unique to one dataset.,I need users in group A but not in group B.,result = set1.difference(set2),-,"set1 = {1,2,3}\nset2 = {2,3,4}\nresult = set1.difference(set2)",{1}
+set.symmetric_difference(),Python,Built-in,set,Returns elements in either set but not both.,Find non-overlapping elements between datasets.,I need users who are only in one of two groups.,result = set1.symmetric_difference(set2),-,"set1 = {1,2,3}\nset2 = {3,4,5}\nresult = set1.symmetric_difference(set2)","{1,2,4,5}"
+set.add(),Python,Built-in,None,Adds a single element to a set in-place.,Insert a new unique element.,I want to add a new user ID to a set.,"result = (set1.add(4), set1)[1]",-,"set1 = {1,2,3}\nresult = (set1.add(4), set1)[1]","{1,2,3,4}"
+set.remove(),Python,Built-in,None,Removes a specific element from a set; errors if not found.,Delete a known existing element.,I need to remove a user ID that must exist.,"result = (set1.remove(2), set1)[1]",-,"set1 = {1,2,3}\nresult = (set1.remove(2), set1)[1]","{1,3}"
+set.discard(),Python,Built-in,None,"Removes an element if present, does nothing if not.",Safely remove elements without errors.,I want to remove a user ID if it exists without failing.,"result = (set1.discard(5), set1)[1]",-,"set1 = {1,2,3}\nresult = (set1.discard(5), set1)[1]","{1,2,3}"
+set.update(),Python,Built-in,None,Adds elements from another iterable into the set in-place.,Merge another collection into a set.,I want to add multiple IDs from a list into my set.,"result = (set1.update(nums), set1)[1]",-,"set1 = {1,2}\nnums = [2,3,4]\nresult = (set1.update(nums), set1)[1]","{1,2,3,4}"
+set.issubset(),Python,Built-in,bool,Checks if all elements of one set are contained in another.,Validate if one dataset is fully contained in another.,I need to confirm all required IDs exist in the main set.,result = set1.issubset(set2),-,"set1 = {1,2}\nset2 = {1,2,3,4}\nresult = set1.issubset(set2)",True
+set.issuperset(),Python,Built-in,bool,Checks if a set contains all elements of another set.,Validate if a dataset fully covers another.,I need to confirm my dataset includes all required IDs.,result = set1.issuperset(set2),-,"set1 = {1,2,3,4}\nset2 = {2,3}\nresult = set1.issuperset(set2)",True
+set.isdisjoint(),Python,Built-in,bool,Checks if two sets have no elements in common.,Ensure datasets do not overlap.,I need to verify two groups share no common IDs.,result = set1.isdisjoint(set2),-,"set1 = {1,2}\nset2 = {3,4}\nresult = set1.isdisjoint(set2)",True
+itertools.permutations(),Python,itertools,iterator of tuples,Returns all possible ordered arrangements of elements of length r.,Generate all possible orderings where position matters.,I have a list of 3 items and need all possible 2-item orderings.,"result = list(itertools.permutations(items, 2))",import itertools,"items = ['A','B','C']\nresult = list(itertools.permutations(items, 2))","[('A','B'),('A','C'),('B','A'),('B','C'),('C','A'),('C','B')]"
+itertools.combinations(),Python,itertools,iterator of tuples,Returns all possible unordered combinations of elements of length r.,Generate unique groupings where order does not matter.,I have 3 items and need all unique 2-item groups.,"result = list(itertools.combinations(items, 2))",import itertools,"items = ['A','B','C']\nresult = list(itertools.combinations(items, 2))","[('A','B'),('A','C'),('B','C')]"
+itertools.product(),Python,itertools,iterator of tuples,Returns Cartesian product of input iterables.,Generate all pair combinations across multiple lists.,I have colors and sizes and need all possible pairs.,"result = list(itertools.product(colors, sizes))",import itertools,"colors = ['red','blue']\nsizes = ['S','M']\nresult = list(itertools.product(colors, sizes))","[('red','S'),('red','M'),('blue','S'),('blue','M')]"
+itertools.combinations_with_replacement(),Python,itertools,iterator of tuples,Returns combinations allowing repeated elements.,Generate combinations where items can repeat.,I need 2-item combinations where repetition is allowed.,"result = list(itertools.combinations_with_replacement(items, 2))",import itertools,"items = ['A','B','C']\nresult = list(itertools.combinations_with_replacement(items, 2))","[('A','A'),('A','B'),('A','C'),('B','B'),('B','C'),('C','C')]"
+math.perm(),Python,math,int,Returns number of permutations of n items taken r at a time.,Count ordered arrangements without generating them.,I need the number of ways to arrange 3 items taken 2 at a time.,"result = math.perm(n, r)",import math,"n = 3\nr = 2\nresult = math.perm(n, r)",6
+math.comb(),Python,math,int,Returns number of combinations of n items taken r at a time.,Count combinations without generating them.,I need the number of ways to choose 2 items from 3.,"result = math.comb(n, r)",import math,"n = 3\nr = 2\nresult = math.comb(n, r)",3
+itertools.chain(),Python,itertools,iterator,Chains multiple iterables into a single sequence.,Flatten multiple lists into one sequence.,I have multiple lists and want to iterate over them as one.,"result = list(itertools.chain(list1, list2))",import itertools,"list1 = [1,2]\nlist2 = [3,4]\nresult = list(itertools.chain(list1, list2))","[1,2,3,4]"
+itertools.zip_longest(),Python,itertools,iterator of tuples,"Zips iterables of different lengths, filling missing values.",Align uneven datasets safely.,I have two lists of different lengths and need paired output.,"result = list(itertools.zip_longest(a, b, fillvalue=None))",import itertools,"a = [1,2]\nb = [3]\nresult = list(itertools.zip_longest(a, b, fillvalue=None))","[(1,3),(2,None)]"

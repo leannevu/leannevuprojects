@@ -1,0 +1,574 @@
+functions_and_parameters$$COLUMN_SPLITTER$$case_scenario$$COLUMN_SPLITTER$$syntax
+$$ROW_SPLITTER$$
+I am building two reference tables for programming methods/functions. Follow these rules exactly.
+
+## OUTPUT REQUIREMENTS
+
+- Output TWO separate CSV blocks with NO headers
+- First block = Table 1 (Methods)
+- Second block = Table 2 (Parameters)
+- Do NOT include explanations outside the CSV blocks
+- Preserve column order exactly
+- Use valid CSV formatting
+- Quote cells when they contain commas, line breaks, or code with commas
+- Keep rows consistent and aligned
+
+---
+
+## TABLE 1 SCHEMA - METHODS
+
+Method | Language | Library / Object | Returns | Description | Use Case | Example Problem | Example Answer | Import | Input example | Output example
+
+---
+
+## TABLE 2 SCHEMA - PARAMETERS
+
+Method | Library / Object | Argument | Type | Valid Range | Required or Not Required | Default Value
+
+---
+
+## METHOD NAMING RULE
+
+Use the method/function name with parentheses and NO parameters inside.
+
+Examples:
+- datetime.datetime()
+- relativedelta()
+- pd.DataFrame.sum()
+- pd.Series.sum()
+- pd.agg()
+- pd.filter()
+- filter()
+- np.argmax()
+- re.search()
+
+Do NOT put parameters inside the Method column.
+
+Incorrect:
+- pd.DataFrame.sum(axis=0)
+- datetime.datetime(year, month, day)
+
+Correct:
+- pd.DataFrame.sum()
+- datetime.datetime()
+
+---
+
+## PANDAS METHOD NAMING PATTERN
+
+Use pandas method names in a consistent object-style pattern.
+
+For object-specific pandas methods, use:
+
+- pd.DataFrame.method()
+- pd.Series.method()
+- pd.Index.method()
+
+Examples:
+- pd.DataFrame.reset_index()
+- pd.DataFrame.set_index()
+- pd.Series.to_frame()
+- pd.Index.get_loc()
+
+For shared conceptual pandas methods where I intentionally use a broad method name, keep the Method name broad in BOTH tables, but split the Library / Object rows in Table 2.
+
+Examples:
+- pd.agg()
+- pd.sum()
+- pd.any()
+- pd.drop()
+- pd.apply()
+- pd.isna()
+- pd.notna()
+- pd.fillna()
+- pd.dropna()
+- pd.head()
+- pd.filter()
+- pd.size()
+- pd.count()
+
+Important:
+- If a method works on Series, DataFrame, and/or GroupBy, Table 2 must include separate rows for each specific Library / Object.
+- Keep the Method name the same across duplicates.
+- The Library / Object column is what distinguishes the object-specific behavior.
+
+Example:
+pd.sum(),pandas.core.series.Series,...
+pd.sum(),pandas.core.frame.DataFrame,...
+pd.sum(),pandas.core.groupby.generic.SeriesGroupBy,...
+pd.sum(),pandas.core.groupby.generic.DataFrameGroupBy,...
+
+---
+
+## LIBRARY / OBJECT RULE
+
+Use the most specific object path possible.
+
+Preferred values include:
+
+Python / built-in:
+- Built-in
+- datetime
+- dateutil.relativedelta
+- re
+- re.Match
+
+pandas:
+- pandas
+- pandas.core.frame.DataFrame
+- pandas.core.series.Series
+- pandas.core.indexes.base.Index
+- pandas.core.indexing._LocIndexer
+- pandas.core.indexing._iLocIndexer
+- pandas.core.groupby.generic.SeriesGroupBy
+- pandas.core.groupby.generic.DataFrameGroupBy
+
+NumPy:
+- numpy
+- numpy.ndarray
+- numpy.random
+- numpy.random.Generator
+
+Use:
+- pandas only for top-level pandas functions like pd.concat(), pd.isna(), pd.notna()
+- pandas.core.frame.DataFrame for DataFrame methods
+- pandas.core.series.Series for Series methods
+- pandas.core.groupby.generic.DataFrameGroupBy for DataFrameGroupBy methods
+- pandas.core.groupby.generic.SeriesGroupBy for SeriesGroupBy methods
+- Built-in for Python built-ins like map(), zip(), enumerate(), filter()
+- re.Match for match object methods like group() and groupdict()
+
+---
+
+## TABLE 1 LIBRARY / OBJECT RULE
+
+In Table 1, choose the best representative Library / Object.
+
+If the method is object-specific:
+- Use the exact object library.
+
+Example:
+pd.DataFrame.reset_index(),Python,pandas.core.frame.DataFrame,...
+
+If the method is a broad shared pandas concept:
+- You may use pandas as the Table 1 Library / Object.
+- Then Table 2 must split the parameters by specific Library / Object.
+
+Example:
+Table 1:
+pd.sum(),Python,pandas,...
+
+Table 2:
+pd.sum(),pandas.core.series.Series,...
+pd.sum(),pandas.core.frame.DataFrame,...
+pd.sum(),pandas.core.groupby.generic.SeriesGroupBy,...
+pd.sum(),pandas.core.groupby.generic.DataFrameGroupBy,...
+
+---
+
+## TABLE 2 LIBRARY / OBJECT RULE
+
+Table 2 must be more specific than Table 1 when behavior or parameters differ by object.
+
+For shared pandas method names:
+- Repeat the same Method name
+- Use different Library / Object values
+- Include parameters specific to that object
+
+Example:
+pd.fillna(),pandas.core.series.Series,value,...
+pd.fillna(),pandas.core.frame.DataFrame,value,...
+
+Do NOT collapse Series/DataFrame/GroupBy parameters into one vague row if their behavior differs.
+
+---
+
+## ATTRIBUTE / INDEXER RULE
+
+Some pandas items are not true methods.
+
+For attributes:
+- Keep the method-style label if I gave it that way, but make the parameter row show no parameters.
+
+Examples:
+- pd.DataFrame.columns
+- pd.size()
+
+Use:
+Argument = -
+Type = -
+Valid Range = attribute; no parameters
+Required or Not Required = Not Required
+Default Value = -
+
+For indexers:
+- .loc and .iloc are indexers, not methods.
+- They use key-based selection.
+
+Examples:
+pd.loc,pandas.core.indexing._LocIndexer,key,label/slice/list/boolean mask,valid labels,Required,-
+pd.iloc,pandas.core.indexing._iLocIndexer,key,int/slice/list/boolean mask,valid positions,Required,-
+
+---
+
+## TABLE 1 CONTENT RULES
+
+Returns:
+- Simple description of what is returned
+
+Description:
+- Clear, short explanation of what the method does
+
+Use Case:
+- When you would use it
+
+Example Problem:
+- Short realistic task
+
+Example Answer:
+- Short correct code
+- Must use variables defined in Input example
+- Must match the method being described
+
+Import:
+- Include import statement
+- Use - if built-in
+
+Input example:
+- Must define every variable used in Example Answer
+- Keep it small and realistic
+- DataFrames: 2-4 rows
+- Lists/arrays: 3-5 values
+- Strings: short
+- Dates: concrete dates
+
+Output example:
+- Must reflect the exact result of the Example Answer
+- Do not approximate
+- Do not generalize
+- If output is complex, provide a short but concrete exact summary
+
+KEY RULE:
+Input example -> Example Answer -> Output example must logically and exactly connect.
+
+---
+
+## TABLE 2 PARAMETER RULES
+
+- One row per useful parameter
+- Include only parameters a beginner should know
+- Omit obscure/deprecated parameters unless important
+- Method column must not contain parameters
+- Library / Object must identify where that parameter belongs
+- Be concise but factual
+
+Column meanings:
+
+Argument:
+- Parameter name
+- Use - only when there are no parameters
+
+Type:
+- Expected type, such as int, str, bool, list-like, callable, dict, DataFrame, Series
+
+Valid Range:
+- Allowed values or realistic constraints
+- Examples:
+  - True or False
+  - 0/'index' or 1/'columns'
+  - 'inner','outer','left','right'
+  - valid column labels
+  - any callable
+  - attribute; no parameters
+
+Required or Not Required:
+- Use only:
+  - Required
+  - Not Required
+
+Default Value:
+- Use the actual default when known
+- Use - if required or not applicable
+
+---
+
+## DUPLICATE / SHARED METHOD RULE
+
+Avoid duplicate rows unless behavior is meaningfully different.
+
+Duplicate rows are REQUIRED when:
+- Same method name works on Series and DataFrame with different object libraries
+- Same method name works on GroupBy with different behavior
+- Same method name exists as both top-level and object-specific behavior
+- Built-in and pandas versions have different meanings
+
+Examples:
+- filter() is Built-in
+- pd.filter() is pandas-related
+These are different and should be separate.
+
+Examples of shared pandas rows:
+- pd.sum()
+- pd.agg()
+- pd.apply()
+- pd.fillna()
+- pd.dropna()
+- pd.head()
+- pd.filter()
+
+---
+
+## FACTUALITY RULE
+
+Be factual and do not invent fake pandas methods.
+
+If my requested method name is not real as written:
+- Correct it only if the intended method is obvious
+- Keep my broad naming pattern if that is the established table convention
+- Use the Library / Object column to clarify the true object
+
+Example:
+pd.apply() is not a top-level pandas function, but in my table it represents:
+- pandas.core.series.Series
+- pandas.core.frame.DataFrame
+
+So Table 2 should split it into:
+pd.apply(),pandas.core.series.Series,...
+pd.apply(),pandas.core.frame.DataFrame,...
+
+---
+
+## CONSISTENCY RULE
+
+Use consistent wording across rows.
+
+Preferred wording:
+- Returns a Series...
+- Returns a DataFrame...
+- Drops...
+- Fills...
+- Aggregates...
+- Selects...
+- Combines...
+
+Avoid vague wording like:
+- Does stuff
+- Works with data
+- Changes things
+
+---
+
+## VALIDATION CHECK BEFORE FINAL OUTPUT
+
+Before answering, verify:
+
+- There are exactly TWO CSV blocks
+- No headers in either CSV block
+- Table 1 rows have exactly 11 columns
+- Table 2 rows have exactly 7 columns
+- Method names contain no parameters
+- Library / Object values follow the object pattern
+- Shared pandas methods are split by Library / Object in Table 2
+- Input examples define all variables used
+- Output examples match the Example Answer
+- CSV quotes are valid
+
+---
+
+## TASK
+
+When I give methods/functions:
+1. Create Table 1 for method/function summaries
+2. Create Table 2 for parameters
+3. Use object-specific Library / Object values
+4. Split shared pandas methods by Library / Object in the parameter table
+5. Keep examples small, realistic, accurate, and beginner-friendly
+6. Output only the two CSV blocks with no extra text
+
+Wait for my methods/functions.
+$$COLUMN_SPLITTER$$
+I am building a structured reference table. Please follow ALL rules strictly.
+
+## OUTPUT FORMAT
+
+- Output MUST be raw CSV (comma-separated)
+- DO NOT include headers
+- DO NOT include explanations outside the CSV
+- Every row must have EXACTLY this column order:
+
+Question,Answer,Wrong Example,Correct Example,Methods,Input Example,Output Example
+
+- Escape new lines with \n when needed so the HTML site shows formatting correctly
+- Use strict CSV formatting for easy copy and paste
+
+---
+
+## QUESTION STYLE
+
+- Questions MUST be scenario-based real use cases
+- Avoid generic phrasing like: How do you use X?
+- Prefer: I have data like X, how do I do Y?
+- Prefer: I need to transform X into Y, what should I use?
+
+---
+
+## CONTENT RULES
+
+- Each row must be complete and self-contained
+- Answer should be concise but clear, 1-2 sentences max
+- Wrong Example must be a realistic mistake someone would actually make
+- Correct Example must directly fix the wrong example
+- Methods should ONLY contain method/function names with parentheses and NO parameters
+
+Examples:
+- re.sub()
+- re.search()
+- pd.DataFrame.pivot()
+
+- DO NOT include arguments in Methods column
+- Parameters should ONLY appear in Correct Example or Input Example
+
+---
+
+## EXAMPLE RULES
+
+- Input Example must EXACTLY match the Correct Example
+- All variables must be defined
+- Output Example must match actual result of execution
+- These must form a logical chain:
+  Question -> Correct Example -> Input Example -> Output Example
+
+---
+
+## FORMATTING RULES
+
+- Code should be written in multi-line format when appropriate
+- Do NOT compress code into one line if readability suffers
+- Output Example should be formatted visually like real output
+- Align spacing where helpful, like DataFrame output
+
+---
+
+## QUALITY RULES
+
+- Avoid vague placeholders like text
+- Prefer realistic small datasets
+- Regex must be correct and general, not overly restrictive
+- Avoid redundant rows
+- Keep terminology consistent
+
+---
+
+## WRONG EXAMPLE RULE
+
+- Must fail for a clear reason related to the concept
+- Must be a mistake someone could realistically make
+- Do NOT include trivial or unrelated mistakes
+
+---
+
+## VALIDATION
+
+Before outputting:
+
+- Ensure every row has exactly 7 columns
+- Ensure Methods column has NO parameters
+- Ensure Input/Output pairs are correct and aligned
+- Ensure no undefined variables
+- Ensure formatting is readable and consistent
+
+---
+
+## CONSISTENCY RULE
+
+- Use consistent terminology across rows
+- Similar concepts should be described similarly
+
+---
+
+## TASK
+
+Generate rows based on the methods/functions I provide.
+$$COLUMN_SPLITTER$$
+I am building a structured syntax reference table. Follow these rules exactly.
+
+## OUTPUT REQUIREMENTS
+
+- Output raw CSV with NO headers
+- Do not include explanations outside the CSV
+- Preserve column order exactly
+- Use quotes only when needed for valid CSV
+- Keep rows consistent and aligned
+
+---
+
+## COLUMN ORDER
+
+Syntax,Language,Library / Context,Meaning,Use Case,Notes,Example Problem,Example Answer,Input Example,Output Example
+
+---
+
+## CONTENT RULES
+
+- This table is for syntax, operators, or constructs, NOT methods
+- Syntax must be the exact syntax token or construct
+- Language must be correct: Python, SQL, etc.
+- Library / Context must be as specific as possible and indicate where the syntax applies
+- Examples: re, Python built-in syntax, pandas.core.series.Series, numpy.ndarray, SQL
+- Meaning must clearly explain what the syntax does
+- Use Case must explain when to use it
+- Notes should include only important caveats or distinctions
+- Avoid redundancy across columns
+
+---
+
+## EXAMPLE RULES
+
+- Example Problem must be realistic and specific
+- Example Answer must directly solve the Example Problem
+- Input Example must match the Example Answer exactly
+- Output Example must reflect the actual result of execution
+- These must form a strict logical chain:
+  Example Problem -> Example Answer -> Input Example -> Output Example
+
+---
+
+## QUALITY RULES
+
+- Be concise but precise
+- Avoid vague placeholders
+- Prefer realistic, small examples
+- Ensure each row is self-contained
+- Do not force syntax into method-style descriptions
+
+---
+
+## VALIDATION
+
+- All variables must be defined in Input Example
+- Output must match actual execution
+- CSV must be properly formatted
+- No broken quotes or columns
+
+---
+
+## CONSISTENCY RULE
+
+- Use consistent terminology across rows
+- Similar concepts should be described similarly
+
+---
+
+## TASK
+
+## STRICT EXECUTION RULES (CRITICAL)
+
+- Each row MUST have exactly 10 columns
+- Input Example must fully define all variables used in Example Answer
+- Example Answer must be executable directly after Input Example
+- Output Example must match the exact result of executing Example Answer
+- If a variable is assigned (e.g., result = ...), Output Example must show that variable’s value
+- Do NOT introduce new variables in Example Answer that are not in Input Example
+- Do NOT change the logic of the Example Problem when writing the Example Answer
+- Only demonstrate the intended syntax change
+- Assume the final evaluated expression or variable is what is shown in Output Example
