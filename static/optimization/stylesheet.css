@@ -1,477 +1,107 @@
 :root {
     --bg: #ffffff;
-    --panel: #0f0f10;
-    --panel-2: #141415;
-    --surface: #f5f5f2;
-    --surface-soft: #efefea;
-    --border: #e6e6e1;
-    --card-border: #d8d8d2;
     --text: #111111;
     --muted: #6f6f6f;
-    --dark-text: #111111;
-    --dark-muted: #6c6c6c;
     --line: #d8d8d2;
-    --highlight: #e8e8e2;
-    --shadow: 0 18px 40px rgba(0, 0, 0, 0.10);
-    --card-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    --soft: #f5f5f2;
 }
 
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", sans-serif;
-}
-
-.page-shell {
-    width: min(100% - 56px, 1240px);
-    margin-inline: auto;
-}
-
-/* HEADER */
-
-.site-header {
-    border-bottom: 1px solid #ebebe7;
-    background: #ffffff;
-}
-
-.header-inner {
+.original-optimization-demo {
     display: flex;
-    justify-content: space-between;
+    min-height: 430px;
+    flex-direction: column;
     align-items: center;
-    padding: 18px 0;
+    justify-content: center;
+    gap: 24px;
+    padding: 36px 0 18px;
+    font-size: 200%;
+    text-align: center;
 }
 
-.brand {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
+.optimization-image-output {
+    width: min(100%, 900px);
+    min-height: 32px;
 }
 
-.avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 1px solid #ddddda;
-    object-fit: cover;
-}
-
-.brand-name {
-    font-family: "Libre Baskerville", serif;
-    font-size: 1.02rem;
-    font-weight: 700;
-}
-
-.brand-tagline {
-    font-size: 13px;
-    color: var(--muted);
-}
-
-.top-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-}
-
-.top-nav a {
-    text-decoration: none;
-    color: var(--muted);
-    font-size: 14px;
-}
-
-.top-nav a:hover {
-    color: var(--text);
-}
-
-/* HERO */
-
-main.page-shell {
-    padding-top: 34px;
-    padding-bottom: 56px;
-}
-
-.hero {
-    margin-bottom: 24px;
-}
-
-.eyebrow {
-    margin: 0 0 10px;
-    font-size: 0.74rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #8a8a8a;
-}
-
-.hero h1 {
-    margin: 0 0 12px;
-    font-family: "Libre Baskerville", serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    font-weight: 700;
-    color: #111111;
-}
-
-.hero-text {
-    max-width: 720px;
-    margin: 0;
-    color: #707070;
-    font-size: 0.98rem;
-    line-height: 1.7;
-}
-
-.header-highlight {
-    color: #111111;
-}
-
-/* APP SHELL */
-
-.app-shell {
-    background: linear-gradient(180deg, var(--panel) 0%, #0c0c0d 100%);
-    border: 1px solid #212123;
-    box-shadow: var(--shadow);
-    padding: 18px;
-    margin: 0 0 28px;
-    width: 100%;
-}
-
-.app-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 4px 4px 14px;
-    border-bottom: 1px solid #202022;
-    margin-bottom: 16px;
-}
-
-.window-dots {
-    display: flex;
-    gap: 8px;
-}
-
-.window-dots span {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #3a3a3d;
-    display: inline-block;
-}
-
-.app-title {
-    color: #c6c6c8;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
-
-/* TOOL LAYOUT */
-
-.tool-layout {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 16px;
-    align-items: start;
-}
-
-.tool-controls {
-    background: var(--surface);
-    border: 1px solid var(--card-border);
-    padding: 18px;
-    position: relative;
-}
-
-.tool-controls::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: #111111;
-}
-
-.console-label,
-.section-label {
-    margin: 0 0 6px;
-    font-size: 0.64rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--dark-muted);
-}
-
-.tool-controls h2,
-.section-heading,
-.about-panel h2 {
-    margin: 0 0 10px;
-    font-family: "Libre Baskerville", serif;
-    font-size: 1.45rem;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    font-weight: 700;
-    color: var(--dark-text);
-}
-
-.console-copy {
-    margin: 0 0 14px;
-    color: #707070;
-    font-size: 0.92rem;
-    line-height: 1.7;
-}
-
-.tool-output {
-    display: grid;
-    gap: 14px;
-}
-
-.output-panel {
-    background: var(--surface);
-    border: 1px solid var(--card-border);
-    padding: 18px;
-    position: relative;
-    min-height: 120px;
-}
-
-.output-panel::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: #111111;
-}
-
-.output-image {
-    min-height: 260px;
-}
-
-.output-image img {
+.optimization-image-output img {
     display: block;
-    max-width: 100%;
-    height: auto;
+    width: 100%;
     border: 1px solid var(--line);
     background: #ffffff;
 }
 
-.output-table {
-    overflow-x: auto;
+#action-button {
+    border: 1px solid #000000;
+    background-color: #000000;
+    color: #ffffff;
+    padding: 12px 18px;
+    font: inherit;
+    font-size: large;
+    cursor: pointer;
 }
 
-/* TABLES */
+#action-button:hover {
+    background: #2a2a2a;
+}
+
+.optimization-result-output {
+    width: 100%;
+    margin: 0;
+    overflow-x: auto;
+    font-size: 1rem;
+    font-weight: 400;
+}
 
 table {
     width: 100%;
+    margin: 0 0 16px;
     border-collapse: collapse;
-    border: 1px solid var(--line);
-    background: #ffffff;
-    margin-bottom: 12px;
 }
 
 th,
 td {
-    padding: 12px 14px;
-    text-align: left;
     border-bottom: 1px solid var(--line);
-    color: var(--dark-text);
-    font-size: 0.86rem;
-}
-
-th {
-    background: #f1f1ee;
-    font-size: 0.8rem;
-    font-weight: 700;
-}
-
-tr:last-child td {
-    border-bottom: none;
+    padding: 10px;
 }
 
 .table-label {
-    font-size: 0.86rem;
+    width: 250px;
+    font-size: large;
     text-align: left;
-    min-width: 180px;
-    font-weight: 600;
 }
 
 .table-rest {
-    font-size: 0.86rem;
-    padding: 10px 12px;
+    padding: 10px;
+    font-size: large;
     text-align: left;
 }
 
-/* BUTTONS */
-
-button,
 .button {
-    border: 1px solid #111111;
-    background: #111111;
-    color: #ffffff;
-    padding: 10px 14px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.16s ease, transform 0.16s ease;
+    border: 1px solid #000000;
+    background: #000000;
+    color: #ffffff;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    text-decoration: none;
 }
 
-button:hover,
-.button:hover {
-    transform: translateY(-1px);
-    background: #2a2a2a;
-}
-
-#action-button {
-    width: 100%;
-}
-
-/* CONTENT SECTIONS */
-
-.content-sections {
-    display: grid;
-    gap: 16px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.page-section,
-.about-panel,
-.info-card {
-    background: #ffffff;
-    border: 1px solid #e8e8e4;
-    padding: 18px;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
-}
-
-.about-panel p,
-.info-card p {
-    color: #707070;
-    line-height: 1.7;
-    font-size: 0.92rem;
-}
-
-.about-panel h2,
-.section-heading,
-.info-card h3 {
-    color: #111111;
-}
-
-.info-card-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-}
-
-.info-card {
-    position: relative;
-}
-
-.info-card::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: #111111;
-}
-
-.info-card h3 {
-    margin: 0 0 8px;
-    font-family: "Libre Baskerville", serif;
-    font-size: 1rem;
-}
-
-.card-role {
-    margin: 0 0 10px !important;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #111111 !important;
-}
-
-.stack-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.stack-list span {
-    border: 1px solid #ddddda;
-    padding: 7px 11px;
-    background: #fafaf8;
-    color: #111111;
-    font-size: 0.82rem;
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 1024px) {
-    .tool-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .info-card-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
+@media (max-width: 800px) {
+    .original-optimization-demo {
+        min-height: 340px;
+        font-size: 150%;
     }
 }
 
 @media (max-width: 640px) {
-    .page-shell {
-        width: min(100% - 28px, 1240px);
-    }
-
-    main.page-shell {
-        padding-top: 24px;
-        padding-bottom: 38px;
-    }
-
-    .app-shell,
-    .tool-controls,
-    .output-panel,
-    .page-section,
-    .about-panel,
-    .info-card {
-        padding: 15px;
-    }
-
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    .section-heading,
-    .about-panel h2,
-    .tool-controls h2 {
-        font-size: 1.3rem;
-    }
-
-    button,
+    #action-button,
     .button {
         width: 100%;
     }
 
     .table-label {
-        min-width: 140px;
+        width: 160px;
     }
 }

@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Model Behavior Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='model-behavior/css/styles.css') }}?v=8" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='project_template.css') }}?v=1" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner page-shell">
+      <a class="brand" href="https://leannevu.github.io/index.html">
+        <img class="avatar" src="{{ url_for('static', filename='scrum/leanne-vu.jpg') }}" alt="Leanne Vu">
+        <div>
+          <div class="brand-name">Leanne Vu</div>
+          <div class="brand-tagline">Writing about data, product, and building practical analytics.</div>
+        </div>
+      </a>
+
+      <nav class="top-nav">
+        <a href="https://leannevu.github.io/index.html">Portfolio</a>
+        <a href="#blog">Blog</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero">
+      <p class="eyebrow">Configurable Simulation / Train-Test Split / Model Evaluation Pipeline</p>
+      <h1>Model Behavior Lab</h1>
+      <p class="lede">Create a train/test dataset, run four regression model profiles, compare bias-variance behavior, and render charts from the latest pipeline run.</p>
+    </section>
+
+    <section class="project-tabs" aria-label="Model behavior project sections">
+      <div class="tab-track" role="tablist">
+        <button class="tab-button active" type="button" role="tab" aria-selected="true" aria-controls="project-demo" data-tab="project-demo">Project Demo</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="additional-info" data-tab="additional-info">Additional Information</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="architecture" data-tab="architecture">Architecture</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="blog" data-tab="blog">Blog</button>
+      </div>
+
+      <div class="tab-panels">
+        <section class="tab-panel active" id="project-demo" role="tabpanel">
+          <section class="control-panel">
+            <div>
+              <label>Data Design</label>
+              <select id="design">
+                <option value="equidistant">Equidistant</option>
+                <option value="non_equidistant">Non-Equidistant</option>
+              </select>
+            </div>
+            <div>
+              <label>Sample Size</label>
+              <input id="nPoints" type="number" value="180" min="60" max="500" />
+            </div>
+            <div>
+              <label>Noise Level</label>
+              <input id="noise" type="number" value="0.25" step="0.05" min="0.05" max="1" />
+            </div>
+            <div>
+              <label>Simulation Runs</label>
+              <input id="nRuns" type="number" value="30" min="5" max="100" />
+            </div>
+            <button id="runBtn">Run Pipeline</button>
+          </section>
+
+          <section class="pipeline-strip" id="pipelineStrip">
+            <div>Generate Data</div><span>/</span>
+            <div>Split</div><span>/</span>
+            <div>Model</div><span>/</span>
+            <div>Score</div><span>/</span>
+            <div>Chart</div>
+          </section>
+
+          <section class="grid-two">
+            <article class="card">
+              <div class="card-head"><h2>Train Preview</h2><span id="trainCount">Waiting</span></div>
+              <div class="table-wrap"><table id="trainTable"></table></div>
+            </article>
+            <article class="card">
+              <div class="card-head"><h2>Test Preview</h2><span id="testCount">Waiting</span></div>
+              <div class="table-wrap"><table id="testTable"></table></div>
+            </article>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <h2>Model Leaderboard</h2>
+              <span>Lower MSE is better</span>
+            </div>
+            <div class="table-wrap"><table id="summaryTable"></table></div>
+          </section>
+
+          <section class="charts">
+            <article class="chart-card">
+              <div class="card-head"><h2>Mean Prediction vs True Function</h2><span>Model fit comparison</span></div>
+              <svg id="predictionChart" viewBox="0 0 900 360" role="img" aria-label="Mean prediction chart"></svg>
+            </article>
+            <article class="chart-card">
+              <div class="card-head"><h2>Bias Squared by Model</h2><span>Error from true function</span></div>
+              <svg id="biasChart" viewBox="0 0 900 360" role="img" aria-label="Bias squared chart"></svg>
+            </article>
+            <article class="chart-card">
+              <div class="card-head"><h2>Variance by Model</h2><span>Prediction stability across runs</span></div>
+              <svg id="varianceChart" viewBox="0 0 900 360" role="img" aria-label="Variance chart"></svg>
+            </article>
+            <article class="chart-card">
+              <div class="card-head"><h2>MSE Curve by Model</h2><span>Bias squared + variance + noise</span></div>
+              <svg id="mseChart" viewBox="0 0 900 360" role="img" aria-label="MSE curve chart"></svg>
+            </article>
+          </section>
+        </section>
+
+        <section class="tab-panel" id="additional-info" role="tabpanel" hidden>
+          <section class="content-sections">
+            <section class="plain-project-section" id="personas">
+              <p class="section-label">Personas</p>
+              <div class="circle-flow persona-circle-flow three">
+                <article><span>DS</span><strong>Data Science Learner</strong><p>Experiments with noise, sample size, and model fit.</p></article>
+                <article><span>MR</span><strong>Model Reviewer</strong><p>Compares bias, variance, and MSE across profiles.</p></article>
+                <article><span>TA</span><strong>Technical Audience</strong><p>Needs a visual explanation of model behavior.</p></article>
+              </div>
+            </section>
+
+            <section class="plain-project-section" id="user-stories">
+              <p class="section-label">User Stories</p>
+              <div class="circle-flow story-circle-flow six">
+                <article><span>1</span><strong>Choose Data</strong><p>Start with spacing, sample size, and noise.</p></article>
+                <article><span>2</span><strong>Run Pipeline</strong><p>Generate train/test data and model runs.</p></article>
+                <article><span>3</span><strong>Preview Split</strong><p>Check training and testing samples.</p></article>
+                <article><span>4</span><strong>Compare Scores</strong><p>Read the model leaderboard.</p></article>
+                <article><span>5</span><strong>Inspect Charts</strong><p>Trace fit, bias, variance, and MSE.</p></article>
+                <article><span>6</span><strong>Explain Tradeoff</strong><p>End with a defendable model comparison.</p></article>
+              </div>
+            </section>
+
+            <section class="plain-project-section" id="journey-map">
+              <p class="section-label">Journey Map</p>
+              <div class="circle-flow dependency-journey five">
+                <article><span>A</span><strong>Configure</strong><p>Set the simulation controls.</p></article>
+                <article><span>B</span><strong>Simulate</strong><p>Create repeatable model runs.</p></article>
+                <article><span>C</span><strong>Measure</strong><p>Calculate bias, variance, and MSE.</p></article>
+                <article><span>D</span><strong>Visualize</strong><p>Render charts from the latest run.</p></article>
+                <article><span>E</span><strong>Compare</strong><p>Use the results to discuss tradeoffs.</p></article>
+              </div>
+            </section>
+          </section>
+        </section>
+
+        <section class="tab-panel" id="architecture" role="tabpanel" hidden>
+          <section class="content-sections architecture-sections">
+            <section class="plain-project-section architecture-visual-section">
+              <div class="architecture-diagram" aria-label="Model behavior lab architecture">
+                <div class="system-box browser-box">
+                  <span>Browser Client</span>
+                  <div class="tech-box">Control Panel</div>
+                  <div class="tech-box">Tables</div>
+                  <div class="tech-box">SVG Charts</div>
+                </div>
+                <div class="system-box api-box">
+                  <span>Flask API</span>
+                  <div class="tech-box">/api/run</div>
+                  <div class="tech-box accent">Pipeline Orchestrator</div>
+                  <div class="tech-box">JSON Results</div>
+                </div>
+                <div class="system-box data-box">
+                  <span>Data Layer</span>
+                  <div class="tech-box data">Generated Dataset</div>
+                  <div class="tech-box">Train/Test Split</div>
+                  <div class="tech-box">Latest Run Artifacts</div>
+                </div>
+                <div class="system-box analytics-box">
+                  <span>Model Layer</span>
+                  <div class="tech-box bigquery">Regression Profiles</div>
+                  <div class="tech-box">Bias / Variance</div>
+                  <div class="tech-box">MSE Summary</div>
+                </div>
+                <svg class="architecture-lines" viewBox="0 0 1000 580" aria-hidden="true">
+                  <defs><marker id="archArrowShared" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z"></path></marker></defs>
+                  <path d="M780 150 C700 150 640 170 560 240"></path>
+                  <path d="M500 330 C470 390 380 420 265 454"></path>
+                  <path d="M550 330 C585 390 680 420 760 454"></path>
+                </svg>
+              </div>
+            </section>
+            <section class="plain-project-section architecture-visual-section">
+              <div class="sequence-flow">
+                <div><span>1</span><p>Controls define sample size, data spacing, noise, and run count.</p></div>
+                <div><span>2</span><p>The simulation generates train/test data.</p></div>
+                <div><span>3</span><p>Regression profiles run against the same scenario.</p></div>
+                <div><span>4</span><p>Bias, variance, and MSE are calculated.</p></div>
+                <div><span>5</span><p>Tables and SVG charts render the comparison.</p></div>
+              </div>
+            </section>
+            <section class="plain-project-section architecture-visual-section">
+              <div class="stack-matrix">
+                <div><strong>UI</strong><span>HTML / CSS / JavaScript</span></div>
+                <div><strong>Server</strong><span>Flask API</span></div>
+                <div><strong>Data</strong><span>Generated train/test samples</span></div>
+                <div><strong>Modeling</strong><span>Regression profile pipeline</span></div>
+                <div><strong>Metrics</strong><span>Bias, variance, MSE</span></div>
+                <div><strong>Output</strong><span>Leaderboard and SVG charts</span></div>
+              </div>
+            </section>
+          </section>
+        </section>
+
+        <section class="tab-panel" id="blog" role="tabpanel" hidden>
+          <div class="info-layout">
+            <article class="blog-intro">
+              <p><a class="blog-link" href="https://leannevu.github.io/blog/posts/parametric-models/index.html" target="_blank" rel="noopener">Open post in new tab here</a></p>
+            </article>
+            <iframe class="external-writeup" src="https://leannevu.github.io/blog/posts/parametric-models/index.html" title="Blog Post"></iframe>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='model-behavior/js/app.js') }}?v=4"></script>
+</body>
+</html>

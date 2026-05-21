@@ -6,6 +6,7 @@
     <title>EDA Interactivity Dashboard — Social Media vs Productivity</title>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='analysis-productivity/stylesheet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='project_template.css') }}?v=1">
 </head>
 <body>
 
@@ -23,9 +24,7 @@
 
             <nav class="top-nav">
                 <a href="https://leannevu.github.io/index.html">Portfolio</a>
-                <a href="#about">About</a>
-                <a href="#use-cases">Use Cases</a>
-                <a href="#tech-stack">Tech Stack</a>
+                <a href="#blog">Blog</a>
             </nav>
         </div>
     </header>
@@ -41,6 +40,16 @@
             </p>
         </section>
 
+        <section class="project-switcher" data-project-tabs>
+            <div class="project-tab-track" role="tablist">
+                <button class="project-tab-button active" type="button" role="tab" aria-selected="true" data-project-tab="demo">Project Demo</button>
+                <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="info">Additional Information</button>
+                <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="architecture">Architecture</button>
+                <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="blog">Blog</button>
+            </div>
+
+            <div class="project-tab-panels">
+                <section class="project-tab-panel active" id="project-demo" role="tabpanel" data-project-panel="demo">
         <section class="app-shell">
             <div class="app-topbar">
                 <div class="window-dots">
@@ -241,72 +250,115 @@
             </section>
         </section>
 
-        <section class="content-sections">
-            <section class="about-panel page-section" id="about">
-                <p class="section-label">About This Project</p>
-                <h2>Why I built this</h2>
-                <p>
-                    As I transition from Computer Science to Data Science, I wanted to deepen my understanding
-                    of exploratory data analysis while building user-focused tools. I created this interactive
-                    EDA dashboard using Python, Flask, Pandas, and Matplotlib to present analysis in a way that
-                    feels more guided, visual, and accessible.
-                </p>
-                <p>
-                    The goal was to bring together notebook-style reasoning and web interactivity — allowing users
-                    to reveal code, inspect results, and move through the analysis step by step instead of consuming
-                    the project as one long static report.
-                </p>
-            </section>
+                </section>
 
-            <section class="page-section" id="use-cases">
-                <p class="section-label">Use Cases</p>
-                <h2 class="section-heading">What the experience supports</h2>
+                <section class="project-tab-panel project-tab-info" id="additional-info" role="tabpanel" data-project-panel="info" hidden>
+                    <section class="content-sections">
+                        <section class="plain-project-section" id="personas">
+                            <p class="section-label">Personas</p>
+                            <div class="circle-flow persona-circle-flow three">
+                                <article><span>DL</span><strong>Data Learner</strong><p>Needs a guided EDA path with code visible on demand.</p></article>
+                                <article><span>IR</span><strong>Insight Reader</strong><p>Wants outputs and interpretation without notebook clutter.</p></article>
+                                <article><span>TR</span><strong>Technical Reviewer</strong><p>Checks the analysis steps behind each conclusion.</p></article>
+                            </div>
+                        </section>
 
-                <div class="info-card-grid">
-                    <article class="info-card">
-                        <h3>Notebook-Style Learning</h3>
-                        <p class="card-role">Exploration</p>
-                        <p>View both code and results in a format that feels similar to a guided Jupyter workflow.</p>
-                    </article>
+                        <section class="plain-project-section" id="user-stories">
+                            <p class="section-label">User Stories</p>
+                            <div class="circle-flow story-circle-flow six">
+                                <article><span>1</span><strong>Open Analysis</strong><p>Start at the first EDA section.</p></article>
+                                <article><span>2</span><strong>Reveal Code</strong><p>Inspect implementation only when useful.</p></article>
+                                <article><span>3</span><strong>Reveal Result</strong><p>Compare the output beside the method.</p></article>
+                                <article><span>4</span><strong>Move Forward</strong><p>Use the guided arrow to continue.</p></article>
+                                <article><span>5</span><strong>Connect Insight</strong><p>Build context across each section.</p></article>
+                                <article><span>6</span><strong>Open Journal</strong><p>End with the full written analysis.</p></article>
+                            </div>
+                        </section>
 
-                    <article class="info-card">
-                        <h3>Step-by-Step Analysis</h3>
-                        <p class="card-role">Walkthrough</p>
-                        <p>Move through the EDA process section by section instead of reading one static output dump.</p>
-                    </article>
+                        <section class="plain-project-section" id="journey-map">
+                            <p class="section-label">Journey Map</p>
+                            <div class="circle-flow dependency-journey five">
+                                <article><span>A</span><strong>Frame</strong><p>Import and inspect the dataset.</p></article>
+                                <article><span>B</span><strong>Explore</strong><p>Find correlations and distributions.</p></article>
+                                <article><span>C</span><strong>Compare</strong><p>Group by age, gender, and productivity.</p></article>
+                                <article><span>D</span><strong>Visualize</strong><p>Use plots to make patterns readable.</p></article>
+                                <article><span>E</span><strong>Synthesize</strong><p>Translate analysis into a journal narrative.</p></article>
+                            </div>
+                        </section>
+                    </section>
+                </section>
 
-                    <article class="info-card">
-                        <h3>Code and Result Separation</h3>
-                        <p class="card-role">Clarity</p>
-                        <p>Reveal implementation details and analytical outputs independently for a cleaner experience.</p>
-                    </article>
-
-                    <article class="info-card">
-                        <h3>Insight Journal Support</h3>
-                        <p class="card-role">Documentation</p>
-                        <p>Pair the dashboard with a long-form analysis journal that explains how insights were derived.</p>
-                    </article>
-                </div>
-            </section>
-
-            <section class="page-section" id="tech-stack">
-                <p class="section-label">Tech Stack</p>
-                <h2 class="section-heading">Built with</h2>
-
-                <div class="stack-list">
-                    <span>Python</span>
-                    <span>Flask</span>
-                    <span>Pandas</span>
-                    <span>Matplotlib</span>
-                    <span>HTML</span>
-                    <span>CSS</span>
-                    <span>JavaScript</span>
-                </div>
-            </section>
+                <section class="project-tab-panel project-tab-info" id="architecture" role="tabpanel" data-project-panel="architecture" hidden>
+                    <section class="content-sections architecture-sections">
+                        <section class="plain-project-section architecture-visual-section">
+                            <div class="architecture-diagram" aria-label="EDA dashboard architecture">
+                                <div class="system-box browser-box">
+                                    <span>Browser Client</span>
+                                    <div class="tech-box">EDA Workspace UI</div>
+                                    <div class="tech-box">Code / Result Toggles</div>
+                                    <div class="tech-box">Step Navigation</div>
+                                </div>
+                                <div class="system-box api-box">
+                                    <span>Flask App</span>
+                                    <div class="tech-box">Project Route</div>
+                                    <div class="tech-box accent">Static Analysis Assets</div>
+                                    <div class="tech-box">Blog Link</div>
+                                </div>
+                                <div class="system-box data-box">
+                                    <span>Data Layer</span>
+                                    <div class="tech-box data">CSV Dataset</div>
+                                    <div class="tech-box">Generated Tables</div>
+                                    <div class="tech-box">Chart Assets</div>
+                                </div>
+                                <div class="system-box analytics-box">
+                                    <span>Analytics Layer</span>
+                                    <div class="tech-box bigquery">Pandas</div>
+                                    <div class="tech-box">Matplotlib</div>
+                                    <div class="tech-box">EDA Notebook Logic</div>
+                                </div>
+                                <svg class="architecture-lines" viewBox="0 0 1000 580" aria-hidden="true">
+                                    <defs><marker id="archArrowShared" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z"></path></marker></defs>
+                                    <path d="M780 150 C700 150 640 170 560 240"></path>
+                                    <path d="M500 330 C470 390 380 420 265 454"></path>
+                                    <path d="M550 330 C585 390 680 420 760 454"></path>
+                                </svg>
+                            </div>
+                        </section>
+                        <section class="plain-project-section architecture-visual-section">
+                            <div class="sequence-flow">
+                                <div><span>1</span><p>Dataset is prepared for exploratory analysis.</p></div>
+                                <div><span>2</span><p>Pandas creates grouped summaries and comparisons.</p></div>
+                                <div><span>3</span><p>Matplotlib outputs charts and visual evidence.</p></div>
+                                <div><span>4</span><p>Flask serves the guided project page.</p></div>
+                                <div><span>5</span><p>The reader moves through code, results, and journal context.</p></div>
+                            </div>
+                        </section>
+                        <section class="plain-project-section architecture-visual-section">
+                            <div class="stack-matrix">
+                                <div><strong>UI</strong><span>HTML / CSS / JavaScript</span></div>
+                                <div><strong>Server</strong><span>Flask route</span></div>
+                                <div><strong>Data</strong><span>Social media productivity CSV</span></div>
+                                <div><strong>Analysis</strong><span>Pandas / Matplotlib</span></div>
+                                <div><strong>Output</strong><span>Code blocks, results, visual insights</span></div>
+                                <div><strong>Writeup</strong><span>External insight journal</span></div>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+<section class="project-tab-panel" id="blog" role="tabpanel" data-project-panel="blog" hidden>
+                    <div class="project-tab-blog">
+                        <p class="section-label">Project Writeup</p>
+                        <h2>Read the productivity insight journal.</h2>
+                        <p>The long-form writeup explains the analysis path and insight decisions behind the interactive dashboard.</p>
+                        <a class="button" href="https://leannevu.github.io/blog-insight-productivity.html" target="_blank" rel="noopener">Open Blog</a>
+                    </div>
+                </section>
+            </div>
         </section>
 
     </main>
 
+    <script src="{{ url_for('static', filename='project_tabs.js') }}"></script>
     <script src="{{ url_for('static', filename='analysis-productivity/index.js') }}"></script>
 </body>
 </html>

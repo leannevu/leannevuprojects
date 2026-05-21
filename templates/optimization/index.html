@@ -6,6 +6,7 @@
     <title>Optimized Portfolio Tool</title>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='optimization/stylesheet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='project_template.css') }}?v=1">
 </head>
 <body>
 
@@ -23,9 +24,6 @@
 
             <nav class="top-nav">
                 <a href="https://leannevu.github.io/index.html">Portfolio</a>
-                <a href="#about">About</a>
-                <a href="#use-cases">Use Cases</a>
-                <a href="#tech-stack">Tech Stack</a>
             </nav>
         </div>
     </header>
@@ -41,102 +39,136 @@
             </p>
         </section>
 
-        <section class="app-shell">
-            <div class="app-topbar">
-                <div class="window-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="app-title">Portfolio Optimization Console</div>
+        <section class="project-switcher" data-project-tabs>
+            <div class="project-tab-track" role="tablist">
+                <button class="project-tab-button active" type="button" role="tab" aria-selected="true" data-project-tab="demo">Project Demo</button>
+                <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="info">Additional Information</button>
+                <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="architecture">Architecture</button>
             </div>
 
-            <section id="body" class="tool-layout">
-                <div class="tool-controls">
-                    <p class="console-label">Interactive Demo</p>
-                    <h2>Generate an optimized portfolio</h2>
-                    <p class="console-copy">
-                        Click the button to generate a randomized portfolio allocation and view both the chart
-                        and the portfolio performance summary.
-                    </p>
+            <div class="project-tab-panels">
+                <section class="project-tab-panel active" id="project-demo" role="tabpanel" data-project-panel="demo">
+                    <section id="body" class="original-optimization-demo">
+                        <div id="image_output" class="optimization-image-output"></div>
+                        <button id="action-button" onclick="getRandomPortfolio()">click for your stock portfolio!</button>
+                        <h2 id="result_output" class="optimization-result-output"></h2>
+                    </section>
+                </section>
 
-                    <button id="action-button" onclick="getRandomPortfolio()">
-                        Click for your stock portfolio
-                    </button>
+                <section class="project-tab-panel project-tab-info" id="additional-info" role="tabpanel" data-project-panel="info" hidden>
+        <section class="content-sections">
+            <section class="plain-project-section" id="personas">
+                <p class="section-label">Personas</p>
+                <div class="circle-flow persona-circle-flow three">
+                    <article><span>CI</span><strong>Curious Investor</strong><p>Wants a quick allocation example with readable metrics.</p></article>
+                    <article><span>DL</span><strong>Data Learner</strong><p>Connects optimization logic to visible portfolio output.</p></article>
+                    <article><span>PR</span><strong>Portfolio Reviewer</strong><p>Checks allocation, risk, and return tradeoffs.</p></article>
                 </div>
+            </section>
 
-                <div class="tool-output">
-                    <div id="image_output" class="output-panel output-image"></div>
-                    <div id="result_output" class="output-panel output-table"></div>
+            <section class="plain-project-section" id="user-stories">
+                <p class="section-label">User Stories</p>
+                <div class="circle-flow story-circle-flow six">
+                    <article>
+                        <span>1</span>
+                        <strong>Select Universe</strong>
+                        <p>Start with available stock data.</p>
+                    </article>
+                    <article>
+                        <span>2</span>
+                        <strong>Generate Portfolio</strong>
+                        <p>Run allocation logic through the demo.</p>
+                    </article>
+                    <article>
+                        <span>3</span>
+                        <strong>Review Allocation</strong>
+                        <p>See which tickers receive portfolio weight.</p>
+                    </article>
+                    <article>
+                        <span>4</span>
+                        <strong>Compare Metrics</strong>
+                        <p>Read return, volatility, and Sharpe ratio.</p>
+                    </article>
+                    <article>
+                        <span>5</span>
+                        <strong>View Chart</strong>
+                        <p>Inspect the generated performance visual.</p>
+                    </article>
+                    <article>
+                        <span>6</span>
+                        <strong>Randomize Again</strong>
+                        <p>End by comparing another portfolio scenario.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="plain-project-section" id="journey-map">
+                <p class="section-label">Journey Map</p>
+                <div class="circle-flow dependency-journey five">
+                    <article><span>A</span><strong>Load Data</strong><p>Stock history is available to the optimizer.</p></article>
+                    <article><span>B</span><strong>Optimize</strong><p>Weights are calculated from the selected universe.</p></article>
+                    <article><span>C</span><strong>Measure</strong><p>Risk and return metrics are computed.</p></article>
+                    <article><span>D</span><strong>Render</strong><p>The UI receives tables and chart output.</p></article>
+                    <article><span>E</span><strong>Compare</strong><p>The demo user can rerun for another scenario.</p></article>
                 </div>
             </section>
         </section>
 
-        <section class="content-sections">
-            <section class="about-panel page-section" id="about">
-                <p class="section-label">About This Project</p>
-                <h2>Why I built this</h2>
-                <p>
-                    I built this project to strengthen my understanding of portfolio optimization while exploring
-                    how quantitative analysis can be turned into a more user-friendly interactive tool. Rather than
-                    keeping the work inside a notebook, I wanted to make the results easier to explore through a
-                    simple web interface.
-                </p>
-                <p>
-                    The project combines financial modeling concepts with product thinking by translating analytical
-                    outputs into a clearer workflow: generate, interpret, and visualize an optimized portfolio in one place.
-                </p>
-            </section>
-
-            <section class="page-section" id="use-cases">
-                <p class="section-label">Use Cases</p>
-                <h2 class="section-heading">What the experience supports</h2>
-
-                <div class="info-card-grid">
-                    <article class="info-card">
-                        <h3>Interactive Optimization</h3>
-                        <p class="card-role">Exploration</p>
-                        <p>Generate portfolio allocations dynamically instead of reading static model output.</p>
-                    </article>
-
-                    <article class="info-card">
-                        <h3>Metric Visibility</h3>
-                        <p class="card-role">Interpretation</p>
-                        <p>Review return, volatility, and Sharpe ratio together in one summarized interface.</p>
-                    </article>
-
-                    <article class="info-card">
-                        <h3>Visualization Support</h3>
-                        <p class="card-role">Analysis</p>
-                        <p>Pair allocation tables with chart output to make the portfolio easier to understand at a glance.</p>
-                    </article>
-
-                    <article class="info-card">
-                        <h3>Quant-to-Product Translation</h3>
-                        <p class="card-role">Product Thinking</p>
-                        <p>Turn a computational finance workflow into a lightweight user-facing analytics tool.</p>
-                    </article>
-                </div>
-            </section>
-
-            <section class="page-section" id="tech-stack">
-                <p class="section-label">Tech Stack</p>
-                <h2 class="section-heading">Built with</h2>
-
-                <div class="stack-list">
-                    <span>Python</span>
-                    <span>Flask</span>
-                    <span>Pandas</span>
-                    <span>Optimization logic</span>
-                    <span>HTML</span>
-                    <span>CSS</span>
-                    <span>JavaScript</span>
-                </div>
-            </section>
+                </section>
+                <section class="project-tab-panel project-tab-info" id="architecture" role="tabpanel" data-project-panel="architecture" hidden>
+                    <section class="content-sections architecture-sections">
+                        <section class="plain-project-section architecture-visual-section">
+                            <div class="architecture-diagram" aria-label="Portfolio optimization architecture">
+                                <div class="system-box browser-box">
+                                    <span>Browser Client</span>
+                                    <div class="tech-box">Portfolio Demo UI</div>
+                                    <div class="tech-box">Randomize Button</div>
+                                    <div class="tech-box">Metrics + Chart Output</div>
+                                </div>
+                                <div class="system-box api-box">
+                                    <span>Flask API</span>
+                                    <div class="tech-box">/get_random_portfolio</div>
+                                    <div class="tech-box accent">Optimization Service</div>
+                                    <div class="tech-box">JSON Response</div>
+                                </div>
+                                <div class="system-box data-box">
+                                    <span>Data Layer</span>
+                                    <div class="tech-box data">Stock CSV Files</div>
+                                    <div class="tech-box">Historical Prices</div>
+                                    <div class="tech-box">Ticker Universe</div>
+                                </div>
+                                <div class="system-box analytics-box">
+                                    <span>Analytics Layer</span>
+                                    <div class="tech-box bigquery">Pandas / SciPy</div>
+                                    <div class="tech-box">Allocation Weights</div>
+                                    <div class="tech-box">Performance Metrics</div>
+                                </div>
+                                <svg class="architecture-lines" viewBox="0 0 1000 580" aria-hidden="true">
+                                    <defs><marker id="archArrowShared" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z"></path></marker></defs>
+                                    <path d="M780 150 C700 150 640 170 560 240"></path>
+                                    <path d="M500 330 C470 390 380 420 265 454"></path>
+                                    <path d="M550 330 C585 390 680 420 760 454"></path>
+                                </svg>
+                            </div>
+                        </section>
+                        <section class="plain-project-section architecture-visual-section">
+                            <div class="stack-matrix">
+                                <div><strong>UI</strong><span>HTML / CSS / JavaScript</span></div>
+                                <div><strong>API</strong><span>Flask route</span></div>
+                                <div><strong>Data</strong><span>Stock CSV history</span></div>
+                                <div><strong>Analytics</strong><span>Pandas / SciPy calculations</span></div>
+                                <div><strong>Output</strong><span>Allocations, metrics, chart</span></div>
+                                <div><strong>Demo Goal</strong><span>Quant model as product workflow</span></div>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </div>
         </section>
 
     </main>
 
+    <script src="{{ url_for('static', filename='project_tabs.js') }}"></script>
     <script>
         function getRandomPortfolio() {
             fetch('/get_random_portfolio')
@@ -187,7 +219,7 @@
                     result_output.innerHTML = table_output + table_output_results;
 
                     const image_output = document.getElementById('image_output');
-                    image_output.innerHTML = `<img src="${data.image}" style="max-width: 100%; height: auto;" />`;
+                    image_output.innerHTML = `<img src="${data.image}" style="max-width: 100%; height: auto; border-radius: 12px;" />`;
                 });
         }
     </script>

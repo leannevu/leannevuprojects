@@ -16,121 +16,6 @@
     --card-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
 }
 
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", sans-serif;
-}
-
-.page-shell {
-    width: min(100% - 56px, 1240px);
-    margin-inline: auto;
-}
-
-/* HEADER */
-
-.site-header {
-    border-bottom: 1px solid #ebebe7;
-    background: #ffffff;
-}
-
-.header-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 0;
-}
-
-.brand {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
-}
-
-.avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 1px solid #ddddda;
-    object-fit: cover;
-}
-
-.brand-name {
-    font-family: "Libre Baskerville", serif;
-    font-size: 1.02rem;
-    font-weight: 700;
-}
-
-.brand-tagline {
-    font-size: 13px;
-    color: var(--muted);
-}
-
-.top-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-}
-
-.top-nav a {
-    text-decoration: none;
-    color: var(--muted);
-    font-size: 14px;
-}
-
-.top-nav a:hover {
-    color: var(--text);
-}
-
-/* HERO */
-
-main.page-shell {
-    padding-top: 34px;
-    padding-bottom: 56px;
-}
-
-.hero {
-    margin-bottom: 24px;
-}
-
-.eyebrow {
-    margin: 0 0 10px;
-    font-size: 0.74rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #8a8a8a;
-}
-
-.hero h1 {
-    margin: 0 0 12px;
-    font-family: "Libre Baskerville", serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    font-weight: 700;
-    color: #111111;
-}
-
-.hero-text {
-    max-width: 720px;
-    margin: 0;
-    color: #707070;
-    font-size: 0.98rem;
-    line-height: 1.7;
-}
-
 /* APP SHELL */
 
 .app-shell {
@@ -238,8 +123,7 @@ main.page-shell {
     background: #111111;
 }
 
-.analysis-label,
-.section-label {
+.analysis-label {
     margin: 0 0 6px;
     font-size: 0.64rem;
     font-weight: 700;
@@ -329,96 +213,6 @@ button:hover,
     font-weight: bold;
 }
 
-/* CASE STUDY / CONTENT BELOW */
-
-.content-sections {
-    display: grid;
-    gap: 16px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.page-section,
-.about-panel,
-.info-card {
-    background: #ffffff;
-    border: 1px solid #e8e8e4;
-    padding: 18px;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
-}
-
-.about-panel p,
-.info-card p {
-    color: #707070;
-    line-height: 1.7;
-    font-size: 0.92rem;
-}
-
-.about-panel h2,
-.section-heading,
-.info-card h3 {
-    color: #111111;
-}
-
-.section-heading,
-.about-panel h2 {
-    margin: 0 0 10px;
-    font-family: "Libre Baskerville", serif;
-    font-size: 1.45rem;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    font-weight: 700;
-}
-
-.info-card-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-}
-
-.info-card {
-    position: relative;
-}
-
-.info-card::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: #111111;
-}
-
-.info-card h3 {
-    margin: 0 0 8px;
-    font-family: "Libre Baskerville", serif;
-    font-size: 1rem;
-}
-
-.card-role {
-    margin: 0 0 10px !important;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #111111 !important;
-}
-
-.stack-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.stack-list span {
-    border: 1px solid #ddddda;
-    padding: 7px 11px;
-    background: #fafaf8;
-    color: #111111;
-    font-size: 0.82rem;
-}
-
 /* RESPONSIVE */
 
 @media (max-width: 1024px) {
@@ -437,46 +231,15 @@ button:hover,
         align-items: flex-start;
     }
 
-    .info-card-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
-    }
-
     .journal-link {
         width: auto;
     }
 }
 
 @media (max-width: 640px) {
-    .page-shell {
-        width: min(100% - 28px, 1240px);
-    }
-
-    main.page-shell {
-        padding-top: 24px;
-        padding-bottom: 38px;
-    }
-
     .app-shell,
-    .analysis-card,
-    .page-section,
-    .about-panel,
-    .info-card {
+    .analysis-card {
         padding: 15px;
-    }
-
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    .section-heading,
-    .about-panel h2 {
-        font-size: 1.3rem;
     }
 
     .action-row {

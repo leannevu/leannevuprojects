@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leanne Study Vault</title>
+  <link rel="icon" type="image/svg+xml" href="{{ asset_url('favicon.svg') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset_url('css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='project_template.css') }}?v=1">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner page-shell">
+    <a class="brand" href="https://leannevu.github.io/index.html">
+      <img class="avatar" src="{{ url_for('static', filename='scrum/leanne-vu.jpg') }}" alt="Leanne Vu">
+      <div>
+        <div class="brand-name">Leanne Vu</div>
+        <div class="brand-tagline">
+          Writing about data, product, and building practical analytics.
+        </div>
+      </div>
+    </a>
+
+    <nav class="top-nav">
+      <a href="https://leannevu.github.io/index.html">Portfolio</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-shell study-project-page">
+  <section class="portfolio-hero">
+    <p class="eyebrow">Portfolio Demo</p>
+    <h1>Study Vault</h1>
+    <p class="hero-text">
+      A personal study dashboard for tracking daily practice, browsing course sheets,
+      and opening note PDFs from one compact workspace.
+    </p>
+  </section>
+
+  <section class="project-switcher" data-project-tabs>
+    <div class="project-tab-track" role="tablist">
+      <button class="project-tab-button active" type="button" role="tab" aria-selected="true" data-project-tab="demo">Project Demo</button>
+      <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="info">Additional Information</button>
+      <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="architecture">Architecture</button>
+    </div>
+
+    <div class="project-tab-panels">
+      <section class="project-tab-panel active" id="project-demo" role="tabpanel" data-project-panel="demo">
+        <div class="wrap study-dashboard-wrap">
+  <section id="dashboardPage">
+    <div class="hero">
+      <div class="hero-top">
+        <div class="hero-copy">
+          <p>A compact paper-and-glass home base for habits, class sheets, and notes.</p>
+          <div class="stats editorial-stats hero-stats" id="statsRow"></div>
+          <section class="hero-drawer-slot index-vault" id="indexVault" aria-label="Course note drawer">
+            <div class="vault-stage">
+              <button class="vault-drawer" id="vaultDrawerBtn" type="button" aria-pressed="true" aria-label="Open or close index card vault">
+                <span class="vault-drawer-lid">
+                  <span class="vault-handle"></span>
+                  <span class="vault-label">Note Drawer</span>
+                </span>
+                <span class="vault-slot"></span>
+              </button>
+              <div class="vault-front" aria-hidden="true"></div>
+            </div>
+          </section>
+          <aside class="study-stats-panel study-stats-drawer" id="studyStatsPanel" aria-label="Study analysis drawer">
+            <button class="study-stats-drawer-front" id="studyStatsDrawerBtn" type="button" aria-expanded="false" aria-controls="studyStatsDrawerBody">
+              <span class="study-stats-drawer-handle"></span>
+              <span class="study-stats-drawer-label">Analysis Drawer</span>
+            </button>
+            <div class="study-stats-drawer-body" id="studyStatsDrawerBody">
+              <div class="study-stats-head">
+                <div>
+                  <div class="eyebrow">Study stats</div>
+                  <h2 id="studyStatsTitle">Self analysis</h2>
+                </div>
+                <div class="study-stats-tabs" aria-label="Study stats view">
+                  <button type="button" data-study-stats-view="self">Self</button>
+                  <button type="button" data-study-stats-view="friends">Friends</button>
+                  <button type="button" data-study-stats-view="global">Global</button>
+                </div>
+              </div>
+              <div class="study-stats-grid" id="studyStatsGrid"></div>
+              <div class="study-friends-list" id="studyFriendsList"></div>
+            </div>
+          </aside>
+        </div>
+        <div class="hero-side">
+          <div class="hero-tracker-row">
+            <div class="month-panel hero-habit-panel">
+              <div class="month-header">
+                <div>
+                  <div class="eyebrow">Habit tracker</div>
+                  <div class="month-title" id="monthTitle"></div>
+                </div>
+                <div class="month-nav">
+                  <button class="btn small ghost" id="prevMonthBtn">&larr;</button>
+                  <button class="btn small ghost" id="todayMonthBtn">Today</button>
+                  <button class="btn small ghost" id="nextMonthBtn">&rarr;</button>
+                </div>
+              </div>
+              <div class="dual-months">
+                <div class="month-section">
+                  <div class="weekdays">
+                    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                  </div>
+                  <div class="month-grid" id="monthGridA"></div>
+                </div>
+                <div class="month-section">
+                  <div class="month-subtitle" id="monthTitleB"></div>
+                  <div class="weekdays">
+                    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                  </div>
+                  <div class="month-grid" id="monthGridB"></div>
+                </div>
+              </div>
+              <div class="legend compact-legend">
+                <span><i style="background:#ffffff;border:1px solid #d9d9d9;"></i> No entry</span>
+                <span><i style="background:#ff2b2b;"></i> 0h</span>
+                <span><i style="background:#ff8f1f;"></i> 0.5-1h</span>
+                <span><i style="background:#fff200;"></i> 1.5-2.5h</span>
+                <span><i style="background:#38e838;"></i> 3h+</span>
+              </div>
+              <div class="selected-day-compact">
+                <span id="selectedDateLabel"></span>
+                <span><strong id="selectedHoursLabel"></strong> logged</span>
+                <span id="selectedStatusLabel"></span>
+              </div>
+            </div>
+
+            <div class="day-grid-wrap hero-block-panel">
+              <div class="day-grid" id="dayGrid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="flashcardsPage" class="hidden">
+    <div class="cs-page-actions">
+      <button class="return-home-link return-home-button" id="returnHomeBtn" type="button">Return Home</button>
+    </div>
+    <div class="page-head">
+      <div class="course-page-title">
+        <div id="courseEyebrow">Course</div>
+      </div>
+    </div>
+
+    <div class="flash-header">
+      <div class="flash-controls">
+        <select id="libraryFilter"></select>
+        <select id="libraryDetailFilter"></select>
+        <input id="flashSearchInput" type="search" placeholder="Search spreadsheet" aria-label="Search spreadsheet" />
+      </div>
+      <div class="flash-view-area">
+        <div class="flash-controls flash-view-links">
+          <div class="flash-link-pair">
+            <button class="view-link" id="parameterSheetToggleBtn" type="button">Parameters view</button>
+            <button class="view-link" id="functionSheetViewBtn" type="button">Function spreadsheet view</button>
+          </div>
+          <button class="view-link" id="syntaxSheetViewBtn" type="button">Syntax spreadsheet</button>
+          <button class="view-link" id="caseSheetViewBtn" type="button">Scenario spreadsheet</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="flashcardsApp"></div>
+    <div class="flash-import-panel">
+      <div class="flash-import-actions">
+        <button class="btn ghost" id="importFlashBtn" type="button">Functions table source</button>
+        <button class="btn ghost" id="importParamsBtn" type="button">Parameters table source</button>
+        <button class="btn ghost" id="importSyntaxBtn" type="button">Syntax table source</button>
+        <button class="btn ghost" id="exportJsonBtn" type="button">Export JSON</button>
+        <button class="btn ghost" id="questionsSubpageBtn" type="button">Case scenario table source</button>
+      </div>
+      <div class="flash-import-notes">
+        <p><strong>Functions table source</strong> Pastes new function rows into the database table source using the existing column order and no headers.</p>
+        <p><strong>Parameters table source</strong> Pastes parameter rows into the database table source using the existing column order and no headers.</p>
+        <p><strong>Syntax table source</strong> Pastes syntax rows into the database table source using the existing column order and no headers.</p>
+        <p><strong>Export JSON</strong> Downloads the current spreadsheet view as JSON for reuse or backup.</p>
+        <p><strong>Case scenario table source</strong> Pastes case scenario rows into the database table source using the existing column order and no headers.</p>
+      </div>
+    </div>
+    <div class="flash-footer" id="flashcardsFooter">
+      <div class="flash-footer-links">
+        <button class="view-link" id="functionCsvPromptBtn" type="button">Functions prompt</button>
+        <button class="view-link" id="scenarioCsvPromptBtn" type="button">Scenario prompt</button>
+        <button class="view-link" id="syntaxCsvPromptBtn" type="button">Syntax prompt</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="notesPage" class="hidden">
+    <h1 class="notes-title" id="notesTitle">--</h1>
+    <div class="notes-stage-shell">
+      <div class="notes-viewer-wrap" id="notesViewerWrap">
+        <div class="notes-media-stage" id="notesMediaStage">
+          <div id="notesViewer" class="notes-viewer hidden" aria-label="Notes PDF viewer">
+            <div class="notes-canvas-layer" id="notesCanvasLayer"></div>
+          </div>
+        </div>
+        <div class="notes-empty hidden" id="notesEmptyState">
+          <div class="label">No PDFs found</div>
+          <div class="muted">Add numbered PDFs to `data/notes` to view them here.</div>
+        </div>
+      </div>
+      <div class="notes-toolbar">
+        <div class="notes-controls">
+          <button class="notes-mini-btn" id="prevNoteBtn" type="button" aria-label="Previous note">Previous</button>
+          <button class="notes-mini-btn" id="nextNoteBtn" type="button" aria-label="Next note">Next</button>
+        </div>
+        <div class="notes-slider-wrap">
+          <input class="notes-pdf-slider" id="notesPdfSlider" type="range" min="1" max="1" step="1" value="1" aria-label="Choose note PDF number">
+          <div class="notes-slider-labels" id="notesSliderLabels"></div>
+        </div>
+        <div class="notes-controls">
+          <button class="notes-mini-btn" id="zoomOutNoteBtn" type="button" aria-label="Zoom out">-</button>
+          <div class="notes-zoom-label" id="notesZoomLabel">100%</div>
+          <button class="notes-mini-btn" id="zoomInNoteBtn" type="button" aria-label="Zoom in">+</button>
+        </div>
+        <div class="subtle notes-meta" id="notesMeta">Loading notes...</div>
+      </div>
+    </div>
+  </section>
+        </div>
+      </section>
+
+      <section class="project-tab-panel project-tab-info" id="additional-info" role="tabpanel" data-project-panel="info" hidden>
+        <section class="content-sections">
+          <section class="plain-project-section">
+            <p class="section-label">Personas</p>
+
+            <div class="circle-flow persona-circle-flow three" aria-label="Persona dependency map">
+              <article>
+                <span>1</span>
+                <strong>Demo Learner</strong>
+                <p>Explores the populated account.</p>
+              </article>
+              <article>
+                <span>2</span>
+                <strong>Peer Learner</strong>
+                <p>Adds comparison context.</p>
+              </article>
+              <article>
+                <span>3</span>
+                <strong>Reviewer</strong>
+                <p>Reads aggregate learning patterns.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="plain-project-section">
+            <p class="section-label">Use Cases / User Stories</p>
+
+            <div class="circle-flow story-circle-flow six" aria-label="User story dependency map">
+              <article>
+                <span>1</span>
+                <strong>Choose Course</strong>
+                <p>Starts the study context.</p>
+              </article>
+              <article>
+                <span>2</span>
+                <strong>Search Sheets</strong>
+                <p>Depends on course selection.</p>
+              </article>
+              <article>
+                <span>3</span>
+                <strong>Open Notes</strong>
+                <p>Uses course-specific resources.</p>
+              </article>
+              <article>
+                <span>4</span>
+                <strong>Log Study</strong>
+                <p>Creates activity records.</p>
+              </article>
+              <article>
+                <span>5</span>
+                <strong>Compare Stats</strong>
+                <p>Depends on recorded study activity.</p>
+              </article>
+              <article>
+                <span>6</span>
+                <strong>View Trends</strong>
+                <p>Ends with aggregate insight.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="plain-project-section">
+            <p class="section-label">Product Flow</p>
+
+            <div class="circle-flow dependency-journey six" aria-label="Dependency-based user journey map">
+              <article>
+                <span>1</span>
+                <strong>Enter Demo</strong>
+                <p>Demo user lands in a populated account.</p>
+              </article>
+              <article>
+                <span>2</span>
+                <strong>Select Course</strong>
+                <p>Course choice unlocks the right sheet and note context.</p>
+              </article>
+              <article>
+                <span>3</span>
+                <strong>Reference Material</strong>
+                <p>Functions, parameters, syntax, prompts, and PDFs support review.</p>
+              </article>
+              <article>
+                <span>4</span>
+                <strong>Log Study Activity</strong>
+                <p>Study blocks and notes create operational learning events.</p>
+              </article>
+              <article>
+                <span>5</span>
+                <strong>Aggregate Progress</strong>
+                <p>BigQuery computes self, friend, and global study analytics.</p>
+              </article>
+              <article>
+                <span>6</span>
+                <strong>Reflect and Adjust</strong>
+                <p>The learner sees trends and decides what to study next.</p>
+              </article>
+            </div>
+          </section>
+
+        </section>
+      </section>
+
+      <section class="project-tab-panel project-tab-info" id="architecture" role="tabpanel" data-project-panel="architecture" hidden>
+        <section class="content-sections architecture-sections">
+          <section class="plain-project-section architecture-visual-section">
+            <div class="architecture-diagram" aria-label="Study Dashboard high-level architecture">
+              <div class="system-box browser-box">
+                <span>Browser Client</span>
+                <div class="tech-box">HTML / CSS / JavaScript UI</div>
+                <div class="tech-box">Demo User Session</div>
+                <div class="tech-box">Study Dashboard Views</div>
+              </div>
+
+              <div class="system-box api-box">
+                <span>Server / API Layer</span>
+                <div class="tech-box">Flask Blueprint Routes</div>
+                <div class="tech-box accent">Study Dashboard API</div>
+                <div class="tech-box">Notes + Sheet Endpoints</div>
+              </div>
+
+              <div class="system-box data-box">
+                <span>Operational Data Layer</span>
+                <div class="tech-box postgres">Railway Postgres</div>
+                <div class="tech-box">users / pages / spreadsheets</div>
+                <div class="tech-box">study_habits</div>
+              </div>
+
+              <div class="system-box analytics-box">
+                <span>Analytics Layer</span>
+                <div class="tech-box bigquery">Google BigQuery</div>
+                <div class="tech-box">SQL rollups</div>
+                <div class="tech-box">self / friends / global stats</div>
+              </div>
+
+              <svg class="architecture-lines" viewBox="0 0 1000 580" aria-hidden="true">
+                <defs>
+                  <marker id="archArrowShared" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z"></path>
+                  </marker>
+                </defs>
+                <path d="M780 150 C700 150 640 170 560 240"></path>
+                <path d="M500 330 C470 390 380 420 265 454"></path>
+                <path d="M550 330 C585 390 680 420 760 454"></path>
+                <path d="M250 240 C250 190 310 165 405 160"></path>
+              </svg>
+            </div>
+          </section>
+
+          <section class="plain-project-section architecture-visual-section">
+            <div class="sequence-flow">
+              <div><span>1</span><p>Demo user opens the Analysis Drawer.</p></div>
+              <div><span>2</span><p>Flask reads study habit events from Railway Postgres.</p></div>
+              <div><span>3</span><p>Server sends event JSON into a BigQuery SQL aggregation query.</p></div>
+              <div><span>4</span><p>BigQuery calculates today, current week, previous week, delta, and averages.</p></div>
+              <div><span>5</span><p>Flask returns a compact API response to the dashboard UI.</p></div>
+            </div>
+          </section>
+
+          <section class="plain-project-section architecture-visual-section">
+            <div class="stack-matrix">
+              <div><strong>UI</strong><span>HTML / CSS / JavaScript</span></div>
+              <div><strong>API</strong><span>Flask Blueprints</span></div>
+              <div><strong>App Data</strong><span>Railway Postgres</span></div>
+              <div><strong>Analytics</strong><span>Google BigQuery</span></div>
+              <div><strong>Stats API</strong><span>Postgres events to BigQuery SQL</span></div>
+              <div><strong>Deployment Shape</strong><span>Gunicorn-ready Flask app</span></div>
+            </div>
+          </section>
+        </section>
+      </section>
+    </div>
+  </section>
+</main>
+
+<div class="paste-modal hidden" id="csvPasteModal" aria-hidden="true">
+  <div class="paste-modal-card">
+    <div class="section-header">
+      <div>
+        <h3 id="csvPasteTitle">Paste table rows</h3>
+        <div class="subtle" id="csvPasteSubtitle">Paste rows with no header line.</div>
+      </div>
+      <button class="btn plain" id="closeCsvPasteBtn" type="button">Close</button>
+    </div>
+    <textarea id="csvPasteInput" class="paste-textarea" placeholder="Paste rows here..."></textarea>
+    <div class="paste-modal-actions">
+      <button class="btn ghost" id="cancelCsvPasteBtn" type="button">Cancel</button>
+      <button class="btn primary" id="submitCsvPasteBtn" type="button">Import</button>
+    </div>
+  </div>
+</div>
+
+  <script src="{{ asset_url('js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='project_tabs.js') }}?v=2"></script>
+</body>
+</html>

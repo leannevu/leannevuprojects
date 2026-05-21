@@ -1,277 +1,21 @@
-const DAY_BLOCK_VALUES = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7];
+﻿const DAY_BLOCK_VALUES = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7];
 
-const FALLBACK_CTRL_C_PROMPTS = [
-  {
-    key: 'functions_and_parameters',
-    text: `I’m building two reference tables for programming methods/functions. Follow these rules exactly.
-
-## OUTPUT REQUIREMENTS (VERY IMPORTANT)
-
-* Output **two separate CSV blocks with NO headers**
-* First block = **Table 1**
-* Second block = **Table 2**
-* Do NOT include any explanations or text outside the CSV blocks
-* Preserve column order exactly
-* Use quotes where needed so CSV formatting is valid
-* Keep rows consistent and aligned
-
----
-
-## TABLE SCHEMAS
-
-### Table 1 (Methods)
-
-Method | Language | Library / Object | Returns | Description | Use Case | Example Problem | Example Answer | Import | Input example | Output example
-
-### Table 2 (Parameters)
-
-Method | Library / Object | Argument | Type | Valid Range | Required or Not Required | Default Value
-
----
-
-## GENERAL RULES
-
-* Be concise but accurate
-* No extra columns
-* 1 row per method unless truly necessary
-* Use beginner-friendly but correct explanations
-* Avoid duplicates unless behavior is meaningfully different
-
----
-
-## METHOD NAMING RULE
-
-* Use only method/function name with parentheses
-* No parameters inside
-* Examples:
-
-  * datetime.datetime()
-  * pd.DataFrame.sum()
-  * np.array()
-
----
-
-## LIBRARY / OBJECT RULE
-
-Use the most specific object path possible:
-
-* pandas.core.frame.DataFrame
-* pandas.core.series.Series
-* pandas.core.groupby.DataFrameGroupBy
-* numpy.ndarray
-* datetime
-* re
-
-Language stays:
-
-* Python (unless SQL)
-
----
-
-## CONTENT RULES (Table 1)
-
-### Returns
-
-* Simple description of what is returned
-
-### Description
-
-* What the method does (clear, short)
-
-### Use Case
-
-* When you would use it
-
-### Example Problem
-
-* Short real-world task
-
-### Example Answer
-
-* Short correct code
-
-### Import
-
-* Include import OR use "—" if built-in
-
----
-
-## INPUT / OUTPUT RULES (CRITICAL)
-
-### Input example
-
-* Must match the Example Answer exactly
-* Show the actual variables/data used
-* Keep small:
-
-  * DataFrame: 2–4 rows
-  * Arrays/lists: 3–5 values
-  * Strings: short
-  * SQL: tiny conceptual rows
-
-### Output example
-
-* Must match what the Example Answer produces
-* Show actual output if practical
-* If output is complex:
-
-  * Use a short but concrete summary (not vague)
-
-### KEY RULE
-
-Input → Example Answer → Output must logically connect
-
----
-
-## PARAMETER TABLE RULES (Table 2)
-
-* One row per parameter
-* Method name still has no parameters
-* Library / Object matches the object or module that owns that parameter
-* Include only useful parameters
-* Be concise but clear
-
----
-
-## EXAMPLE FORMAT
-
-Table 1:
-datetime.datetime() | Python | datetime | datetime object | Creates a datetime object | Create a date from parts | Create a date | obj = datetime.datetime(2024,1,1) | import datetime | year=2024, month=1, day=1 | 2024-01-01 00:00:00
-
-Table 2:
-datetime.datetime() | datetime | year | int | 1-9999 | Required | -
-
----
-
-## TASK
-
-When I give methods/functions:
-
-1. Decide which table they belong in
-2. Follow all formatting rules exactly
-3. Ensure Input and Output examples are correct and helpful
-4. Keep everything clean, consistent, and realistic
-
-Wait for my methods/functions.`,
-  },
-  {
-    key: 'syntax',
-    text: `I am building a structured syntax reference table. Follow these rules exactly.
-
-## OUTPUT REQUIREMENTS
-
-- Output raw CSV with NO headers
-- Do not include explanations outside the CSV
-- Preserve column order exactly
-- Use quotes only when needed for valid CSV
-- Keep rows consistent and aligned
-
----
-
-## COLUMN ORDER
-
-Syntax,Language,Library / Context,Meaning,Use Case,Notes,Example Problem,Example Answer,Input Example,Output Example
-
----
-
-## CONTENT RULES
-
-- This table is for syntax, operators, or constructs (NOT methods)
-- "Syntax" must be the exact syntax token or construct
-- "Language" must be correct (Python, SQL, etc.)
-- "Library / Context" must be as specific as possible and indicate where the syntax applies
-- "Meaning" must clearly explain what the syntax does
-- "Use Case" must explain when to use it
-- "Notes" should include only important caveats or distinctions
-- Avoid redundancy across columns
-
----
-
-## EXAMPLE RULES (CRITICAL)
-
-- Example Problem must be realistic and specific
-- Example Answer must directly solve the Example Problem
-- Input Example must match the Example Answer exactly
-- Output Example must reflect the actual result of execution
-- Example Problem -> Example Answer -> Input Example -> Output Example must form a strict logical chain
-
----
-
-## QUALITY RULES
-
-- Be concise but precise
-- Avoid vague placeholders
-- Prefer realistic, small examples
-- Ensure each row is self-contained
-- Do not force syntax into method-style descriptions
-
----
-
-## VALIDATION (STRICT)
-
-- All variables must be defined in Input Example
-- Output must match actual execution
-- CSV must be properly formatted
-- No broken quotes or columns
-
----
-
-## TASK`,
-  },
-  {
-    key: 'case_scenario',
-    text: `I am building a structured reference table. Please follow ALL rules strictly.
-
-OUTPUT FORMAT:
-- Output MUST be raw CSV (comma-separated).
-- DO NOT include headers.
-- DO NOT include explanations outside the CSV.
-- Every row must have EXACTLY this column order:
-Question,Answer,Wrong Example,Correct Example,Methods,Input Example,Output Example
-
-CONTENT RULES:
-- Each row must be complete and self-contained.
-- "Answer" should be concise but clear (1–2 sentences max).
-- "Wrong Example" must be a realistic common mistake.
-- "Correct Example" must directly fix the wrong example.
-- "Methods" should ONLY contain method/function names with parentheses and NO parameters.
-  - Example: re.sub(), re.search(), pd.DataFrame.sum()
-  - DO NOT include arguments inside Methods.
-- Parameters/arguments should ONLY appear in the Correct Example or Input Example when needed.
-- "Input Example" and "Output Example" must form a clear before/after pair.
-- Input/Output must be simple, realistic, and easy to understand.
-- Avoid vague placeholders like "text" unless necessary—prefer concrete examples.
-
-FORMATTING RULES:
-- Only use quotes when required by CSV (e.g., commas inside a cell).
-- Escape quotes properly using double quotes ("").
-- No extra spaces before or after commas.
-- No broken or partial rows.
-
-QUALITY RULES:
-- Examples must match the explanation exactly.
-- Regex must be correct and general (not overly restrictive).
-- Prefer clarity over cleverness.
-- Avoid redundant rows.
-
-VALIDATION:
-Before outputting:
-- Ensure every row has exactly 7 columns
-- Ensure Methods column has NO parameters
-- Ensure Input/Output pairs are correct and aligned
-- Ensure CSV is properly formatted (no broken quotes or commas)
-
-TASK:`,
-  },
-];
 
 const state = {
   page: 'dashboard',
+  activeCourse: '',
   flashcards: [],
   caseScenarios: [],
   syntaxRows: [],
+  mgmtRows: [],
   notesPdfs: [],
   ctrlCPrompts: [],
+  studyStats: null,
+  studyStatsView: 'self',
+  catalog: {
+    pages: [],
+    spreadsheets: [],
+  },
   flashView: 'sheet',
   flashDataset: 'methods',
   methodSheetMode: 'functions',
@@ -280,6 +24,7 @@ const state = {
     parameters: '',
     cases: '',
     syntax: '',
+    mgmt: '',
   },
   flashIndex: 0,
   flashFlipped: false,
@@ -294,18 +39,13 @@ const state = {
   visibleParameterColumns: new Set(['method', 'library', 'argument', 'type', 'validRange', 'required', 'default']),
   visibleCaseColumns: new Set(['question', 'methods', 'correctExample', 'exampleOutput']),
   visibleSyntaxColumns: new Set(['syntax', 'language', 'library', 'meaning', 'useCase', 'exampleAnswer']),
+  visibleMgmtColumns: new Set(['term', 'definition', 'dependencies']),
   productivity: {
     studyLogs: {},
     notes: {},
   },
   selectedDate: '',
   calendarMonth: null,
-  timer: {
-    running: false,
-    elapsedMs: 0,
-    startedAt: null,
-    intervalId: null,
-  },
   noteSaveTimeout: null,
   currentNotesIndex: 0,
   notesZoom: 1,
@@ -328,6 +68,12 @@ async function loadFlashcards() {
   return await res.json();
 }
 
+async function loadCatalog() {
+  const res = await fetch('/api/catalog');
+  if (!res.ok) throw new Error('Failed to load dashboard catalog');
+  return await res.json();
+}
+
 async function loadCaseScenarios() {
   const res = await fetch('/api/case-scenarios');
   if (!res.ok) throw new Error('Failed to load case scenarios');
@@ -340,11 +86,26 @@ async function loadSyntaxRows() {
   return await res.json();
 }
 
+async function loadMgmtRows() {
+  const res = await fetch('/api/terms');
+  if (!res.ok) throw new Error('Failed to load term rows');
+  return await res.json();
+}
+
 async function loadSyntaxRowsSafe() {
   try {
     return await loadSyntaxRows();
   } catch (err) {
     console.warn('Syntax rows are unavailable.', err);
+    return [];
+  }
+}
+
+async function loadMgmtRowsSafe() {
+  try {
+    return await loadMgmtRows();
+  } catch (err) {
+    console.warn('Term rows are unavailable.', err);
     return [];
   }
 }
@@ -358,10 +119,10 @@ async function loadCtrlCPrompts() {
 async function loadCtrlCPromptsSafe() {
   try {
     const prompts = await loadCtrlCPrompts();
-    return prompts?.length ? prompts : FALLBACK_CTRL_C_PROMPTS;
+    return prompts || [];
   } catch (err) {
     console.warn('Ctrl+C prompts are unavailable.', err);
-    return FALLBACK_CTRL_C_PROMPTS;
+    return [];
   }
 }
 
@@ -384,6 +145,21 @@ async function loadProductivity() {
   const res = await fetch('/api/productivity');
   if (!res.ok) throw new Error('Failed to load productivity data');
   return await res.json();
+}
+
+async function loadStudyStats() {
+  const res = await fetch('/api/study-stats');
+  if (!res.ok) throw new Error('Failed to load study stats');
+  return await res.json();
+}
+
+async function loadStudyStatsSafe() {
+  try {
+    return await loadStudyStats();
+  } catch (err) {
+    console.warn('Study stats are unavailable.', err);
+    return null;
+  }
 }
 
 async function saveHours(date, hours) {
@@ -419,7 +195,7 @@ async function importFunctionCsvText(text) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text }),
   });
-  if (!res.ok) throw new Error('Failed to import functions CSV rows');
+  if (!res.ok) throw new Error('Failed to import functions rows');
   return await res.json();
 }
 
@@ -429,7 +205,7 @@ async function importParameterCsvText(text) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text }),
   });
-  if (!res.ok) throw new Error('Failed to import parameters CSV rows');
+  if (!res.ok) throw new Error('Failed to import parameters rows');
   return await res.json();
 }
 
@@ -439,7 +215,7 @@ async function importQuestionCsvText(text) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text }),
   });
-  if (!res.ok) throw new Error('Failed to import case scenario CSV rows');
+  if (!res.ok) throw new Error('Failed to import case scenario rows');
   return await res.json();
 }
 
@@ -449,7 +225,17 @@ async function importSyntaxCsvText(text) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text }),
   });
-  if (!res.ok) throw new Error('Failed to import syntax CSV rows');
+  if (!res.ok) throw new Error('Failed to import syntax rows');
+  return await res.json();
+}
+
+async function importMgmtCsvText(text) {
+  const res = await fetch('/api/import/terms', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text }),
+  });
+  if (!res.ok) throw new Error('Failed to import term rows');
   return await res.json();
 }
 
@@ -791,6 +577,17 @@ function rankCaseSearchRow(row = {}, query = '') {
   return textIncludes(haystack, query) ? 2 : Infinity;
 }
 
+function rankMgmtSearchRow(row = {}, query = '') {
+  if (textIncludes(row.term, query)) return 0;
+
+  const haystack = [
+    row.definition,
+    row.dependencies,
+  ].join(' ');
+
+  return textIncludes(haystack, query) ? 1 : Infinity;
+}
+
 function syntaxHighlight(code = '') {
   const source = displaySpreadsheetMarkers(code);
   const stringPattern = /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g;
@@ -904,6 +701,18 @@ function targetStatus(hours) {
   return 'Not started';
 }
 
+function trendLabel(trend = '') {
+  if (trend === 'improved') return 'Improved';
+  if (trend === 'declined') return 'Lower';
+  return 'No change';
+}
+
+function trendClass(trend = '') {
+  if (trend === 'improved') return 'good';
+  if (trend === 'declined') return 'low';
+  return 'flat';
+}
+
 function monthHours(date) {
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -952,58 +761,90 @@ function averageHours(date = null) {
   return entries.reduce((sum, value) => sum + value, 0) / entries.length;
 }
 
-function timerElapsedMs() {
-  if (!state.timer.running || !state.timer.startedAt) return state.timer.elapsedMs;
-  return state.timer.elapsedMs + (Date.now() - state.timer.startedAt);
-}
-
-function formatTimer(ms) {
-  const totalSeconds = Math.floor(ms / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  const tenths = Math.floor((ms % 1000) / 100);
-  return `${hours}:${pad(minutes)}:${pad(seconds)}.${tenths}`;
-}
-
-function formatTabTimer(ms) {
-  const totalSeconds = Math.floor(ms / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  return `${hours}:${pad(minutes)}:${pad(seconds)}`;
-}
-
 function updateDocumentTitle() {
-  document.title = `${formatTabTimer(timerElapsedMs())} | Leanne Productivity`;
+  document.title = 'Leanne Study Vault';
 }
 
-function updateTimerButtons() {
-  const isRunning = state.timer.running;
-  const startButtons = ['timerStartBtn', 'timerStartBtn2'].map(id => document.getElementById(id)).filter(Boolean);
-  const pauseButtons = ['timerPauseBtn', 'timerPauseBtn2'].map(id => document.getElementById(id)).filter(Boolean);
-  const resetButtons = ['timerResetBtn', 'timerResetBtn2'].map(id => document.getElementById(id)).filter(Boolean);
-  const logButtons = ['logTimerBtn'].map(id => document.getElementById(id)).filter(Boolean);
-
-  startButtons.forEach(button => {
-    button.classList.toggle('timer-live', isRunning);
-    button.classList.toggle('timer-ready', !isRunning);
-  });
-
-  [...pauseButtons, ...resetButtons, ...logButtons].forEach(button => {
-    button.classList.toggle('timer-live', !isRunning);
-    button.classList.toggle('timer-ready', isRunning);
-  });
+function slugifyKey(value = '') {
+  return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-function updateTimerDisplays() {
-  const display = formatTimer(timerElapsedMs());
-  const timerDisplay = document.getElementById('timerDisplay');
-  const fullscreenTimerDisplay = document.getElementById('fullscreenTimerDisplay');
-  if (timerDisplay) timerDisplay.textContent = display;
-  if (fullscreenTimerDisplay) fullscreenTimerDisplay.textContent = display;
-  updateDocumentTitle();
-  updateTimerButtons();
+function catalogPageByKey(key) {
+  return (state.catalog.pages || []).find(page => page.key === key) || null;
+}
+
+function catalogPageName(key, fallback = '') {
+  return catalogPageByKey(key)?.name || fallback;
+}
+
+function catalogSpreadsheetsForPage(pageKey = state.activeCourse) {
+  const page = catalogPageByKey(pageKey);
+  if (!page) return [];
+  return (state.catalog.spreadsheets || []).filter(sheet => sheet.pageId === page.id);
+}
+
+function catalogSpreadsheetByRole(role, pageKey = '') {
+  const scoped = pageKey ? catalogSpreadsheetsForPage(pageKey) : [];
+  return scoped.find(sheet => sheet.role === role)
+    || (state.catalog.spreadsheets || []).find(sheet => sheet.role === role)
+    || null;
+}
+
+function catalogSpreadsheetName(role, fallback = '') {
+  return catalogSpreadsheetByRole(role, state.activeCourse)?.name || fallback;
+}
+
+function pageHasSpreadsheetRole(pageKey, role) {
+  return catalogSpreadsheetsForPage(pageKey).some(sheet => sheet.role === role);
+}
+
+function isTermsCourse(pageKey = state.activeCourse) {
+  return pageHasSpreadsheetRole(pageKey, 'terms');
+}
+
+function firstCoursePageKey() {
+  const pages = state.catalog.pages || [];
+  const referencePage = pages.find(page =>
+    pageHasSpreadsheetRole(page.key, 'functions')
+    || pageHasSpreadsheetRole(page.key, 'syntax')
+    || pageHasSpreadsheetRole(page.key, 'case_scenarios')
+  );
+  return (referencePage || pages[0] || {}).key || '';
+}
+
+function displayCatalogName(name = '') {
+  return String(name || '')
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, char => char.toUpperCase());
+}
+
+function renderVaultCardsFromCatalog() {
+  const vault = document.getElementById('indexVault');
+  if (!vault) return;
+
+  const stage = vault.querySelector('.vault-stage');
+  const drawerButton = document.getElementById('vaultDrawerBtn');
+  if (!stage || !drawerButton) return;
+
+  stage.querySelectorAll('.vault-card').forEach(card => card.remove());
+
+  (state.catalog.pages || []).forEach((page, index) => {
+    const button = document.createElement('button');
+    button.className = `vault-card${index === 0 ? ' is-active' : ''}`;
+    button.type = 'button';
+    button.dataset.vaultCard = String(index);
+    button.dataset.courseLink = page.key;
+
+    if (catalogSpreadsheetsForPage(page.key).length) {
+      button.dataset.pageLink = 'flashcards';
+    }
+
+    button.innerHTML = `
+      <strong>${escapeHtml(page.name)}</strong>
+      <i></i><i></i><i></i><i class="short"></i>
+    `;
+    stage.insertBefore(button, drawerButton);
+  });
 }
 
 function setSelectedDate(dateKey) {
@@ -1036,6 +877,105 @@ function renderStats() {
       <div class="value">${value}</div>
     </div>
   `).join('');
+}
+
+function renderStudyStats() {
+  const grid = document.getElementById('studyStatsGrid');
+  const friendsList = document.getElementById('studyFriendsList');
+  const title = document.getElementById('studyStatsTitle');
+  if (!grid || !friendsList) return;
+
+  document.querySelectorAll('[data-study-stats-view]').forEach(button => {
+    button.classList.toggle('active', button.dataset.studyStatsView === state.studyStatsView);
+  });
+
+  const stats = state.studyStats;
+  if (!stats) {
+    if (title) title.textContent = 'Study analysis';
+    grid.innerHTML = `
+      <div class="study-stat-card">
+        <div class="label">Stats</div>
+        <div class="value">--</div>
+      </div>
+    `;
+    friendsList.innerHTML = '';
+    return;
+  }
+
+  const global = stats.global || {};
+  const friendAverages = stats.friendAverages || {};
+  const you = stats.you || {};
+  const friends = stats.friends || [];
+  const friendCount = Number(stats.friendCount || friends.length || 0);
+  const friendTrend = (friendAverages.avgDelta || 0) > 0 ? 'improved' : (friendAverages.avgDelta || 0) < 0 ? 'declined' : 'no_change';
+  const globalTrend = global.avgDelta > 0 ? 'improved' : global.avgDelta < 0 ? 'declined' : 'no_change';
+
+  const views = {
+    self: {
+      title: 'Self analysis',
+      cards: [
+        ['Today', `${formatHours(you.todayHours || 0)}h`, stats.date || ''],
+        ['This week', `${formatHours(you.weekHours || 0)}h`, `${trendLabel(you.trend)}`],
+        ['Previous week', `${formatHours(you.previousWeekHours || 0)}h`, '7-day comparison'],
+        ['Change', `${formatHours(Math.abs(you.delta || 0))}h`, (you.delta || 0) >= 0 ? 'above last week' : 'below last week'],
+      ],
+      detail: `
+        <div class="study-analysis-note">
+          ${escapeHtml((you.delta || 0) > 0
+            ? 'Your current week is pacing above the previous week.'
+            : (you.delta || 0) < 0
+              ? 'Your current week is pacing below the previous week.'
+              : 'Your current week is matching the previous week.')}
+        </div>
+      `,
+    },
+    friends: {
+      title: 'Friend analysis',
+      cards: [
+        ['Friends today', `${formatHours(friendAverages.avgTodayHours || 0)}h`, 'average'],
+        ['Friends week', `${formatHours(friendAverages.avgWeekHours || 0)}h`, `${trendLabel(friendTrend)}`],
+        ['Previous week', `${formatHours(friendAverages.avgPreviousWeekHours || 0)}h`, `${friendCount} friends`],
+        ['Change', `${formatHours(Math.abs(friendAverages.avgDelta || 0))}h`, (friendAverages.avgDelta || 0) >= 0 ? 'above last week' : 'below last week'],
+      ],
+      detail: friends.length ? `
+        <div class="study-friends-title">Friend sample (${friends.length} of ${friendCount})</div>
+        ${friends.map(friend => `
+          <div class="study-friend-row">
+            <div>
+              <strong>${escapeHtml(friend.name || `User ${friend.userId}`)}</strong>
+              <span>${formatHours(friend.todayHours || 0)}h today</span>
+            </div>
+            <span class="trend-pill ${trendClass(friend.trend)}">${escapeHtml(trendLabel(friend.trend))}</span>
+          </div>
+        `).join('')}
+      ` : '<div class="study-friend-empty">No friend study logs found yet.</div>',
+    },
+    global: {
+      title: 'Global analysis',
+      cards: [
+        ['Global today', `${formatHours(global.avgTodayHours || 0)}h`, `${global.activeToday || 0}/${global.users || 0} active`],
+        ['Global week', `${formatHours(global.avgWeekHours || 0)}h`, `${trendLabel(globalTrend)}`],
+        ['Previous week', `${formatHours(global.avgPreviousWeekHours || 0)}h`, 'all users'],
+        ['Change', `${formatHours(Math.abs(global.avgDelta || 0))}h`, (global.avgDelta || 0) >= 0 ? 'above last week' : 'below last week'],
+      ],
+      detail: `
+        <div class="study-analysis-note">
+          ${escapeHtml(`${global.users || 0} users are included in this study habits analysis window.`)}
+        </div>
+      `,
+    },
+  };
+  const view = views[state.studyStatsView] || views.self;
+  if (title) title.textContent = view.title;
+
+  grid.innerHTML = view.cards.map(([label, value, meta]) => `
+    <div class="study-stat-card">
+      <div class="label">${escapeHtml(label)}</div>
+      <div class="value">${escapeHtml(value)}</div>
+      <div class="meta">${escapeHtml(meta)}</div>
+    </div>
+  `).join('');
+  friendsList.innerHTML = view.detail;
 }
 
 function renderTodayPanel() {
@@ -1102,7 +1042,6 @@ function renderSelectedDay() {
   const selectedHoursLabel = document.getElementById('selectedHoursLabel');
   const selectedStatusLabel = document.getElementById('selectedStatusLabel');
   const selectedDatePicker = document.getElementById('selectedDatePicker');
-  const dayNote = document.getElementById('dayNote');
   const hours = getHoursForDate(state.selectedDate);
 
   if (selectedDateLabel) selectedDateLabel.textContent = formatReadableDate(state.selectedDate);
@@ -1110,9 +1049,6 @@ function renderSelectedDay() {
   if (selectedHoursLabel) selectedHoursLabel.textContent = `${formatHours(hours)} hours`;
   if (selectedStatusLabel) selectedStatusLabel.textContent = targetStatus(hours);
   if (selectedDatePicker) selectedDatePicker.value = state.selectedDate;
-  if (dayNote && dayNote.value !== getNoteForDate(state.selectedDate)) {
-    dayNote.value = getNoteForDate(state.selectedDate);
-  }
 }
 
 function renderDayGrid() {
@@ -1182,12 +1118,12 @@ function renderDashboardCalendar() {
 
 function renderDashboard() {
   renderStats();
+  renderStudyStats();
   renderTodayPanel();
   renderMiniCalendar();
   renderSelectedDay();
   renderDayGrid();
   renderDashboardCalendar();
-  updateTimerDisplays();
 }
 
 // =======================
@@ -1483,6 +1419,8 @@ async function updateHours(dateKey, hours) {
   state.productivity.studyLogs[dateKey] = Number(hours);
   renderDashboard();
   await saveHours(dateKey, hours);
+  state.studyStats = await loadStudyStatsSafe();
+  renderStudyStats();
 }
 
 async function removeStudyDay(dateKey) {
@@ -1490,6 +1428,8 @@ async function removeStudyDay(dateKey) {
   delete state.productivity.notes[dateKey];
   renderDashboard();
   await deleteStudyDay(dateKey);
+  state.studyStats = await loadStudyStatsSafe();
+  renderStudyStats();
 }
 
 function scheduleNoteSave(note) {
@@ -1501,48 +1441,6 @@ function scheduleNoteSave(note) {
       alert('Could not save note.');
     });
   }, 300);
-}
-
-function startTimer() {
-  if (state.timer.running) return;
-  state.timer.running = true;
-  state.timer.startedAt = Date.now();
-  state.timer.intervalId = window.setInterval(updateTimerDisplays, 100);
-  updateTimerDisplays();
-}
-
-function pauseTimer() {
-  if (!state.timer.running) return;
-  state.timer.elapsedMs = timerElapsedMs();
-  state.timer.running = false;
-  state.timer.startedAt = null;
-  window.clearInterval(state.timer.intervalId);
-  state.timer.intervalId = null;
-  updateTimerDisplays();
-}
-
-function resetTimer() {
-  pauseTimer();
-  state.timer.elapsedMs = 0;
-  updateTimerDisplays();
-}
-
-async function logTimerToSelectedDay() {
-  const hours = Math.round((timerElapsedMs() / 3600000) * 100) / 100;
-  if (hours <= 0) return;
-  const updatedHours = Math.round((getHoursForDate(state.selectedDate) + hours) * 100) / 100;
-  await updateHours(state.selectedDate, updatedHours);
-  resetTimer();
-}
-
-function openFullscreenTimer() {
-  const fullscreenTimer = document.getElementById('fullscreenTimer');
-  if (fullscreenTimer) fullscreenTimer.classList.add('open');
-}
-
-function closeFullscreenTimer() {
-  const fullscreenTimer = document.getElementById('fullscreenTimer');
-  if (fullscreenTimer) fullscreenTimer.classList.remove('open');
 }
 
 // =======================
@@ -1564,11 +1462,62 @@ function updateTopNav() {
   updateSpreadsheetJumpButton();
 }
 
+function updateCourseChrome() {
+  const isTerms = isTermsCourse();
+  const courseName = catalogPageName(state.activeCourse, 'Course');
+  const functionsLabel = displayCatalogName(catalogSpreadsheetName('functions', 'functions'));
+  const parametersLabel = displayCatalogName(catalogSpreadsheetName('parameters', 'parameters'));
+  const syntaxLabel = displayCatalogName(catalogSpreadsheetName('syntax', 'syntax'));
+  const scenarioLabel = displayCatalogName(catalogSpreadsheetName('case_scenarios', 'case scenario'));
+  const termsLabel = displayCatalogName(catalogSpreadsheetName('terms', 'terms'));
+  const eyebrow = document.getElementById('courseEyebrow');
+  const title = document.getElementById('courseTitle');
+  const description = document.getElementById('courseDescription');
+  const libraryFilter = document.getElementById('libraryFilter');
+  const libraryDetailFilter = document.getElementById('libraryDetailFilter');
+  const viewArea = document.querySelector('#flashcardsPage .flash-view-area');
+  const importFlashBtn = document.getElementById('importFlashBtn');
+  const importParamsBtn = document.getElementById('importParamsBtn');
+  const importSyntaxBtn = document.getElementById('importSyntaxBtn');
+  const questionsSubpageBtn = document.getElementById('questionsSubpageBtn');
+  const importNotes = document.querySelector('#flashcardsPage .flash-import-notes');
+
+  if (eyebrow) eyebrow.textContent = courseName;
+  if (title) title.textContent = isTerms ? 'Terms and dependencies.' : 'Sheets and notes.';
+  if (description) {
+    description.textContent = isTerms
+      ? 'A compact spreadsheet for course terms, definitions, and prerequisite links.'
+      : 'Functions, parameters, syntax, and case scenarios in compact spreadsheet views.';
+  }
+
+  if (libraryFilter) libraryFilter.classList.toggle('hidden', isTerms);
+  if (libraryDetailFilter) libraryDetailFilter.classList.toggle('hidden', isTerms);
+  if (viewArea) viewArea.classList.toggle('hidden', isTerms);
+
+  if (importFlashBtn) importFlashBtn.textContent = isTerms ? `${termsLabel} table source` : `${functionsLabel} table source`;
+  if (importParamsBtn) importParamsBtn.textContent = `${parametersLabel} table source`;
+  if (importSyntaxBtn) importSyntaxBtn.textContent = `${syntaxLabel} table source`;
+  if (questionsSubpageBtn) questionsSubpageBtn.textContent = `${scenarioLabel} table source`;
+  importParamsBtn?.classList.toggle('hidden', isTerms);
+  importSyntaxBtn?.classList.toggle('hidden', isTerms);
+  questionsSubpageBtn?.classList.toggle('hidden', isTerms);
+
+  if (importNotes) {
+    importNotes.innerHTML = isTerms
+      ? `<p><strong>${escapeHtml(termsLabel)} table source</strong> Pastes new rows into the database table source using term, definition, dependencies order and no headers.</p><p><strong>Export JSON</strong> Downloads the ${escapeHtml(courseName)} spreadsheet as JSON for reuse or backup.</p>`
+      : `<p><strong>${escapeHtml(functionsLabel)} table source</strong> Pastes new function rows into the database table source using the existing column order and no headers.</p><p><strong>${escapeHtml(parametersLabel)} table source</strong> Pastes parameter rows into the database table source using the existing column order and no headers.</p><p><strong>${escapeHtml(syntaxLabel)} table source</strong> Pastes syntax rows into the database table source using the existing column order and no headers.</p><p><strong>Export JSON</strong> Downloads the current spreadsheet view as JSON for reuse or backup.</p><p><strong>${escapeHtml(scenarioLabel)} table source</strong> Pastes case scenario rows into the database table source using the existing column order and no headers.</p>`;
+  }
+}
+
 // =======================
 // FLASHCARD FILTERING
 // =======================
 
 function filteredFlashcards() {
+  if (isTermsCourse()) {
+    return state.mgmtRows || [];
+  }
+
   const rows = state.flashDataset === 'syntax' ? state.syntaxRows : uniqueMethodCards(state.flashcards);
   return rows.filter(card => {
     const libraries = cardLibraryValues(card);
@@ -1585,6 +1534,11 @@ function filteredFlashcards() {
 }
 
 function currentFlashRows() {
+  if (isTermsCourse()) {
+    const query = state.flashSearch.mgmt.trim().toLowerCase();
+    return sortedBySearchPriority(state.mgmtRows || [], query, rankMgmtSearchRow);
+  }
+
   if (state.flashDataset === 'cases') {
     const query = state.flashSearch.cases.trim().toLowerCase();
 
@@ -1636,6 +1590,12 @@ function renderLibraryFilter() {
   const primaryEl = document.getElementById('libraryFilter');
   const detailEl = document.getElementById('libraryDetailFilter');
   if (!primaryEl || !detailEl) return;
+
+  if (isTermsCourse()) {
+    primaryEl.disabled = true;
+    detailEl.disabled = true;
+    return;
+  }
 
   if (state.flashDataset === 'cases') {
     const methodOptions = currentCaseMethodOptions();
@@ -1711,8 +1671,12 @@ function ensureSpreadsheetJumpButton() {
     button.type = 'button';
     button.className = 'spreadsheet-jump-btn hidden';
     button.setAttribute('aria-label', 'Jump to bottom');
-    button.textContent = '↓';
-    document.body.appendChild(button);
+    button.textContent = 'â†“';
+  }
+
+  const flashcardsPage = document.getElementById('flashcardsPage');
+  if (flashcardsPage && button.parentElement !== flashcardsPage) {
+    flashcardsPage.appendChild(button);
   }
 
   return button;
@@ -1754,7 +1718,7 @@ function updateSpreadsheetJumpButton() {
   const atBottom = isNearPageBottom();
   button.classList.remove('hidden');
   button.dataset.direction = atBottom ? 'top' : 'bottom';
-  button.textContent = atBottom ? '↑' : '↓';
+  button.textContent = atBottom ? 'â†‘' : 'â†“';
   button.setAttribute('aria-label', atBottom ? 'Jump to top' : 'Jump to bottom');
 }
 
@@ -1870,7 +1834,15 @@ function renderColumnToggles() {
   let selectedColumns = null;
   let toggleAttr = 'data-col-toggle';
 
-  if (state.flashDataset === 'methods') {
+  if (isTermsCourse()) {
+    cols = ['term', 'definition', 'dependencies'];
+    labels = {
+      term: 'Term',
+      definition: 'Definition',
+      dependencies: 'Dependencies',
+    };
+    selectedColumns = state.visibleMgmtColumns;
+  } else if (state.flashDataset === 'methods') {
     if (state.methodSheetMode === 'parameters') {
       cols = ['method', 'library', 'argument', 'type', 'validRange', 'required', 'default', 'notes', 'problemExample', 'answerExample'];
       labels = {
@@ -1986,33 +1958,46 @@ function setCsvPasteMode(mode = 'functions') {
   if (!modal || !title || !subtitle || !input || !submit) return;
 
   modal.dataset.mode = mode;
+  const functionsLabel = displayCatalogName(catalogSpreadsheetName('functions', 'functions'));
+  const parametersLabel = displayCatalogName(catalogSpreadsheetName('parameters', 'parameters'));
+  const syntaxLabel = displayCatalogName(catalogSpreadsheetName('syntax', 'syntax'));
+  const scenarioLabel = displayCatalogName(catalogSpreadsheetName('case_scenarios', 'case scenario'));
+  const mgmtLabel = displayCatalogName(catalogSpreadsheetName('terms', 'terms'));
+
+  if (mode === 'mgmt') {
+    title.textContent = `Paste ${mgmtLabel} rows`;
+    subtitle.textContent = 'Paste rows in term, definition, dependencies order with no headers.';
+    input.placeholder = 'term, definition, dependencies';
+    submit.textContent = `Import ${mgmtLabel} terms`;
+    return;
+  }
 
   if (mode === 'questions') {
-    title.textContent = 'Paste Case Scenario CSV rows';
-    subtitle.textContent = 'Paste rows in case scenario CSV order with no headers.';
+    title.textContent = `Paste ${scenarioLabel} rows`;
+    subtitle.textContent = `Paste rows in ${scenarioLabel} order with no headers.`;
     input.placeholder = 'Question, Answer, Wrong Example, Correct Example, Methods, Example Input, Example Output';
     submit.textContent = 'Import case scenarios';
     return;
   }
 
   if (mode === 'syntax') {
-    title.textContent = 'Paste Syntax CSV rows';
-    subtitle.textContent = 'Paste rows in syntax CSV order with no headers.';
+    title.textContent = `Paste ${syntaxLabel} rows`;
+    subtitle.textContent = `Paste rows in ${syntaxLabel} order with no headers.`;
     input.placeholder = 'Syntax, Language, Library / Context, Meaning, Use Case, Notes, Example Problem, Example Answer, Input Example, Output Example';
     submit.textContent = 'Import syntax';
     return;
   }
 
   if (mode === 'parameters') {
-    title.textContent = 'Paste Parameters CSV rows';
-    subtitle.textContent = 'Paste rows in parameters CSV order with no headers.';
+    title.textContent = `Paste ${parametersLabel} rows`;
+    subtitle.textContent = `Paste rows in ${parametersLabel} order with no headers.`;
     input.placeholder = 'Method, Library / Object, Argument, Type, Valid Range, Required or Not Required, Default Value';
     submit.textContent = 'Import parameters';
     return;
   }
 
-  title.textContent = 'Paste Functions CSV rows';
-  subtitle.textContent = 'Paste rows in functions CSV order with no headers. Existing methods will be skipped.';
+  title.textContent = `Paste ${functionsLabel} rows`;
+  subtitle.textContent = `Paste rows in ${functionsLabel} order with no headers. Existing methods will be skipped.`;
   input.placeholder = 'Method, Language, Library / Object, Returns, Description, Use Case, Example Problem, Example Answer, Import, Input example, Output example';
   submit.textContent = 'Import functions';
 }
@@ -2040,15 +2025,17 @@ function closeCsvPasteModal() {
 }
 
 async function refreshFlashcardData() {
-  const [flashcards, caseScenarios, syntaxRows] = await Promise.all([
+  const [flashcards, caseScenarios, syntaxRows, mgmtRows] = await Promise.all([
     loadFlashcards(),
     loadCaseScenarios(),
     loadSyntaxRowsSafe(),
+    loadMgmtRowsSafe(),
   ]);
 
   state.flashcards = flashcards;
   state.caseScenarios = caseScenarios;
   state.syntaxRows = syntaxRows;
+  state.mgmtRows = mgmtRows;
   renderFlashcards();
 }
 
@@ -2234,6 +2221,7 @@ function renderListCardBack(card) {
 function renderFlashcards() {
   ensureFlashcardsFooter();
   ensureSpreadsheetJumpButton();
+  updateCourseChrome();
   renderLibraryFilter();
   const columnToggleMarkup = renderColumnToggles();
 
@@ -2254,6 +2242,10 @@ function renderFlashcards() {
   }
 
   if (flashSearchInput) {
+    if (isTermsCourse()) {
+      flashSearchInput.value = state.flashSearch.mgmt;
+      flashSearchInput.placeholder = `Search ${displayCatalogName(catalogSpreadsheetName('terms', 'terms'))} spreadsheet`;
+    } else {
     const isCases = state.flashDataset === 'cases';
     const isSyntax = state.flashDataset === 'syntax';
     const isParameters = state.flashDataset === 'methods' && state.methodSheetMode === 'parameters';
@@ -2271,19 +2263,82 @@ function renderFlashcards() {
         : isParameters
           ? 'Search parameters spreadsheet'
           : 'Search function spreadsheet';
+    }
   }
 
   const cards = currentFlashRows();
   const app = document.getElementById('flashcardsApp');
   if (!app) return;
 
-  if (!cards.length) {
+  if (!cards.length && !isTermsCourse()) {
     app.innerHTML = `
       <div class="panel">
         <div class="panel-inner">
           <div class="label">No matches</div>
           <div class="muted">No rows match the current search. Clear the search box and try again.</div>
         </div>
+      </div>
+    `;
+    scheduleStickySheetHeaderUpdate();
+    updateSpreadsheetJumpButton();
+    return;
+  }
+
+  if (isTermsCourse()) {
+    const cols = ['term', 'definition', 'dependencies'];
+    const labels = {
+      term: 'Term',
+      definition: 'Definition',
+      dependencies: 'Dependencies',
+    };
+
+    app.innerHTML = `
+      <div class="sheet-sticky-tools">
+        ${columnToggleMarkup}
+        <div class="sheet-controls">
+          <div class="muted">Click any row to expand.</div>
+        </div>
+        ${renderSheetHeader(cols, labels, state.visibleMgmtColumns)}
+      </div>
+      <div class="table-wrap">
+        <table class="sheet" ${sheetColumnStyle(cols, state.visibleMgmtColumns)}>
+          <thead>
+            <tr>
+              ${cols.filter(c => state.visibleMgmtColumns.has(c)).map(c => `<th>${labels[c]}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${cards.map(row => {
+              const rowKey = `mgmt-${row.id}`;
+              const open = state.expandedSheetRows.has(rowKey);
+              return `
+                <tr data-sheet-row="${rowKey}">
+                  ${cols.filter(c => state.visibleMgmtColumns.has(c)).map(c => `
+                    <td>${escapeHtml(row[c] || '')}</td>
+                  `).join('')}
+                </tr>
+                ${open ? `
+                  <tr class="expand-row">
+                    <td colspan="${cols.filter(c => state.visibleMgmtColumns.has(c)).length}">
+                      ${row.definition ? `
+                        <div>
+                          <div class="label">Definition</div>
+                          <div>${escapeHtml(row.definition)}</div>
+                        </div>
+                      ` : ''}
+                      ${row.dependencies ? `
+                        <div style="margin-top:12px;">
+                          <div class="label">Dependencies</div>
+                          <div>${escapeHtml(row.dependencies)}</div>
+                        </div>
+                      ` : ''}
+                    </td>
+                  </tr>
+                ` : ''}
+              `;
+            }).join('')}
+          </tbody>
+        </table>
       </div>
     `;
     scheduleStickySheetHeaderUpdate();
@@ -2688,11 +2743,21 @@ function ensureFlashcardsFooter() {
     flashcardsPage.appendChild(footer);
   }
 
+  if (isTermsCourse()) {
+    footer.innerHTML = '';
+    footer.classList.add('hidden');
+    return;
+  }
+
+  footer.classList.remove('hidden');
+  const functionsLabel = displayCatalogName(catalogSpreadsheetName('functions', 'functions'));
+  const syntaxLabel = displayCatalogName(catalogSpreadsheetName('syntax', 'syntax'));
+  const scenarioLabel = displayCatalogName(catalogSpreadsheetName('case_scenarios', 'case scenario'));
   footer.innerHTML = `
     <div class="flash-footer-links">
-      <button class="view-link" id="functionCsvPromptBtn" type="button">Function CSV prompt</button>
-      <button class="view-link" id="scenarioCsvPromptBtn" type="button">Scenario CSV prompt</button>
-      <button class="view-link" id="syntaxCsvPromptBtn" type="button">Syntax CSV prompt</button>
+      <button class="view-link" id="functionCsvPromptBtn" type="button">${escapeHtml(functionsLabel)} prompt</button>
+      <button class="view-link" id="scenarioCsvPromptBtn" type="button">${escapeHtml(scenarioLabel)} prompt</button>
+      <button class="view-link" id="syntaxCsvPromptBtn" type="button">${escapeHtml(syntaxLabel)} prompt</button>
     </div>
   `;
 }
@@ -2727,7 +2792,9 @@ async function copyCtrlCPromptByKey(promptKey, promptLabel) {
 
 function exportJson() {
   const rows = currentFlashRows();
-  const filename = state.flashDataset === 'cases'
+  const filename = isTermsCourse()
+    ? `${slugifyKey(catalogSpreadsheetName('terms', 'terms')) || 'terms'}.json`
+    : state.flashDataset === 'cases'
     ? 'case_scenarios.json'
     : state.flashDataset === 'syntax'
       ? 'syntax.json'
@@ -2751,16 +2818,48 @@ function bindTopNavEvents() {
     el.addEventListener('click', e => {
       e.preventDefault();
       state.page = el.dataset.pageLink;
+      if (state.page === 'flashcards') {
+        state.activeCourse = el.dataset.courseLink || firstCoursePageKey();
+      }
       updateTopNav();
       if (state.page === 'dashboard') renderDashboard();
       if (state.page === 'flashcards') renderFlashcards();
       if (state.page === 'notes') renderNotes();
     });
   });
+
+  const returnHomeBtn = document.getElementById('returnHomeBtn');
+  if (returnHomeBtn) {
+    returnHomeBtn.addEventListener('click', e => {
+      e.preventDefault();
+      state.page = 'dashboard';
+      updateTopNav();
+      renderDashboard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 }
 
 function bindDashboardEvents() {
   document.addEventListener('click', e => {
+    const statsDrawerToggle = e.target.closest('#studyStatsDrawerBtn');
+    if (statsDrawerToggle) {
+      const drawer = document.getElementById('studyStatsPanel');
+      if (drawer) {
+        const isOpen = !drawer.classList.contains('is-open');
+        drawer.classList.toggle('is-open', isOpen);
+        statsDrawerToggle.setAttribute('aria-expanded', String(isOpen));
+      }
+      return;
+    }
+
+    const studyStatsView = e.target.closest('[data-study-stats-view]');
+    if (studyStatsView) {
+      state.studyStatsView = studyStatsView.dataset.studyStatsView || 'self';
+      renderStudyStats();
+      return;
+    }
+
     const dateSelect = e.target.closest('[data-date-select]');
     if (dateSelect) {
       setSelectedDate(dateSelect.dataset.dateSelect);
@@ -2819,37 +2918,6 @@ function bindDashboardEvents() {
       return;
     }
 
-    if (e.target.id === 'timerStartBtn' || e.target.id === 'timerStartBtn2') {
-      startTimer();
-      return;
-    }
-
-    if (e.target.id === 'timerPauseBtn' || e.target.id === 'timerPauseBtn2') {
-      pauseTimer();
-      return;
-    }
-
-    if (e.target.id === 'timerResetBtn' || e.target.id === 'timerResetBtn2') {
-      resetTimer();
-      return;
-    }
-
-    if (e.target.id === 'logTimerBtn') {
-      logTimerToSelectedDay().catch(err => {
-        console.error(err);
-        alert('Could not log timer time.');
-      });
-      return;
-    }
-
-    if (e.target.id === 'openFullscreenBtn') {
-      openFullscreenTimer();
-      return;
-    }
-
-    if (e.target.id === 'closeFullscreenBtn') {
-      closeFullscreenTimer();
-    }
   });
 
   const selectedDatePicker = document.getElementById('selectedDatePicker');
@@ -2859,53 +2927,45 @@ function bindDashboardEvents() {
     });
   }
 
-  const dayNote = document.getElementById('dayNote');
-  if (dayNote) {
-    dayNote.addEventListener('input', e => {
-      scheduleNoteSave(e.target.value);
+}
+
+function bindVaultEvents() {
+  const vault = document.getElementById('indexVault');
+  const drawerButton = document.getElementById('vaultDrawerBtn');
+  if (!vault || !drawerButton) return;
+
+  vault.classList.add('is-open');
+
+  drawerButton.addEventListener('click', () => {
+    const isOpen = !vault.classList.contains('is-open');
+    vault.classList.toggle('is-open', isOpen);
+    drawerButton.setAttribute('aria-pressed', String(isOpen));
+  });
+
+  vault.querySelectorAll('[data-vault-card]').forEach(card => {
+    const activate = () => {
+      if (!vault.classList.contains('is-open')) return;
+      vault.querySelectorAll('[data-vault-card]').forEach(item => {
+        item.classList.toggle('is-active', item === card);
+      });
+    };
+
+    card.addEventListener('mouseenter', activate);
+    card.addEventListener('mousemove', activate);
+    card.addEventListener('focus', activate);
+    card.addEventListener('click', () => {
+      activate();
+      const page = card.dataset.pageLink;
+      if (!page) return;
+      state.page = page;
+      if (state.page === 'flashcards') {
+        state.activeCourse = card.dataset.courseLink || firstCoursePageKey();
+      }
+      updateTopNav();
+      if (state.page === 'flashcards') renderFlashcards();
+      if (state.page === 'notes') renderNotes();
     });
-  }
-
-  ['timerStartBtn', 'timerStartBtn2'].forEach(id => {
-    const button = document.getElementById(id);
-    if (button) {
-      button.addEventListener('click', event => {
-        event.preventDefault();
-        startTimer();
-      });
-    }
   });
-
-  ['timerPauseBtn', 'timerPauseBtn2'].forEach(id => {
-    const button = document.getElementById(id);
-    if (button) {
-      button.addEventListener('click', event => {
-        event.preventDefault();
-        pauseTimer();
-      });
-    }
-  });
-
-  ['timerResetBtn', 'timerResetBtn2'].forEach(id => {
-    const button = document.getElementById(id);
-    if (button) {
-      button.addEventListener('click', event => {
-        event.preventDefault();
-        resetTimer();
-      });
-    }
-  });
-
-  const logTimerBtn = document.getElementById('logTimerBtn');
-  if (logTimerBtn) {
-    logTimerBtn.addEventListener('click', event => {
-      event.preventDefault();
-      logTimerToSelectedDay().catch(err => {
-        console.error(err);
-        alert('Could not log timer time.');
-      });
-    });
-  }
 }
 
 function bindNotesEvents() {
@@ -3021,7 +3081,9 @@ function bindFlashcardEvents() {
 
   if (flashSearchInput) {
     flashSearchInput.addEventListener('input', e => {
-      const key = state.flashDataset === 'cases'
+      const key = isTermsCourse()
+        ? 'mgmt'
+        : state.flashDataset === 'cases'
         ? 'cases'
         : state.flashDataset === 'syntax'
           ? 'syntax'
@@ -3073,7 +3135,9 @@ function bindFlashcardEvents() {
         const col = toggle.dataset.colToggle;
         if (!col) return;
 
-        const selectedColumns = state.flashDataset === 'syntax'
+        const selectedColumns = isTermsCourse()
+          ? state.visibleMgmtColumns
+          : state.flashDataset === 'syntax'
           ? state.visibleSyntaxColumns
           : state.flashDataset === 'methods' && state.methodSheetMode === 'parameters'
             ? state.visibleParameterColumns
@@ -3133,17 +3197,17 @@ function bindFlashcardEvents() {
 
   flashcardsPage?.addEventListener('click', e => {
     if (e.target.closest('#functionCsvPromptBtn')) {
-      copyCtrlCPromptByKey('functions_and_parameters', 'Function CSV prompt');
+      copyCtrlCPromptByKey('functions_and_parameters', 'Functions prompt');
       return;
     }
 
     if (e.target.closest('#scenarioCsvPromptBtn')) {
-      copyCtrlCPromptByKey('case_scenario', 'Scenario CSV prompt');
+      copyCtrlCPromptByKey('case_scenario', 'Scenario prompt');
       return;
     }
 
     if (e.target.closest('#syntaxCsvPromptBtn')) {
-      copyCtrlCPromptByKey('syntax', 'Syntax CSV prompt');
+      copyCtrlCPromptByKey('syntax', 'Syntax prompt');
     }
   });
 
@@ -3154,7 +3218,7 @@ function bindFlashcardEvents() {
 
   if (importFlashBtn) {
     importFlashBtn.addEventListener('click', () => {
-      openCsvPasteModal('functions');
+      openCsvPasteModal(isTermsCourse() ? 'mgmt' : 'functions');
     });
   }
 
@@ -3205,13 +3269,21 @@ function bindFlashcardEvents() {
     const text = csvPasteInput?.value || '';
 
     if (!text.trim()) {
-      alert('Paste at least one CSV row first.');
+      alert('Paste at least one row first.');
       return;
     }
 
     submitCsvPasteBtn.disabled = true;
 
     try {
+      if (mode === 'mgmt') {
+        const result = await importMgmtCsvText(text);
+        await refreshFlashcardData();
+        closeCsvPasteModal();
+        alert(`Imported ${result.inserted} MGMT term row${result.inserted === 1 ? '' : 's'}.`);
+        return;
+      }
+
       if (mode === 'questions') {
         const result = await importQuestionCsvText(text);
         await refreshFlashcardData();
@@ -3252,7 +3324,7 @@ function bindFlashcardEvents() {
       alert(`Imported ${result.inserted} function row${result.inserted === 1 ? '' : 's'}.`);
     } catch (err) {
       console.error(err);
-      alert('Could not import the pasted CSV rows.');
+      alert('Could not import the pasted rows.');
     } finally {
       submitCsvPasteBtn.disabled = false;
     }
@@ -3264,39 +3336,48 @@ function bindFlashcardEvents() {
 // =======================
 
 async function init() {
-  const [flashcards, caseScenarios, syntaxRows, productivity, ctrlCPrompts, notesPdfs] = await Promise.all([
+  const [catalog, flashcards, caseScenarios, syntaxRows, mgmtRows, productivity, studyStats, ctrlCPrompts, notesPdfs] = await Promise.all([
+    loadCatalog(),
     loadFlashcards(),
     loadCaseScenarios(),
     loadSyntaxRowsSafe(),
+    loadMgmtRowsSafe(),
     loadProductivity(),
+    loadStudyStatsSafe(),
     loadCtrlCPromptsSafe(),
     loadNotesSafe(),
   ]);
 
+  state.catalog = catalog || { pages: [], spreadsheets: [] };
   state.flashcards = flashcards;
   state.caseScenarios = caseScenarios;
   state.syntaxRows = syntaxRows;
+  state.mgmtRows = mgmtRows;
   state.ctrlCPrompts = ctrlCPrompts;
   state.notesPdfs = notesPdfs;
+  state.activeCourse = firstCoursePageKey();
   state.productivity.studyLogs = productivity.studyLogs || {};
   state.productivity.notes = productivity.notes || {};
+  state.studyStats = studyStats;
   state.selectedDate = formatDateKey(new Date());
   state.calendarMonth = monthStart(new Date());
 
+  renderVaultCardsFromCatalog();
   updateTopNav();
   renderDashboard();
   renderFlashcards();
   renderNotes();
   bindTopNavEvents();
   bindDashboardEvents();
+  bindVaultEvents();
   bindNotesEvents();
   bindFlashcardEvents();
   window.setInterval(renderTodayPanel, 1000);
   updateDocumentTitle();
-  updateTimerButtons();
 }
 
 init().catch(err => {
   console.error(err);
   alert('The dashboard could not finish loading.');
 });
+

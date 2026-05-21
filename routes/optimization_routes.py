@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template
 
-import optimization as op
+from services.optimization_service import Optimize
 
 optimization_bp = Blueprint("optimization", __name__)
 
@@ -13,7 +13,7 @@ def optimization():
 @optimization_bp.route('/get_random_portfolio')
 def get_random_portfolio():
     try:
-        op_object = op.Optimize()
+        op_object = Optimize()
 
         results_as_object = op_object.optimize_portfolio()
         image = results_as_object.get('encoded_image')

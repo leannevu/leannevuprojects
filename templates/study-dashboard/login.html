@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in | Leanne Study Vault</title>
+  <link rel="icon" type="image/svg+xml" href="{{ asset_url('favicon.svg') }}" />
+  <link rel="stylesheet" href="{{ asset_url('css/style.css') }}" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .login-panel {
+      width: min(420px, 100%);
+      border: 1px solid rgba(20, 20, 20, 0.14);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(20, 20, 20, 0.12);
+    }
+    .login-panel h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    .login-panel p {
+      margin: 0 0 22px;
+      color: #555;
+      line-height: 1.5;
+    }
+    .login-button {
+      width: 100%;
+      justify-content: center;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="login-panel">
+    <div class="eyebrow">Study dashboard</div>
+    <h1>Sign in.</h1>
+    <p>Use your Google account to open the dashboard.</p>
+    <a class="btn primary login-button" href="{{ url_for('google_login', next=request.args.get('next') or '/') }}">Continue with Google</a>
+  </main>
+</body>
+</html>

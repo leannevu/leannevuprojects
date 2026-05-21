@@ -6,6 +6,8 @@
     <title>SCRUM Team Management Application</title>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='scrum/stylesheet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='project_template.css') }}?v=1">
+    <script src="{{ url_for('static', filename='project_tabs.js') }}" defer></script>
     <script src="{{ url_for('static', filename='scrum/index.js') }}" defer></script>
 </head>
 <body>
@@ -24,9 +26,6 @@
 
             <nav class="top-nav">
                 <a href="https://leannevu.github.io/index.html">Portfolio</a>
-                <a href="#about">About</a>
-                <a href="#use-cases">Use Cases</a>
-                <a href="#tech-stack">Tech Stack</a>
             </nav>
         </div>
     </header>
@@ -42,143 +41,208 @@
             </p>
         </section>
 
-        <section class="app-shell">
-            <div class="app-topbar">
-                <div class="window-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="app-title">Sprint Workspace</div>
+        <section class="project-switcher" data-project-tabs>
+            <div class="project-tab-track" role="tablist">
+                <button class="project-tab-button active" type="button" role="tab" aria-selected="true" data-project-tab="demo">Project Demo</button>
+                <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="info">Additional Information</button>
+                <button class="project-tab-button" type="button" role="tab" aria-selected="false" data-project-tab="architecture">Architecture</button>
             </div>
 
-            <section class="dashboard-grid">
-
-                <div class="box feature-card backlog-card">
-                    <div class="section-top">
-                        <div>
-                            <p class="feature-kicker">Feature 01</p>
-                            <h2>Sprint Backlog</h2>
+            <div class="project-tab-panels">
+                <section class="project-tab-panel active" id="project-demo" role="tabpanel" data-project-panel="demo">
+                    <section class="scrum-workspace" aria-label="Scrum sprint dashboard demo">
+                        <div class="scrum-dashboard-head">
+                            <div>
+                                <p class="feature-kicker">Sprint control room</p>
+                                <h2>Agile delivery workspace</h2>
+                            </div>
+                            <div class="sprint-pulse" aria-label="Sprint health">
+                                <span></span>
+                                Live sprint data
+                            </div>
                         </div>
 
-                        <div class="filter_option">
-                            <select>
-                                <option>All</option>
-                                <option>Not Started</option>
-                                <option>In Development</option>
-                                <option>Testing</option>
-                                <option>Production</option>
-                            </select>
+                        <div class="sprint-metrics" aria-label="Sprint overview">
+                            <div>
+                                <span>Backlog</span>
+                                <strong>Active stories</strong>
+                            </div>
+                            <div>
+                                <span>Team</span>
+                                <strong>Assigned owners</strong>
+                            </div>
+                            <div>
+                                <span>Workflow</span>
+                                <strong>4 delivery stages</strong>
+                            </div>
                         </div>
-                    </div>
 
-                    <ul id="backlog-list">
-                        <li>US 1</li>
-                    </ul>
-                </div>
+                        <section class="dashboard-grid">
+                            <div class="box feature-card backlog-card">
+                                <div class="section-top">
+                                    <div>
+                                        <p class="feature-kicker">Product backlog</p>
+                                        <h2>Sprint Stories</h2>
+                                    </div>
 
-                <div class="box feature-card team-card">
-                    <p class="feature-kicker">Feature 02</p>
-                    <h2>Team Members</h2>
-                    <ul id="team-list">
-                        <li>Alice</li>
-                    </ul>
-                </div>
+                                    <div class="filter_option">
+                                        <select aria-label="Filter stories by status">
+                                            <option>All</option>
+                                            <option>Not Started</option>
+                                            <option>In Development</option>
+                                            <option>Testing</option>
+                                            <option>Production</option>
+                                        </select>
+                                    </div>
+                                </div>
 
-                <div class="sprint-box feature-card phase-card">
-                    <p class="feature-kicker">Current Sprint</p>
-                    <div id="current-phase-box">
-                        <h2>Current Phase</h2>
-                    </div>
-                    <div class="button-row">
-                        <button id="next-phase-button">Next Phase</button>
-                        <button id="reverse-phase-button">Reverse Phase</button>
-                    </div>
-                </div>
+                                <ul id="backlog-list">
+                                    <li>Loading stories...</li>
+                                </ul>
+                            </div>
 
-                <div class="about feature-card story-card">
-                    <p class="feature-kicker">Feature 03</p>
-                    <h1 id="story-points">Story Points</h1>
-                    <table>
-                        <tr>
-                            <th>Story Points</th>
-                            <th>Status</th>
-                        </tr>
-                        <tr>
-                            <td>Story</td>
-                            <td>Story</td>
-                        </tr>
-                    </table>
-                    <div class="button-row">
-                        <button id="push-status">Push Status</button>
-                        <button id="reverse-status">Reverse Status</button>
-                    </div>
-                </div>
+                            <div class="box feature-card team-card">
+                                <p class="feature-kicker">Delivery squad</p>
+                                <h2>Team Members</h2>
+                                <ul id="team-list">
+                                    <li>Select a story</li>
+                                </ul>
+                            </div>
 
-            </section>
-        </section>
+                            <div class="sprint-box feature-card phase-card">
+                                <p class="feature-kicker">Sprint lifecycle</p>
+                                <div id="current-phase-box">
+                                    <h2>Current Phase</h2>
+                                </div>
+                                <div class="phase-rail" aria-hidden="true">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="button-row">
+                                    <button id="next-phase-button">Next Phase</button>
+                                    <button id="reverse-phase-button">Reverse Phase</button>
+                                </div>
+                            </div>
 
-        <section class="content-sections">
-            <section class="about-panel page-section" id="about">
-                <p class="section-label">About This Project</p>
-                <h2>Why I built this</h2>
-                <p>
-                    Inspired by my internship experience in agile teams, I built this SCRUM management tool
-                    to explore how a lightweight interface can improve sprint visibility, coordination, and
-                    backlog tracking.
-                </p>
-                <p>
-                    I originally developed it using PHP and MySQL, then rebuilt it in Python with Flask after
-                    the site crashed. The rewrite gave me the opportunity to simplify the architecture and
-                    rethink the workflow from a product perspective.
-                </p>
-            </section>
+                            <div class="about feature-card story-card">
+                                <p class="feature-kicker">Selected story</p>
+                                <h1 id="story-points">Story Points</h1>
+                                <table>
+                                    <tr>
+                                        <th>Story Points</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Story</td>
+                                        <td>Story</td>
+                                    </tr>
+                                </table>
+                                <div class="button-row">
+                                    <button id="push-status">Push Status</button>
+                                    <button id="reverse-status">Reverse Status</button>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                </section>
 
-            <section class="page-section" id="use-cases">
-                <p class="section-label">Use Cases</p>
-                <h2 class="section-heading">Who it supports</h2>
+                <section class="project-tab-panel project-tab-info" id="additional-info" role="tabpanel" data-project-panel="info" hidden>
+                    <section class="content-sections">
+                        <section class="plain-project-section" id="personas">
+                            <p class="section-label">Personas</p>
+                            <div class="circle-flow persona-circle-flow four">
+                                <article><span>PO</span><strong>Product Owner</strong><p>Prioritizes backlog and reads story status.</p></article>
+                                <article><span>SM</span><strong>Scrum Master</strong><p>Tracks phase movement and delivery rhythm.</p></article>
+                                <article><span>EL</span><strong>Engineering Lead</strong><p>Checks owners, workload, and blockers.</p></article>
+                                <article><span>PM</span><strong>Project Manager</strong><p>Turns sprint state into stakeholder updates.</p></article>
+                            </div>
+                        </section>
 
-                <div class="info-card-grid">
-                    <article class="info-card">
-                        <h3>Backlog Monitoring</h3>
-                        <p class="card-role">Product Owner</p>
-                        <p>Filter and review stories by status to support sprint planning and prioritization.</p>
-                    </article>
+                        <section class="plain-project-section" id="user-stories">
+                            <p class="section-label">User Stories</p>
+                            <div class="circle-flow story-circle-flow six">
+                                <article><span>1</span><strong>Filter Backlog</strong><p>Start by narrowing active stories.</p></article>
+                                <article><span>2</span><strong>Select Story</strong><p>Open the work item that needs attention.</p></article>
+                                <article><span>3</span><strong>Review Team</strong><p>See who owns the selected work.</p></article>
+                                <article><span>4</span><strong>Push Status</strong><p>Move the story through delivery states.</p></article>
+                                <article><span>5</span><strong>Advance Phase</strong><p>Update the sprint lifecycle.</p></article>
+                                <article><span>6</span><strong>Share Status</strong><p>End with a visible sprint snapshot.</p></article>
+                            </div>
+                        </section>
 
-                    <article class="info-card">
-                        <h3>Sprint Execution Tracking</h3>
-                        <p class="card-role">SCRUM Master</p>
-                        <p>Monitor phase progression and keep the team aligned throughout the sprint lifecycle.</p>
-                    </article>
+                        <section class="plain-project-section" id="journey-map">
+                            <p class="section-label">Journey Map</p>
+                            <div class="circle-flow dependency-journey five">
+                                <article><span>A</span><strong>Plan</strong><p>Stories enter the sprint board.</p></article>
+                                <article><span>B</span><strong>Assign</strong><p>Team ownership becomes visible.</p></article>
+                                <article><span>C</span><strong>Build</strong><p>Statuses reflect execution progress.</p></article>
+                                <article><span>D</span><strong>Validate</strong><p>Testing and production stages show readiness.</p></article>
+                                <article><span>E</span><strong>Report</strong><p>Sprint health is ready for review.</p></article>
+                            </div>
+                        </section>
+                    </section>
+                </section>
 
-                    <article class="info-card">
-                        <h3>Team Coordination</h3>
-                        <p class="card-role">Engineering Leads</p>
-                        <p>View assignments and workload distribution across the team to support delivery planning.</p>
-                    </article>
-
-                    <article class="info-card">
-                        <h3>Stakeholder Visibility</h3>
-                        <p class="card-role">Project Managers</p>
-                        <p>Communicate sprint status and progress clearly through a centralized dashboard.</p>
-                    </article>
-                </div>
-            </section>
-
-            <section class="page-section" id="tech-stack">
-                <p class="section-label">Tech Stack</p>
-                <h2 class="section-heading">How I rebuilt it</h2>
-
-                <div class="stack-list">
-                    <span>Python</span>
-                    <span>Flask</span>
-                    <span>JavaScript</span>
-                    <span>HTML</span>
-                    <span>CSS</span>
-                    <span>CSV-backed data</span>
-                    <span>Originally PHP + MySQL</span>
-                </div>
-            </section>
+                <section class="project-tab-panel project-tab-info" id="architecture" role="tabpanel" data-project-panel="architecture" hidden>
+                    <section class="content-sections architecture-sections">
+                        <section class="plain-project-section architecture-visual-section">
+                            <div class="architecture-diagram" aria-label="Scrum dashboard architecture">
+                                <div class="system-box browser-box">
+                                    <span>Browser Client</span>
+                                    <div class="tech-box">Sprint Dashboard UI</div>
+                                    <div class="tech-box">Backlog Filter</div>
+                                    <div class="tech-box">Status Controls</div>
+                                </div>
+                                <div class="system-box api-box">
+                                    <span>Flask App</span>
+                                    <div class="tech-box">Project Route</div>
+                                    <div class="tech-box accent">Static Asset Server</div>
+                                    <div class="tech-box">JSON Fixtures</div>
+                                </div>
+                                <div class="system-box data-box">
+                                    <span>Data Layer</span>
+                                    <div class="tech-box data">Backlog Data</div>
+                                    <div class="tech-box">Team Assignments</div>
+                                    <div class="tech-box">Sprint Statuses</div>
+                                </div>
+                                <div class="system-box analytics-box">
+                                    <span>Workflow Logic</span>
+                                    <div class="tech-box bigquery">JavaScript State</div>
+                                    <div class="tech-box">Phase Progression</div>
+                                    <div class="tech-box">Story Movement</div>
+                                </div>
+                                <svg class="architecture-lines" viewBox="0 0 1000 580" aria-hidden="true">
+                                    <defs><marker id="archArrowShared" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z"></path></marker></defs>
+                                    <path d="M780 150 C700 150 640 170 560 240"></path>
+                                    <path d="M500 330 C470 390 380 420 265 454"></path>
+                                    <path d="M550 330 C585 390 680 420 760 454"></path>
+                                </svg>
+                            </div>
+                        </section>
+                        <section class="plain-project-section architecture-visual-section">
+                            <div class="sequence-flow">
+                                <div><span>1</span><p>The sprint board loads backlog and team data.</p></div>
+                                <div><span>2</span><p>The user filters stories by delivery status.</p></div>
+                                <div><span>3</span><p>Selecting a story reveals owners and points.</p></div>
+                                <div><span>4</span><p>Status controls move the selected story forward.</p></div>
+                                <div><span>5</span><p>Phase controls update the visible sprint lifecycle.</p></div>
+                            </div>
+                        </section>
+                        <section class="plain-project-section architecture-visual-section">
+                            <div class="stack-matrix">
+                                <div><strong>UI</strong><span>HTML / CSS / JavaScript</span></div>
+                                <div><strong>Server</strong><span>Flask route</span></div>
+                                <div><strong>Data</strong><span>Backlog and team fixtures</span></div>
+                                <div><strong>Logic</strong><span>Status and phase transitions</span></div>
+                                <div><strong>Output</strong><span>Sprint dashboard view</span></div>
+                                <div><strong>Scope</strong><span>Agile coordination demo</span></div>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </div>
         </section>
 
     </main>
