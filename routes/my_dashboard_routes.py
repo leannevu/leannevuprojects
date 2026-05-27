@@ -480,6 +480,76 @@ def postgres_execute(sql, parameters=None):
         conn.commit()
         return True
 
+def api_runtime_error_response(exc):
+    if request.path.startswith("/api/"):
+        print(f"Dashboard API error on {request.path}: {exc}", file=sys.stderr)
+        return jsonify({"error": str(exc), "path": request.path}), 500
+    raise exc
+
+@newdashboard_bp.errorhandler(RuntimeError)
+def handle_dashboard_runtime_error(exc):
+    return api_runtime_error_response(exc)
+
+def postgres_health():
+    health = {
+        "available": POSTGRES_AVAILABLE,
+        "urlSet": bool(POSTGRES_URL),
+        "urlSource": postgres_url_source(),
+        "connected": False,
+        "tables": [],
+        "counts": {},
+        "error": "",
+    }
+    if not POSTGRES_AVAILABLE:
+        health["error"] = "psycopg is not installed or no Postgres URL is configured."
+        return health
+
+    try:
+        with psycopg.connect(POSTGRES_URL, row_factory=dict_row) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT table_name
+                    FROM information_schema.tables
+                    WHERE table_schema = 'public'
+                    ORDER BY table_name
+                    """
+                )
+                health["tables"] = [row["table_name"] for row in cursor.fetchall()]
+
+                for table_name in ("users", "pages", "spreadsheets", "study_habits", "ctrl_c_prompts"):
+                    if table_name not in health["tables"]:
+                        health["counts"][table_name] = None
+                        continue
+                    cursor.execute(f"SELECT COUNT(*) AS count FROM {table_name}")
+                    health["counts"][table_name] = cursor.fetchone()["count"]
+
+        health["connected"] = True
+    except Exception as exc:
+        health["error"] = str(exc)
+    return health
+
+def bigquery_health():
+    health = {
+        "available": BQ_AVAILABLE,
+        "enabled": USE_BIGQUERY,
+        "credentialsSource": bigquery_credentials_source(),
+        "project": BQ_PROJECT if BQ_AVAILABLE else "",
+        "dataset": BQ_DATASET if BQ_AVAILABLE else "",
+        "connected": False,
+        "error": "",
+    }
+    if not BQ_AVAILABLE:
+        health["error"] = "BigQuery is disabled, unavailable, or missing project/dataset config."
+        return health
+
+    try:
+        bq_query("SELECT 1 AS ok")
+        health["connected"] = True
+    except Exception as exc:
+        health["error"] = str(exc)
+    return health
+
 def split_csv_headers(header_text, fallback_headers):
     text = (header_text or "").strip()
     if not text:
@@ -1737,6 +1807,17 @@ def api_data_source():
         "project": BQ_PROJECT if BQ_AVAILABLE else "",
         "dataset": BQ_DATASET if BQ_AVAILABLE else "",
         "localDataDir": str(DATA_DIR),
+    })
+
+@newdashboard_bp.get("/api/health")
+def api_health():
+    return jsonify({
+        "source": configured_db_source(),
+        "analyticsEngine": configured_analytics_engine(),
+        "configured": DATA_SOURCE,
+        "analyticsConfigured": ANALYTICS_ENGINE,
+        "postgres": postgres_health(),
+        "bigQuery": bigquery_health(),
     })
 
 @newdashboard_bp.route("/study-dashboard")
