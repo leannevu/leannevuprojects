@@ -430,8 +430,14 @@ def configured_analytics_engine():
 def bigquery_credentials_source():
     if BQ_CREDENTIALS_JSON:
         return "json_env"
-    if BQ_CREDENTIALS and Path(BQ_CREDENTIALS).exists():
-        return "file"
+    if BQ_CREDENTIALS and BQ_CREDENTIALS.lstrip().startswith("{"):
+        return "json_in_credentials_path_env"
+    if BQ_CREDENTIALS:
+        try:
+            if Path(BQ_CREDENTIALS).exists():
+                return "file"
+        except OSError:
+            return "invalid_file_path"
     return "default_credentials"
 
 def bq_id_parameter(name, value):
