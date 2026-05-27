@@ -9,9 +9,16 @@
 html{scroll-behavior:smooth}
 body{
   margin:0;
+  overflow-x:hidden;
   background:#fff;
   color:var(--project-ink);
   font-family:Inter,Arial,sans-serif;
+}
+img,
+svg,
+canvas,
+iframe{
+  max-width:100%;
 }
 a{text-decoration:none;color:inherit}
 
@@ -68,6 +75,7 @@ a{text-decoration:none;color:inherit}
   display:flex;
   flex-wrap:wrap;
   gap:18px;
+  max-width:100%;
 }
 
 .top-nav a{
@@ -142,6 +150,7 @@ main.page-shell > .hero .hero-text,
   border-bottom:1px solid var(--project-line);
   padding:0 0 12px;
   background:#fff;
+  max-width:100%;
 }
 
 .project-tab-button,
@@ -487,10 +496,20 @@ main.page-shell > .hero .hero-text,
     flex-direction:column;
   }
 
+  .brand{
+    align-items:flex-start;
+  }
+
+  .top-nav{
+    width:100%;
+  }
+
   .project-tab-track,
   .tab-track{
     gap:14px;
     overflow-x:auto;
+    scrollbar-width:thin;
+    -webkit-overflow-scrolling:touch;
   }
 
   .project-tab-button,
@@ -511,8 +530,31 @@ main.page-shell > .hero .hero-text,
   }
 
   .architecture-diagram{
-    min-width:980px;
-    overflow-x:auto;
+    display:grid;
+    gap:14px;
+    min-height:0;
+    overflow:visible;
+  }
+
+  .system-box{
+    position:relative;
+    inset:auto;
+    width:100%;
+  }
+
+  .browser-box,
+  .api-box,
+  .data-box,
+  .analytics-box{
+    left:auto;
+    right:auto;
+    top:auto;
+    bottom:auto;
+    width:100%;
+  }
+
+  .architecture-lines{
+    display:none;
   }
 }
 
@@ -533,6 +575,16 @@ main.page-shell > .hero .hero-text,
 @media(max-width:640px){
   .page-shell{
     width:min(100% - 28px,1240px);
+  }
+
+  .brand-tagline{
+    font-size:12px;
+  }
+
+  main.page-shell > .hero h1,
+  .portfolio-hero h1{
+    font-size:clamp(2rem,11vw,2.8rem);
+    line-height:1.08;
   }
 
   main,

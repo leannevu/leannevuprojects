@@ -2868,11 +2868,32 @@ textarea{
   }
 
   .architecture-diagram{
-    overflow-x:auto;
+    display:grid;
+    gap:14px;
+    min-width:0;
+    min-height:0;
+    overflow:visible;
   }
 
-  .architecture-diagram{
-    min-width:980px;
+  .system-box{
+    position:relative;
+    inset:auto;
+    width:100%;
+  }
+
+  .browser-box,
+  .api-box,
+  .data-box,
+  .analytics-box{
+    left:auto;
+    right:auto;
+    top:auto;
+    bottom:auto;
+    width:100%;
+  }
+
+  .architecture-lines{
+    display:none;
   }
 }
 
@@ -2906,5 +2927,136 @@ textarea{
   .hero-block-panel .day-grid{
     grid-template-columns:repeat(4, minmax(0,1fr));
     width:100%;
+  }
+}
+
+@media (max-width:720px){
+  body{
+    overflow-x:hidden;
+  }
+
+  .wrap,
+  .study-dashboard-wrap{
+    width:100%;
+  }
+
+  #dashboardPage .hero-side{
+    max-width:none;
+  }
+
+  .hero-copy,
+  .hero-side,
+  .hero-habit-panel,
+  .index-vault,
+  .vault-stage,
+  .flash-header,
+  .flash-controls,
+  .flash-import-actions,
+  .notes-toolbar,
+  .notes-controls{
+    min-width:0;
+  }
+
+  .editorial-stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .editorial-stats .stat{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:2px;
+  }
+
+  .month-header,
+  .flash-header,
+  .flash-controls,
+  .flash-view-links,
+  .flash-link-pair,
+  .flash-import-actions,
+  .flash-footer-links,
+  .notes-toolbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .month-nav,
+  .study-stats-tabs,
+  .notes-controls{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    width:100%;
+  }
+
+  .study-stats-grid{
+    grid-template-columns:1fr;
+  }
+
+  .table-wrap{
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .sheet-header-shell,
+  .sheet-header-bar,
+  .sheet{
+    min-width:720px;
+  }
+
+  .code,
+  .code-template{
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+  }
+
+  .notes-stage-shell,
+  .notes-toolbar{
+    width:100%;
+  }
+
+  .notes-viewer-wrap{
+    min-width:0;
+    overflow:auto;
+  }
+}
+
+@media (max-width:480px){
+  .editorial-stats,
+  .study-stats-grid,
+  .month-nav,
+  .study-stats-tabs,
+  .notes-controls{
+    grid-template-columns:1fr;
+  }
+
+  .hero-habit-panel{
+    padding:12px;
+  }
+
+  .hero-habit-panel .month-cell{
+    min-height:32px;
+    padding:3px;
+  }
+
+  .hero-habit-panel .month-cell .hours,
+  .hero-block-panel .block-hours{
+    font-size:11px;
+  }
+
+  .vault-card{
+    width:96px;
+    height:156px;
+  }
+
+  .vault-label,
+  .study-stats-drawer-label{
+    letter-spacing:.12em;
+  }
+
+  .sheet-header-shell,
+  .sheet-header-bar,
+  .sheet{
+    min-width:640px;
   }
 }

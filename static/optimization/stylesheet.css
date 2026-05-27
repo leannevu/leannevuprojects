@@ -53,6 +53,7 @@
 }
 
 table {
+    min-width: 680px;
     width: 100%;
     margin: 0 0 16px;
     border-collapse: collapse;
@@ -96,12 +97,27 @@ td {
 }
 
 @media (max-width: 640px) {
+    .original-optimization-demo {
+        min-height: 260px;
+        gap: 18px;
+        padding-top: 20px;
+        font-size: 100%;
+    }
+
     #action-button,
     .button {
         width: 100%;
+        min-height: 44px;
     }
 
     .table-label {
-        width: 160px;
+        width: 150px;
+        font-size: 0.92rem;
+        white-space:normal;
+    }
+
+    .table-rest {
+        font-size: 0.92rem;
+        white-space:nowrap;
     }
 }

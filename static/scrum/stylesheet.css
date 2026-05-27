@@ -20,22 +20,13 @@
     position: relative;
     overflow: hidden;
     border: 1px solid var(--line);
-    background:
-        linear-gradient(135deg, rgba(17, 17, 17, 0.07), transparent 28%),
-        linear-gradient(90deg, rgba(17, 17, 17, 0.045) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(17, 17, 17, 0.04) 1px, transparent 1px),
-        #ffffff;
-    background-size: 44px 44px;
+    background: #ffffff;
     box-shadow: var(--shadow);
     padding: 24px;
 }
 
 .scrum-workspace::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border-top: 4px solid var(--accent);
+    display: none;
 }
 
 .scrum-workspace::after {
@@ -306,6 +297,7 @@
 
 .about table {
     width: 100%;
+    min-width: 420px;
     border-collapse: collapse;
     border: 1px solid var(--line);
     background: #ffffff;
@@ -395,12 +387,18 @@
 @media (max-width: 640px) {
     .scrum-workspace {
         padding: 16px;
+        box-shadow: none;
+    }
+
+    .scrum-workspace::after {
+        display: none;
     }
 
     .box,
     .about,
     .sprint-box {
         padding: 15px;
+        overflow-x: auto;
     }
 
     .filter_option,

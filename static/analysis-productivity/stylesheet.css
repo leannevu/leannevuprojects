@@ -154,6 +154,32 @@
     font-size: 0.88rem;
     line-height: 1.6;
     overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+    overflow-wrap: anywhere;
+}
+
+[id^="output_result_"] table {
+    width: max-content !important;
+    min-width: min(680px, 100%) !important;
+    max-width: none !important;
+    border-collapse: collapse;
+}
+
+[id^="output_result_"] th,
+[id^="output_result_"] td {
+    border-bottom: 1px solid #d8d8d2;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+[id^="output_result_"] img {
+    display: block;
+    width: 100%;
+    max-width: 100% !important;
+    height: auto;
+    border: 1px solid #d8d8d2;
 }
 
 .line {
@@ -237,6 +263,12 @@ button:hover,
 }
 
 @media (max-width: 640px) {
+    .app-topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .app-shell,
     .analysis-card {
         padding: 15px;
