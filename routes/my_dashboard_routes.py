@@ -42,15 +42,21 @@ DATA_DIR = PROJECT_ROOT / "data" / "study-dashboard"
 def load_local_launch_env():
     allowed_keys = {
         "DATABASE_URL",
+        "DATABASE_PRIVATE_URL",
         "GOOGLE_APPLICATION_CREDENTIALS",
+        "GOOGLE_APPLICATION_CREDENTIALS_JSON",
         "STUDY_DASHBOARD_BQ_CREDENTIALS",
+        "STUDY_DASHBOARD_BQ_CREDENTIALS_JSON",
         "STUDY_DASHBOARD_DATASET",
         "STUDY_DASHBOARD_DATA_SOURCE",
         "STUDY_DASHBOARD_ANALYTICS_ENGINE",
         "STUDY_DASHBOARD_POSTGRES_URL",
+        "STUDY_DASHBOARD_POSTGRES_PRIVATE_URL",
         "STUDY_DASHBOARD_PROJECT",
         "STUDY_DASHBOARD_USE_BIGQUERY",
         "STUDY_DASHBOARD_USER_ID",
+        "POSTGRES_URL",
+        "POSTGRES_PRIVATE_URL",
     }
 
     env_files = [
@@ -117,9 +123,27 @@ BQ_CREDENTIALS = os.environ.get(
         r"c:\Users\Leanne\Downloads\mydashboard-496904-cd3b0c2909f5.json",
     ),
 )
+BQ_CREDENTIALS_JSON = os.environ.get(
+    "GOOGLE_APPLICATION_CREDENTIALS_JSON",
+    os.environ.get("STUDY_DASHBOARD_BQ_CREDENTIALS_JSON", ""),
+).strip()
 USE_BIGQUERY = os.environ.get("STUDY_DASHBOARD_USE_BIGQUERY", "0").strip().lower() in {"1", "true", "yes"}
 BQ_AVAILABLE = bigquery is not None and USE_BIGQUERY and bool(BQ_PROJECT and BQ_DATASET)
-POSTGRES_URL = os.environ.get("DATABASE_URL", os.environ.get("STUDY_DASHBOARD_POSTGRES_URL", "")).strip()
+POSTGRES_URL = next(
+    (
+        os.environ.get(key, "").strip()
+        for key in (
+            "DATABASE_PRIVATE_URL",
+            "STUDY_DASHBOARD_POSTGRES_PRIVATE_URL",
+            "POSTGRES_PRIVATE_URL",
+            "DATABASE_URL",
+            "STUDY_DASHBOARD_POSTGRES_URL",
+            "POSTGRES_URL",
+        )
+        if os.environ.get(key, "").strip()
+    ),
+    "",
+)
 POSTGRES_AVAILABLE = psycopg is not None and bool(POSTGRES_URL)
 ACTIVE_USER_ID = int(os.environ.get("STUDY_DASHBOARD_USER_ID", "1"))
 DATA_SOURCE = os.environ.get("STUDY_DASHBOARD_DATA_SOURCE", "auto").strip().lower()
@@ -324,6 +348,11 @@ def bq_client():
         )
 
     try:
+        if BQ_CREDENTIALS_JSON and service_account is not None:
+            credentials_info = json.loads(BQ_CREDENTIALS_JSON)
+            credentials = service_account.Credentials.from_service_account_info(credentials_info)
+            return bigquery.Client(project=BQ_PROJECT, credentials=credentials)
+
         credentials_path = Path(BQ_CREDENTIALS) if BQ_CREDENTIALS else None
         if credentials_path and credentials_path.exists() and service_account is not None:
             credentials = service_account.Credentials.from_service_account_file(str(credentials_path))
@@ -363,6 +392,12 @@ def use_postgres_source():
 def use_bigquery_source():
     return BQ_AVAILABLE and DATA_SOURCE in {"auto", "bigquery"}
 
+def require_postgres_source():
+    return DATA_SOURCE == "postgres"
+
+def require_bigquery_source():
+    return DATA_SOURCE == "bigquery"
+
 def configured_db_source():
     if use_postgres_source():
         return "postgres"
@@ -370,11 +405,34 @@ def configured_db_source():
         return "bigquery"
     return "local"
 
+def postgres_url_source():
+    for key in (
+        "DATABASE_PRIVATE_URL",
+        "STUDY_DASHBOARD_POSTGRES_PRIVATE_URL",
+        "POSTGRES_PRIVATE_URL",
+        "DATABASE_URL",
+        "STUDY_DASHBOARD_POSTGRES_URL",
+        "POSTGRES_URL",
+    ):
+        if os.environ.get(key, "").strip():
+            return key
+    return ""
+
 def use_bigquery_analytics():
     return BQ_AVAILABLE and ANALYTICS_ENGINE in {"auto", "bigquery"}
 
+def require_bigquery_analytics():
+    return ANALYTICS_ENGINE == "bigquery"
+
 def configured_analytics_engine():
     return "bigquery" if use_bigquery_analytics() else "python"
+
+def bigquery_credentials_source():
+    if BQ_CREDENTIALS_JSON:
+        return "json_env"
+    if BQ_CREDENTIALS and Path(BQ_CREDENTIALS).exists():
+        return "file"
+    return "default_credentials"
 
 def bq_id_parameter(name, value):
     if isinstance(value, int):
@@ -656,8 +714,12 @@ def write_bq_rows(role, rows, headers):
 def ensure_source(role):
     if use_postgres_source() and get_db_spreadsheet_by_role(role):
         return
+    if require_postgres_source():
+        raise RuntimeError(f"Required Postgres spreadsheet source not found for role: {role}")
     if use_bigquery_source() and get_bq_spreadsheet_by_role(role):
         return
+    if require_bigquery_source():
+        raise RuntimeError(f"Required BigQuery spreadsheet source not found for role: {role}")
     local_source = LOCAL_SPREADSHEETS.get(role)
     if local_source and (DATA_DIR / local_source["filename"]).exists():
         return
@@ -668,10 +730,14 @@ def read_rows(role):
         db_rows = read_db_rows(role)
         if db_rows is not None:
             return db_rows
+        if require_postgres_source():
+            raise RuntimeError(f"Required Postgres spreadsheet source not found for role: {role}")
     if use_bigquery_source():
         bq_rows = read_bq_rows(role)
         if bq_rows is not None:
             return bq_rows
+        if require_bigquery_source():
+            raise RuntimeError(f"Required BigQuery spreadsheet source not found for role: {role}")
     return read_local_rows(role)
 
 def read_case_scenario_rows():
@@ -680,8 +746,12 @@ def read_case_scenario_rows():
 def write_rows(role, rows, headers):
     if use_postgres_source() and write_db_rows(role, rows, headers):
         return
+    if require_postgres_source():
+        raise RuntimeError(f"Required Postgres spreadsheet source not found for role: {role}")
     if use_bigquery_source() and write_bq_rows(role, rows, headers):
         return
+    if require_bigquery_source():
+        raise RuntimeError(f"Required BigQuery spreadsheet source not found for role: {role}")
     if write_local_rows(role, rows, headers):
         return
     raise RuntimeError(f"No spreadsheet source found for role: {role}")
@@ -1291,6 +1361,11 @@ def load_study_stats(anchor_date=None, active_user_id=None):
                 "delta": delta,
                 "trend": "improved" if delta > 0 else "declined" if delta < 0 else "no_change",
             })
+    elif require_bigquery_analytics():
+        raise RuntimeError(
+            "BigQuery analytics is required. Install google-cloud-bigquery, set credentials, "
+            "and keep STUDY_DASHBOARD_USE_BIGQUERY enabled."
+        )
     elif use_postgres_source():
         people = study_people_from_events(load_study_log_events_from_postgres(), today)
     elif use_bigquery_source():
@@ -1655,8 +1730,10 @@ def api_data_source():
         "configured": DATA_SOURCE,
         "postgresAvailable": POSTGRES_AVAILABLE,
         "postgresUrlSet": bool(POSTGRES_URL),
+        "postgresUrlSource": postgres_url_source(),
         "bigQueryAvailable": BQ_AVAILABLE,
         "bigQueryEnabled": USE_BIGQUERY,
+        "bigQueryCredentialsSource": bigquery_credentials_source(),
         "project": BQ_PROJECT if BQ_AVAILABLE else "",
         "dataset": BQ_DATASET if BQ_AVAILABLE else "",
         "localDataDir": str(DATA_DIR),

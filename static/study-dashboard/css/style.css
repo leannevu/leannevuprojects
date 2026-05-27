@@ -641,8 +641,9 @@ height:100%}
 .stat{padding:18px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
 .stat .label{font-size:14px;color:var(--muted);margin-bottom:10px}
 .stat .value{font-size:20px;font-weight:500;letter-spacing:-.03em}
+.stat .meta{font-size:11px;color:var(--muted);line-height:1.2}
 .editorial-stats{display:flex;flex-wrap:nowrap;gap:18px;margin:0;padding-top:10px;border-top:1px solid rgba(236,215,226,.55)}
-.hero-stats{max-width:520px;margin-top:2px}
+.hero-stats{max-width:640px;margin-top:2px}
 
 .study-stats-panel{
   border:1px solid var(--line);
@@ -754,6 +755,7 @@ height:100%}
 .editorial-stats .stat{display:inline-flex;align-items:baseline;gap:6px;padding:0;border:none;background:transparent}
 .editorial-stats .stat .label{margin:0;font-size:10px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
 .editorial-stats .stat .value{font-size:18px;line-height:1.1;white-space:nowrap}
+.editorial-stats .stat .meta{font-size:10px;white-space:nowrap}
 .today-date{font-size:18px;font-weight:600;letter-spacing:-.03em;margin:8px 0 2px}
 .today-time{font-size:13px;color:var(--muted)}
 .mini-cal{padding:16px;border:1px solid var(--line);border-radius:8px;background:#fff}

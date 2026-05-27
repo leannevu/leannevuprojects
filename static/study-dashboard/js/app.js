@@ -12,6 +12,7 @@ const state = {
   ctrlCPrompts: [],
   studyStats: null,
   studyStatsView: 'self',
+  dataSource: null,
   catalog: {
     pages: [],
     spreadsheets: [],
@@ -72,6 +73,21 @@ async function loadCatalog() {
   const res = await fetch('/api/catalog');
   if (!res.ok) throw new Error('Failed to load dashboard catalog');
   return await res.json();
+}
+
+async function loadDataSource() {
+  const res = await fetch('/api/data-source');
+  if (!res.ok) throw new Error('Failed to load dashboard data source');
+  return await res.json();
+}
+
+async function loadDataSourceSafe() {
+  try {
+    return await loadDataSource();
+  } catch (err) {
+    console.warn('Dashboard data source is unavailable.', err);
+    return null;
+  }
 }
 
 async function loadCaseScenarios() {
@@ -869,6 +885,7 @@ function renderStats() {
     ['Selected day', `${formatHours(selectedHours)}h`],
     ['Selected month', `${formatHours(monthHours(selectedMonth))}h`],
     ['Average / day', `${formatHours(averageHours(selectedMonth))}h`],
+    ['Data source', dataSourceLabel(), dataSourceMeta()],
   ];
 
   statsRow.innerHTML = cards.map(([label, value]) => `
@@ -877,6 +894,22 @@ function renderStats() {
       <div class="value">${value}</div>
     </div>
   `).join('');
+}
+
+function dataSourceLabel() {
+  const source = state.dataSource?.source || 'local';
+  if (source === 'postgres') return 'Postgres';
+  if (source === 'bigquery') return 'BigQuery';
+  return 'Local CSV';
+}
+
+function dataSourceMeta() {
+  const source = state.dataSource || {};
+  if (source.source === 'postgres') {
+    return source.analyticsEngine === 'bigquery' ? 'analytics: BigQuery' : 'live database';
+  }
+  if (source.source === 'bigquery') return source.dataset || 'live warehouse';
+  return source.localDataDir ? 'fallback' : 'offline';
 }
 
 function renderStudyStats() {
@@ -3336,7 +3369,8 @@ function bindFlashcardEvents() {
 // =======================
 
 async function init() {
-  const [catalog, flashcards, caseScenarios, syntaxRows, mgmtRows, productivity, studyStats, ctrlCPrompts, notesPdfs] = await Promise.all([
+  const [dataSource, catalog, flashcards, caseScenarios, syntaxRows, mgmtRows, productivity, studyStats, ctrlCPrompts, notesPdfs] = await Promise.all([
+    loadDataSourceSafe(),
     loadCatalog(),
     loadFlashcards(),
     loadCaseScenarios(),
@@ -3348,6 +3382,7 @@ async function init() {
     loadNotesSafe(),
   ]);
 
+  state.dataSource = dataSource;
   state.catalog = catalog || { pages: [], spreadsheets: [] };
   state.flashcards = flashcards;
   state.caseScenarios = caseScenarios;
